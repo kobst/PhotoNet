@@ -8,5 +8,6 @@ target 'SpyNetProto' do
    pod 'Firebase/Messaging'
    pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc'
    pod 'INTULocationManager', '~> 4.2'
+   pod 'Firebase/Storage'
 
 end

@@ -11,6 +11,9 @@ PODS:
   - Firebase/Messaging (3.11.1):
     - Firebase/Core
     - FirebaseMessaging (= 1.2.1)
+  - Firebase/Storage (3.11.1):
+    - Firebase/Core
+    - FirebaseStorage (= 1.0.5)
   - FirebaseAnalytics (3.6.0):
     - FirebaseCore (~> 3.4)
     - FirebaseInstanceID (~> 1.0)
@@ -34,6 +37,9 @@ PODS:
     - GoogleInterchangeUtilities (~> 1.2)
     - GoogleSymbolUtilities (~> 1.1)
     - GoogleToolboxForMac/Logger (~> 2.1)
+  - FirebaseStorage (1.0.5):
+    - FirebaseAnalytics (~> 3.5)
+    - GTMSessionFetcher/Core (~> 1.1)
   - GeoFire (2.0.0):
     - Firebase/Database (~> 3.2)
   - GoogleInterchangeUtilities (1.2.2):
@@ -59,6 +65,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Messaging
+  - Firebase/Storage
   - GeoFire (from `https://github.com/firebase/geofire-objc`)
   - INTULocationManager (~> 4.2)
 
@@ -79,6 +86,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 6de92187481ff0e8e124064f21742e95ee883b02
   FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
   FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
+  FirebaseStorage: 5738284835edb57f0e81d4ae5832bb17c1e4b5fa
   GeoFire: ef73103b88eb026c27212c40ea16757d6ad362ea
   GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
@@ -86,6 +94,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   INTULocationManager: 73f8254b3d05c897c56bb13c190e5b7c648c0998
 
-PODFILE CHECKSUM: f1b91f6891b0c71789518f733ff9998922de029b
+PODFILE CHECKSUM: 8264bce4ca8ee6eb1bfb42acc5918745b22bb6e5
 
 COCOAPODS: 1.2.0.rc.1

@@ -10,32 +10,12 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     
     var locationManager = CLLocationManager()
-    
-    func makeMap() {
-        let latitude: CLLocationDegrees = 40
-        
-        let longitude: CLLocationDegrees = 90
-        
-        let lanDelta: CLLocationDegrees = 0.0005
-        
-        let lonDelta: CLLocationDegrees = 0.0005
-        
-        let span = MKCoordinateSpan(latitudeDelta: lanDelta, longitudeDelta: lonDelta)
-        
-        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        
-        let region = MKCoordinateRegion(center: center, span: span)
-        
-         mapView.setRegion(region, animated: true)
-    
-        
-    }
-    
+
     
     func getLocationPermissions() {
         
@@ -68,26 +48,61 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
 
 
-extension ViewController: CLLocationManagerDelegate {
+extension MapViewController: CLLocationManagerDelegate {
     
     
     // MARK: - location delegate
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
-            self.locationManager.startUpdatingLocation()
+            self.locationManager.requestLocation()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        print(locations.first)
+        guard !locations.isEmpty, let location = locations.first else {return}
+        makeMap(forCoordinate: location)
+        
     }
+    
+    
+    
     
     
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
+    
+    
+    
+    
+    func makeMap(forCoordinate coord: CLLocation) {
+        
+        let origLat = coord.coordinate.latitude
+        let origLon = coord.coordinate.longitude
+        
+        let latitude: CLLocationDegrees = 40
+        
+        let longitude: CLLocationDegrees = 90
+        
+        let lanDelta: CLLocationDegrees = 0.005
+        
+        let lonDelta: CLLocationDegrees = 0.005
+        
+        let span = MKCoordinateSpan(latitudeDelta: lanDelta, longitudeDelta: lonDelta)
+        
+        let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        
+        let region = MKCoordinateRegion(center: center, span: span)
+        
+        let region2 = MKCoordinateRegionMakeWithDistance(coord.coordinate, 100, 100)
+        self.mapView.setRegion(region2, animated: true)
+        
+        
+    }
+    
+    
     
 }
 
