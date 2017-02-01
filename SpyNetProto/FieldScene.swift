@@ -114,7 +114,7 @@ class Target {
     func givePosition() -> CGPoint {
         let origin = Model.shared.myOrigin
         let originLat = CGFloat(lat - (origin!.coordinate.latitude))
-        let originLon = CGFloat(lon - (origin!.coordinate.latitude))
+        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
         
         return CGPoint(x: originLat, y: originLon)
         
@@ -408,7 +408,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             sprite.physicsBody?.restitution = 0.05
             sprite.physicsBody?.fieldBitMask = self.gravityCategory
             target.sprite = sprite
-            
+            print("\(sprite.position)......\(target.user!.name).....")
             self.addChild(sprite)
            
             

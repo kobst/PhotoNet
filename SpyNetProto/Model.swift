@@ -114,7 +114,7 @@ class Model {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         //        var targets = [Target]()
         let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 3000)
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 1000)
         
         circleQuery?.observe(.keyEntered, with: {(string, location) in
             if let validUID = string, let locationBack = location {
@@ -186,8 +186,7 @@ class Model {
                     print(target.user?.name ?? "no name")
                     print(self.queryTarget.count)
                     self.addTargetDelegate?.addTarget(target: target)
-                    
-//                    
+                                      
 //                    circleQuery?.observeReady({
 //                        completion(self.queryTarget)
 //                    })

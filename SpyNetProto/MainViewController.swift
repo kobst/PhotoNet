@@ -43,10 +43,17 @@ class MainViewController: UIViewController {
                                block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
                                 if status == INTULocationStatus.success {
                                     print("got location");
-                                    Model.shared.myOrigin = currentLocation
-                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
-
-                                    Model.shared.getTargets3(myLocation: currentLocation!)
+                                    
+                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+//                                    Model.shared.myOrigin = currentLocation
+//                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
+//                                    Model.shared.getTargets3(myLocation: currentLocation!)
+                                    Model.shared.myOrigin = dummyLocation
+                                    print("\(currentLocation).....currentlocation.")
+                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
+                                    Model.shared.getTargets3(myLocation: dummyLocation)
+                                    
+                                    
 //                                    Model.shared.getTargets2(myLocation: currentLocation!) { targets in
 //                                        
 //                                        scene.addTargetArray(targets: targets)
