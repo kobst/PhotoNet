@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		039EC93ABD1D63436F41BBF9 /* Pods_SpyNetProto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */; };
-		8439C9611E3A930C00E72B7A /* TestScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8439C9601E3A930C00E72B7A /* TestScene.swift */; };
+		8439C9611E3A930C00E72B7A /* FieldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8439C9601E3A930C00E72B7A /* FieldScene.swift */; };
 		846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA861E3B9FF700CAE31E /* MapViewController.swift */; };
-		846DCA8D1E3BBF7900CAE31E /* LoginTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8C1E3BBF7900CAE31E /* LoginTwoViewController.swift */; };
-		846DCA8F1E3BC43100CAE31E /* OnBoardOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8E1E3BC43100CAE31E /* OnBoardOneViewController.swift */; };
+		846DCA8D1E3BBF7900CAE31E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */; };
+		846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */; };
 		846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA911E3BCD5C00CAE31E /* Model.swift */; };
 		84D2BC231E393894001EABC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2BC221E393894001EABC2 /* AppDelegate.swift */; };
 		84D2BC251E393894001EABC2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2BC241E393894001EABC2 /* MainViewController.swift */; };
@@ -19,17 +19,16 @@
 		84D2BC2B1E393894001EABC2 /* SpyNetProto.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84D2BC291E393894001EABC2 /* SpyNetProto.xcdatamodeld */; };
 		84D2BC2D1E393894001EABC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84D2BC2C1E393894001EABC2 /* Assets.xcassets */; };
 		84D2BC301E393894001EABC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84D2BC2E1E393894001EABC2 /* LaunchScreen.storyboard */; };
-		84EDF5821E39884A0002D4EE /* PlotScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EDF5811E39884A0002D4EE /* PlotScene.swift */; };
 		84EDF5841E39905F0002D4EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84EDF5831E39905F0002D4EE /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpyNetProto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62BAD37BB5CB014EB6EDE009 /* Pods-SpyNetProto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.release.xcconfig"; sourceTree = "<group>"; };
-		8439C9601E3A930C00E72B7A /* TestScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestScene.swift; sourceTree = "<group>"; };
+		8439C9601E3A930C00E72B7A /* FieldScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldScene.swift; sourceTree = "<group>"; };
 		846DCA861E3B9FF700CAE31E /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		846DCA8C1E3BBF7900CAE31E /* LoginTwoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTwoViewController.swift; sourceTree = "<group>"; };
-		846DCA8E1E3BC43100CAE31E /* OnBoardOneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardOneViewController.swift; sourceTree = "<group>"; };
+		846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardViewController.swift; sourceTree = "<group>"; };
 		846DCA911E3BCD5C00CAE31E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		84D2BC1F1E393894001EABC2 /* SpyNetProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpyNetProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84D2BC221E393894001EABC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +38,6 @@
 		84D2BC2C1E393894001EABC2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84D2BC2F1E393894001EABC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84D2BC311E393894001EABC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84EDF5811E39884A0002D4EE /* PlotScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlotScene.swift; sourceTree = "<group>"; };
 		84EDF5831E39905F0002D4EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E6D70F6B4362147E1A5B0172 /* Pods-SpyNetProto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,11 +86,10 @@
 				84D2BC221E393894001EABC2 /* AppDelegate.swift */,
 				84D2BC241E393894001EABC2 /* MainViewController.swift */,
 				846DCA911E3BCD5C00CAE31E /* Model.swift */,
-				84EDF5811E39884A0002D4EE /* PlotScene.swift */,
-				8439C9601E3A930C00E72B7A /* TestScene.swift */,
-				846DCA8C1E3BBF7900CAE31E /* LoginTwoViewController.swift */,
+				8439C9601E3A930C00E72B7A /* FieldScene.swift */,
+				846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */,
 				84D2BC261E393894001EABC2 /* Main.storyboard */,
-				846DCA8E1E3BC43100CAE31E /* OnBoardOneViewController.swift */,
+				846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */,
 				846DCA861E3B9FF700CAE31E /* MapViewController.swift */,
 				84D2BC2C1E393894001EABC2 /* Assets.xcassets */,
 				84D2BC2E1E393894001EABC2 /* LaunchScreen.storyboard */,
@@ -236,15 +233,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				846DCA8D1E3BBF7900CAE31E /* LoginTwoViewController.swift in Sources */,
+				846DCA8D1E3BBF7900CAE31E /* LoginVC.swift in Sources */,
 				84D2BC251E393894001EABC2 /* MainViewController.swift in Sources */,
 				846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */,
 				84D2BC231E393894001EABC2 /* AppDelegate.swift in Sources */,
 				846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */,
-				8439C9611E3A930C00E72B7A /* TestScene.swift in Sources */,
-				846DCA8F1E3BC43100CAE31E /* OnBoardOneViewController.swift in Sources */,
+				8439C9611E3A930C00E72B7A /* FieldScene.swift in Sources */,
+				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				84D2BC2B1E393894001EABC2 /* SpyNetProto.xcdatamodeld in Sources */,
-				84EDF5821E39884A0002D4EE /* PlotScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

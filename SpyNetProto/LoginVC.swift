@@ -19,10 +19,15 @@ import Foundation
 import UIKit
 import Firebase
 
-class LoginTwoVC: UIViewController {
+class LoginVC: UIViewController {
     
     override func viewDidLoad() {
+        
+
         super.viewDidLoad()
+        
+        print("____________LOaded  \n \n ....LOADED... ")
+        
         
         hideKeyboardWhenTappedAround()
         
@@ -166,9 +171,29 @@ class LoginTwoVC: UIViewController {
                 return
             }
 
-            let ref = FIRDatabase.database().reference()
-            let usersReference = ref.child("users").child(validUser.uid)
-            usersReference.setValue(0)
+//            let ref = FIRDatabase.database().reference()
+//            let usersReference = ref.child("users").child(validUser.uid)
+//            usersReference.setValue(0)
+            
+            Model.shared.loggedInUser = User(uid: validUser.uid)
+            
+            let baseRef = FIRDatabase.database().reference()
+            let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
+            
+            //            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
+            let avatarRef = ref.child("avatar")
+            avatarRef.setValue("")
+            
+            let nameRef = ref.child("name")
+            nameRef.setValue("")
+            
+            let blurbRef = ref.child("blurb")
+            blurbRef.setValue("")
+            
+            
+            
+            
+            
             
             Model.shared.loggedInUser = User(uid: validUser.uid)
             self.performSegue(withIdentifier: "toOnboard", sender: nil)

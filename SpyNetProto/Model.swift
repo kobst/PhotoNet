@@ -21,9 +21,17 @@ class Model {
     
     var loggedInUser: User?
     var queryTargets: [User] = []
+    var queryTarget: [Target] = []
+    var myLat: CGFloat?
+    var myLong: CGFloat?
+    var myOrigin: CLLocation?
+    var myScreenOrigin = CGPoint(x: 0, y: 0)
+    
+    weak var addTargetDelegate: AddTargetProtocol?
     
     let ref = FIRDatabase.database().reference()
-    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
+//    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
+    
 
     
     func fetchUser(UID: String, completionHandler: @escaping (User) -> ()){
@@ -47,7 +55,7 @@ class Model {
     }
     
     func updateMyLocation(myLocation: CLLocation) {
-        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         
         let userID = Model.shared.loggedInUser!.uid
         let fakeLocation = makeFakeLocation()
@@ -59,10 +67,6 @@ class Model {
                 print("Saved location successfully!")
             }
         }
-        
-        
-        
-        
     }
     
     
@@ -70,29 +74,198 @@ class Model {
     func getTargets(myLocation: CLLocation){
         //Query GeoFire for nearby users
         //Set up query parameters
-
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         var keys = [String]()
         var locations = [CLLocation]()
-        let circleQuery = geoFire?.query(at: myLocation, withRadius: 50)
-        
-        print("Before Geoquery")
+         let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 500)
+//       let circleQuery = geoFire?.query(at: myLocation, withRadius: 500)
         
         circleQuery?.observe(.keyEntered, with: {(string, location) in
-        
             if let stringBack = string, let locationBack = location {
                 keys.append(stringBack)
                 locations.append(locationBack)
                 print(stringBack)
             }
-            
-            
+        })
         
-    })
-          
-
+        circleQuery?.observeReady({
+            for userUID in keys {
+                self.ref.child("users/\(userUID)").observe(.value, with: { snapshot in
+                    let value = snapshot.value as? [String: Any]
+                    print(value?["name"] as? String ?? "(ERROR)")
+                    let user = User(snapshot: snapshot)
+                    self.queryTargets.append(user)
+                  
+                })
+            }
+            
+        })
+        
     }
     
     
+    
+    
+    
+    func getTargets3(myLocation: CLLocation) {
+
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+        //        var targets = [Target]()
+        let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 3000)
+        
+        circleQuery?.observe(.keyEntered, with: {(string, location) in
+            if let validUID = string, let locationBack = location {
+                
+                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
+                    //                    let value = snapshot.value as? [String: Any]
+                    //                    print(value?["name"] as? String ?? "(ERROR)")
+                    let user = User(snapshot: snapshot)
+                    let target = Target(user: user, location: locationBack)
+                    
+//                    self.queryTargets.append(user)
+                    //                    targets.append(target)
+                    self.queryTarget.append(target)
+                    
+                    print(target.user?.name ?? "no name")
+                    print(self.queryTarget.count)
+                    self.addTargetDelegate?.addTarget(target: target)
+                    
+                })
+
+//                circleQuery?.observeReady({
+//                    if self.queryTarget.count > 5 {
+//                        completion(self.queryTarget)
+//                    }
+//                })
+                
+                
+                
+                
+            }})
+        
+        
+    }
+    
+    
+    
+    
+    
+    func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
+//    func getTargets2(myLocation: CLLocation) {
+        //Query GeoFire for nearby users
+        //Set up query parameters
+        //        var keys = [String]()
+        //        var locations = [CLLocation]()
+//        keys.append(stringBack)
+//        locations.append(locationBack)
+//        print(stringBack)
+        
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+//        var targets = [Target]()
+        let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 3000)
+        
+        circleQuery?.observe(.keyEntered, with: {(string, location) in
+            if let validUID = string, let locationBack = location {
+
+                
+                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
+//                    let value = snapshot.value as? [String: Any]
+//                    print(value?["name"] as? String ?? "(ERROR)")
+                    let user = User(snapshot: snapshot)
+                    let target = Target(user: user, location: locationBack)
+                    
+                    self.queryTargets.append(user)
+//                    targets.append(target)
+                    self.queryTarget.append(target)
+                    
+                    print(target.user?.name ?? "no name")
+                    print(self.queryTarget.count)
+                    self.addTargetDelegate?.addTarget(target: target)
+                    
+//                    
+//                    circleQuery?.observeReady({
+//                        completion(self.queryTarget)
+//                    })
+                    
+                
+                })
+//                 initalize the targetData/spot class
+
+  
+                
+                
+            
+            }})
+        
+  
+    }
+    
+
+            
+            // return the spot class....
+
+
+   
+    func fetchImage(stringURL: String, completionHandler: @escaping (UIImage?) -> ()) {
+        DispatchQueue.global(qos: .background).async {
+            let url = URL(string: stringURL)!
+            URLSession.shared.dataTask(with: url) { (data, _, _) in
+                guard let responseData = data else {
+                    completionHandler(nil)
+                    return
+                }
+                let image = UIImage(data: responseData)
+                DispatchQueue.main.async {
+                    completionHandler(image)
+                }
+                
+                }.resume()
+        }
+    }
+    
+    
+    
+    
+    
+    func returnTargets(myLocation: CLLocation){
+        //Query GeoFire for nearby users
+        //Set up query parameters
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+        var keys = [String]()
+        var locations = [CLLocation]()
+        let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 500)
+        //       let circleQuery = geoFire?.query(at: myLocation, withRadius: 500)
+        
+        circleQuery?.observe(.keyEntered, with: {(string, location) in
+            if let stringBack = string, let locationBack = location {
+                keys.append(stringBack)
+                locations.append(locationBack)
+                print(stringBack)
+            }
+        })
+        
+        circleQuery?.observeReady({
+            for userUID in keys {
+                self.ref.child("users/\(userUID)").observe(.value, with: { snapshot in
+                    let value = snapshot.value as? [String: Any]
+                    print(value?["name"] as? String ?? "(ERROR)")
+                    let user = User(snapshot: snapshot)
+                    self.queryTargets.append(user)
+                })
+            }
+            
+        })
+        
+        
+        
+        
+    }
     
     
     
@@ -175,28 +348,3 @@ class Model {
 
 }
 
-class User {
-    
-    
-    var uid: String
-    var name: String
-    var avatar: String
-    var blurb: String
-    
-    init(uid: String) {
-        self.uid = uid
-        name = ""
-        avatar = ""
-        blurb = ""
-    }
-    
-    init(snapshot: FIRDataSnapshot) {
-        let value = snapshot.value as! [String: Any]!
-        uid = snapshot.key 
-        avatar = value?["avatar"] as? String ?? ""
-        blurb = value?["blurb"] as? String ?? ""
-        name = value?["name"] as? String ?? ""
-        
-    }
-    
-}

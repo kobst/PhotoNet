@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseStorage
 
 
-class OnBoardOneViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
     
@@ -80,7 +80,11 @@ class OnBoardOneViewController: UIViewController, UIImagePickerControllerDelegat
         imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
             let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
             
-            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
+            
+            let baseRef = FIRDatabase.database().reference()
+            let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
+            
+//            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
             let avatarRef = ref.child("avatar")
             avatarRef.setValue(imageURL)
             
