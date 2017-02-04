@@ -102,6 +102,7 @@ class User {
 class Target {
     var sprite: SKSpriteNode?
     var user: User?
+    var scaleAdjust = CGFloat(10000)
     var lat: CLLocationDegrees
     var lon: CLLocationDegrees
     init(user: User, location: CLLocation) {
@@ -115,8 +116,9 @@ class Target {
         let origin = Model.shared.myOrigin
         let originLat = CGFloat(lat - (origin!.coordinate.latitude))
         let originLon = CGFloat(lon - (origin!.coordinate.longitude))
-        
-        return CGPoint(x: originLat, y: originLon)
+        let scaledX = originLat * scaleAdjust
+        let scaledY = originLon * scaleAdjust
+        return CGPoint(x: scaledX, y: scaledY)
         
         
     }
@@ -127,52 +129,6 @@ class Target {
 
 
 
-class Spot {
-    
-    weak var sprite: SKSpriteNode?
-    
-    var spotData: TargetData
-    
-    var position: CGPoint {
-        let dLat = spotData.lat - Model.shared.myLat! // continue to subtract origin lat, long from spot lat, long to get spot position relative to center 0,0
-        let dLon = spotData.lon - Model.shared.myLong!
-        return CGPoint(x: dLat, y: dLon)
-        
-    }
-    init(spotData: TargetData) {
-        self.spotData = spotData
-    }
-    
-    
-    
-    class TargetData {
-        
-        
-        var time: Double
-        var profileURL: String
-        var secondPro: String
-        var descr: String
-        var name: String
-        var lat: CGFloat
-        var lon: CGFloat
-        
-        
-        
-        init(time: Double, profile: String, secondPro: String, descr: String, name: String, lat: CGFloat, lon: CGFloat) {
-            self.profileURL = profile
-            self.secondPro = secondPro
-            self.descr = descr
-            self.name = name
-            self.time = time
-            self.lat = lat
-            self.lon = lon
-            
-        }
-        
-    }
-    
-    
-}
 
 
 protocol AddTargetProtocol: class {
@@ -188,6 +144,11 @@ class FieldScene: SKScene, AddTargetProtocol {
     let center = CGPoint(x: 0, y: 0)
     let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0, y: 0), radius: 10, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
     let gravityCategory: UInt32 = 0x1 << 0
+    var cam: SKCameraNode!
+    let gravField = SKFieldNode.springField()
+    let background = SKSpriteNode(imageNamed: "horizonSpace")
+    
+    
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -197,92 +158,93 @@ class FieldScene: SKScene, AddTargetProtocol {
     override init(size: CGSize) {
         super.init(size: size)
         
+        
         Model.shared.addTargetDelegate = self
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let background = SKSpriteNode(imageNamed: "horizonSpace")
+        
         background.size.width = size.width * 10
         background.size.height = size.height * 10
         addChild(background)
         
+//        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
+//        self.addGestureRecognizer(swipe)
+        self.isUserInteractionEnabled = true
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         
         //        let gravField = SKFieldNode.radialGravityField() // Create grav field
-        let gravField = SKFieldNode.springField()
+       
         //        gravField.position.x = size.width/2; // Center on X axis
         //        gravField.position.y = size.height/2; // Center on Y axis (Now at center of screen)
         gravField.position.x = 0
         gravField.position.y = 0
         gravField.isEnabled = true
         gravField.categoryBitMask = gravityCategory
-        gravField.strength = 0.25
-        
-        addChild(gravField);
-        
-        let gravNode = SKSpriteNode(imageNamed: "Spaceship")
-        gravNode.position.x = 0
-        gravNode.position.y = 0
-        gravNode.size = CGSize(width: 10, height: 10)
-        
-        addChild(gravNode)
+        gravField.strength = 10.0
         
         
+//        addChild(gravField);
+        
+//        let gravNode = SKSpriteNode(imageNamed: "Spaceship")
+//        gravNode.position.x = 0
+//        gravNode.position.y = 0
+//        gravNode.size = CGSize(width: 10, height: 10)
 //        
-//        let testData = Spot.TargetData(time: 2, profile: "beckett", secondPro: "beckett", descr: "writer", name: "sb")
-//        let testSpot = Spot(spotData: testData)
-//        let point = CGPoint(x: 0, y: 80)
-//        
-//        let testData2 = Spot.TargetData(time: 5, profile: "karina", secondPro: "karina", descr: "beautiful", name: "ak")
-//        let testSpot2 = Spot(spotData: testData2)
-//        let point2 = CGPoint(x: 100, y: 100)
-//        
-//        let testData3 = Spot.TargetData(time: 7, profile: "einstein", secondPro: "einstein", descr: "genius", name: "ae")
-//        let testSpot3 = Spot(spotData: testData3)
-//        let point3 = CGPoint(x: -100, y: 0)
-//        
-//        let testData4 = Spot.TargetData(time: 10, profile: "nietzsche", secondPro: "nietzsche", descr: "genius", name: "fn")
-//        let testSpot4 = Spot(spotData: testData4)
-//        let point4 = CGPoint(x: -100, y: -170)
-//        
-//        addSpot(spot: testSpot, position: point)
-//        addSpot(spot: testSpot2, position: point2)
-//        addSpot(spot: testSpot3, position: point3)
-//        addSpot(spot: testSpot4, position: point4)
-//        
+//        addChild(gravNode)
+        
+        
         
     }
     
     
+
+    
+//    func moveCenter(_ sender: UIPanGestureRecognizer) {
+//
+//        var point = sender.translation(in: view)
+//        print("\(point).....translation..")
+//        
+//    }
     
     
-    func addSpot(spot: Spot, position: CGPoint) {
-        let profileImage = spot.spotData.profileURL
-        let sizeFactor = spot.spotData.time * 10
-        //        let roundedImage = maskRoundedImage(image: UIImage(named: profileImage)!, radius: Float(sizeFactor))
-        
-        let roundedImage = UIImage(named: profileImage)!.circle
-        //        let sprite = SKSpriteNode(imageNamed: profileImage)
-        
-        let texture = SKTexture(image: roundedImage!)
-        let sprite  = SKSpriteNode(texture: texture)
-        //        sprite.size = CGSize(width: 0.1, height: 0.1)
-        sprite.position = position
-        sprite.zPosition = 10
-        sprite.size = CGSize(width: sizeFactor, height: sizeFactor)
-        sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
-        sprite.physicsBody?.affectedByGravity = true
-        sprite.physicsBody?.isDynamic = true
-        sprite.physicsBody?.density = 0.01
-        sprite.physicsBody?.friction = 100.01
-        sprite.physicsBody?.restitution = 0.05
-        sprite.physicsBody?.fieldBitMask = gravityCategory
-        self.addChild(sprite)
-        spot.sprite = sprite
-        
+    
+    func handlePanFrom(recognizer: UIPanGestureRecognizer) {
+        if recognizer.state == .began {
+            var touchLocation = recognizer.location(in: recognizer.view)
+            touchLocation = self.convertPoint(fromView: touchLocation)
+            
+//            self.selectNodeForTouch(touchLocation)
+            
+        } else if recognizer.state == .changed {
+            var translation = recognizer.translation(in: recognizer.view!)
+            translation = CGPoint(x: translation.x, y: -translation.y)
+            print("in handle pan changed.....\(translation)")
+          
+//            let x = translation.x * -1.0
+//            let y = translation.y * -1.0
+            
+            Model.shared.myScreenOrigin = CGPoint(x: cam.position.x - translation.x, y: cam.position.y - translation.y)
+            print(cam.position)
+            updateSpotSizes()
+            
+            recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
+            
+//            self.panForTranslation(translation)
+//            recognizer.setTranslation(CGPointZero, in: recognizer.view)
+            
+        }
+//        else if recognizer.state == .ended {
+//            var translation = recognizer.translation(in: recognizer.view!)
+//            translation = CGPoint(x: translation.x, y: -translation.y)
+//            print("in handle pan.....\(translation)")
+//
+//        }
     }
+    
+    
     
     
     
@@ -291,91 +253,21 @@ class FieldScene: SKScene, AddTargetProtocol {
         let newY = position.y - (Model.shared.myScreenOrigin.y)
         
         var distance = sqrt((newX * newX) + (newY * newY))
-        
-        
-//        let xsquared = (position.x) * (position.x)
-//        let ysquared = (position.y) * (position.y)
-//        let sizeFactorDi = (xsquared + ysquared)
-//        var returnFactor =  35000 / sizeFactorDi.squareRoot()
-        
-        
+
         if distance < 50 {
             distance = 50
         }
-        if distance > 250 {
-            distance = 250
+        if distance > 300 {
+            distance = 300
         }
         
-        return distance
+        let spriteSize = CGFloat(10000 / distance)
+        return spriteSize
         
     }
     
     
-    
-    
-    func addTargetArray(targets: [Target]) {
-        let batch = DispatchGroup()
-    
-        for target in targets {
-            
-          
-            batch.enter()
-            let profileImageURL = target.user!.avatar
-            //        let sizeFactor = spot.spotData.time * 10
-            //        let roundedImage = maskRoundedImage(image: UIImage(named: profileImage)!, radius: Float(sizeFactor))
-            
-            Model.shared.fetchImage(stringURL: profileImageURL) { image in
-                
-                guard let returnedImage = image else  {
-                    return
-                }
-                
-                let roundedImage = returnedImage.circle
-                let texture = SKTexture(image: roundedImage!)
-                let sprite  = SKSpriteNode(texture: texture)
-                
-                //            let sizeFactor = self.applySize(position: target.position)
-                //            sprite.position = target.position
-                //
-                
-                sprite.position = target.givePosition()
-                let sizeFactor = self.applySize(position: sprite.position)
-                sprite.zPosition = 10
-                sprite.size = CGSize(width: sizeFactor, height: sizeFactor)
-                sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
-                sprite.physicsBody?.affectedByGravity = true
-                sprite.physicsBody?.isDynamic = true
-                sprite.physicsBody?.density = 0.01
-                sprite.physicsBody?.friction = 100.01
-                sprite.physicsBody?.restitution = 0.05
-                sprite.physicsBody?.fieldBitMask = self.gravityCategory
-                target.sprite = sprite
-                batch.leave()
-                
-                
-                
-                
-            }
-            
-            
-        }
-        
-        batch.notify(queue: .main) {
-            
-            for target in targets {
-                self.addChild(target.sprite!)
-            }
-            
-        }
 
-    }
-
-    
-    
-    
-    
-    
-    
     
     func addTarget(target: Target) {
         let profileImageURL = target.user!.avatar
@@ -398,14 +290,18 @@ class FieldScene: SKScene, AddTargetProtocol {
             
             sprite.position = target.givePosition()
             let sizeFactor = self.applySize(position: sprite.position)
+            print("\(sizeFactor).....sizeFactor")
             sprite.zPosition = 10
             sprite.size = CGSize(width: sizeFactor, height: sizeFactor)
             sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
-            sprite.physicsBody?.affectedByGravity = true
+            sprite.physicsBody?.affectedByGravity = false
             sprite.physicsBody?.isDynamic = true
-            sprite.physicsBody?.density = 0.01
-            sprite.physicsBody?.friction = 100.01
-            sprite.physicsBody?.restitution = 0.05
+            sprite.physicsBody?.density = 0.1 * sizeFactor
+            sprite.physicsBody?.friction = 0.1 * sizeFactor
+            sprite.physicsBody?.restitution = 0.95
+            sprite.physicsBody?.allowsRotation = false
+            sprite.physicsBody?.linearDamping = 1
+            sprite.physicsBody?.angularDamping = 1
             sprite.physicsBody?.fieldBitMask = self.gravityCategory
             target.sprite = sprite
             print("\(sprite.position)......\(target.user!.name).....")
@@ -417,82 +313,35 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     
-    
-    func addSpot2(spot: Spot) {
-        let profileImageURL = spot.spotData.profileURL
-//        let sizeFactor = spot.spotData.time * 10
-        //        let roundedImage = maskRoundedImage(image: UIImage(named: profileImage)!, radius: Float(sizeFactor))
-        
-        Model.shared.fetchImage(stringURL: profileImageURL) { image in
-            
-            guard let returnedImage = image else  {
-                return
-            }
-            
-            let roundedImage = returnedImage.circle
-            let texture = SKTexture(image: roundedImage!)
-            let sprite  = SKSpriteNode(texture: texture)
-            
-            
-            
-            let sizeFactor = self.applySize(position: spot.position)
-            //        sprite.size = CGSize(width: 0.1, height: 0.1)
-            sprite.position = spot.position
-            sprite.zPosition = 10
-            sprite.size = CGSize(width: sizeFactor, height: sizeFactor)
-            sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
-            sprite.physicsBody?.affectedByGravity = true
-            sprite.physicsBody?.isDynamic = true
-            sprite.physicsBody?.density = 0.01
-            sprite.physicsBody?.friction = 100.01
-            sprite.physicsBody?.restitution = 0.05
-            sprite.physicsBody?.fieldBitMask = self.gravityCategory
-            self.addChild(sprite)
-            spot.sprite = sprite
-            
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     override func didMove(to view: SKView) {
         
-        // Get label node from scene and store it for use later
-        //        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        //        if let label = self.label {
-        //            label.alpha = 0.0
-        //            label.run(SKAction.fadeIn(withDuration: 2.0))
-        //
-        // Create shape node to use during mouse interaction
-        //        let w = (self.size.width + self.size.height) * 0.05
-        //        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        //
-        //        if let spinnyNode = self.spinnyNode {
-        //            spinnyNode.lineWidth = 2.5
-        //
-        //            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1)))
-        //            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-        //                                              SKAction.fadeOut(withDuration: 0.5),
-        //                                              SKAction.removeFromParent()]))
-        //        }
+        
+        cam = SKCameraNode() //initialize and assign an instance of SKCameraNode to the cam variable.
+        cam.setScale(1.0)  //the scale sets the zoom level of the camera on the given position
+        
+        self.camera = cam //set the scene's camera to reference cam
+        self.addChild(cam) //make the cam a childElement of the scene itself.
+        
+        //position the camera on the gamescene.
+        cam.position = CGPoint(x: 0, y: 0)
+        Model.shared.myScreenOrigin = CGPoint(x: 0, y: 0)
+        
+        
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanFrom))
+        self.view!.addGestureRecognizer(gestureRecognizer)
+        
+        
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
-        //        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-        //            n.position = pos
-        //            n.strokeColor = SKColor.green
-        //            self.addChild(n)
-        //        }
+ 
+        
+        
     }
     
     func touchMoved(toPoint pos : CGPoint) {
+
         
     }
     
@@ -505,7 +354,16 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        let initial = touches.first?.location(in: self)
+        print("\(initial)....")
+        
+//        for touch in touches {
+//            let location = touch.location(in: self)
+//            print(location)
+//        }
+        
+
+       
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -517,16 +375,31 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     
+    
+    
+    func updateSpotSizes() {
+        
+        
+        
+        for target in Model.shared.queryTargets {
+            
+            let sizeFactor = applySize(position: (target.sprite?.position)!)
+            
+            target.sprite?.size = CGSize(width: sizeFactor, height: sizeFactor)
+            
+            target.sprite?.physicsBody = SKPhysicsBody(circleOfRadius: sizeFactor / 2)
+        }
+        
+    }
+    
+    
     override func update(_ currentTime: TimeInterval) {
     
+//        updateSpotSizes()
+        cam.position = Model.shared.myScreenOrigin
+        gravField.position = Model.shared.myScreenOrigin
         
-//        for target in Model.shared.queryTarget {
-//            if target.sprite == nil {
-//                addTarget(target: target)
-//            }
-//        }
-        
-        
+       
     }
 }
 

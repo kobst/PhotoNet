@@ -39,7 +39,6 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     
 
-    
     @IBAction func completeRegistration(_ sender: Any) {
         
         if imagePicked == false {
@@ -63,7 +62,6 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
         }
         
         
-        
         var data = Data()
         data = UIImageJPEGRepresentation(imageUploaded, 0.1)!
         
@@ -84,7 +82,7 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
             let baseRef = FIRDatabase.database().reference()
             let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
             
-//            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
+            //            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
             let avatarRef = ref.child("avatar")
             avatarRef.setValue(imageURL)
             
@@ -94,12 +92,81 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
             let blurbRef = ref.child("blurb")
             blurbRef.setValue(blurb)
             
+            
+            
         }
         
         
-        performSegue(withIdentifier: "toMainFromOnboard", sender: nil)
+       
+         performSegue(withIdentifier: "toMain", sender: nil)
+
+        
+        
+        
+        
         
     }
+    
+//    @IBAction func completeRegistration(_ sender: Any) {
+//        
+//        if imagePicked == false {
+//            alert(message: "please upload a photo")
+//        }
+//        
+//        guard let imageUploaded = profileImageView.image else {
+//            alert(message: "please upload a photo")
+//            return
+//        }
+//        
+//        guard let codeName = codeName.text else {
+//            alert(message: "please enter a code name")
+//            return
+//        }
+//        
+//        guard let blurb = blurbField.text else {
+//            alert(message: "please enter non-classified vital")
+//            return
+//            
+//        }
+//        
+//        
+//        
+//        var data = Data()
+//        data = UIImageJPEGRepresentation(imageUploaded, 0.1)!
+//        
+//        //        let metaData = FIRStorageMetadata()
+//        //        metaData.contentType = "image/jpg"
+//        
+//        let storageRef = FIRStorage.storage().reference()
+//        let imageUID = NSUUID().uuidString
+//        let imageRef = storageRef.child(imageUID)
+//        
+//        Model.shared.loggedInUser?.blurb = blurb
+//        Model.shared.loggedInUser?.name = codeName
+//        
+//        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
+//            let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
+//            
+//            
+//            let baseRef = FIRDatabase.database().reference()
+//            let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
+//            
+////            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
+//            let avatarRef = ref.child("avatar")
+//            avatarRef.setValue(imageURL)
+//            
+//            let nameRef = ref.child("name")
+//            nameRef.setValue(codeName)
+//            
+//            let blurbRef = ref.child("blurb")
+//            blurbRef.setValue(blurb)
+//            
+//        }
+//        
+//        
+//        performSegue(withIdentifier: "toMainFromOnboard", sender: nil)
+//        
+//    }
     
     
     

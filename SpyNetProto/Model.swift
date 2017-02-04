@@ -20,8 +20,8 @@ class Model {
     private init(){}
     
     var loggedInUser: User?
-    var queryTargets: [User] = []
-    var queryTarget: [Target] = []
+    var queryUsers: [User] = []
+    var queryTargets: [Target] = []
     var myLat: CGFloat?
     var myLong: CGFloat?
     var myOrigin: CLLocation?
@@ -70,41 +70,7 @@ class Model {
     }
     
     
-    
-    func getTargets(myLocation: CLLocation){
-        //Query GeoFire for nearby users
-        //Set up query parameters
-        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
-        var keys = [String]()
-        var locations = [CLLocation]()
-         let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 500)
-//       let circleQuery = geoFire?.query(at: myLocation, withRadius: 500)
-        
-        circleQuery?.observe(.keyEntered, with: {(string, location) in
-            if let stringBack = string, let locationBack = location {
-                keys.append(stringBack)
-                locations.append(locationBack)
-                print(stringBack)
-            }
-        })
-        
-        circleQuery?.observeReady({
-            for userUID in keys {
-                self.ref.child("users/\(userUID)").observe(.value, with: { snapshot in
-                    let value = snapshot.value as? [String: Any]
-                    print(value?["name"] as? String ?? "(ERROR)")
-                    let user = User(snapshot: snapshot)
-                    self.queryTargets.append(user)
-                  
-                })
-            }
-            
-        })
-        
-    }
-    
-    
+
     
     
     
@@ -113,8 +79,8 @@ class Model {
         
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         //        var targets = [Target]()
-        let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 1000)
+//        let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: myLocation, withRadius: 5.5)
         
         circleQuery?.observe(.keyEntered, with: {(string, location) in
             if let validUID = string, let locationBack = location {
@@ -127,24 +93,19 @@ class Model {
                     
 //                    self.queryTargets.append(user)
                     //                    targets.append(target)
-                    self.queryTarget.append(target)
+                    self.queryTargets.append(target)
                     
                     print(target.user?.name ?? "no name")
-                    print(self.queryTarget.count)
+                    print(self.queryTargets.count)
                     self.addTargetDelegate?.addTarget(target: target)
+
                     
                 })
 
-//                circleQuery?.observeReady({
-//                    if self.queryTarget.count > 5 {
-//                        completion(self.queryTarget)
-//                    }
-//                })
-                
-                
-                
                 
             }})
+        
+
         
         
     }
@@ -167,9 +128,9 @@ class Model {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
 //        var targets = [Target]()
         let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 3000)
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 1)
         
-        circleQuery?.observe(.keyEntered, with: {(string, location) in
+        let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
             if let validUID = string, let locationBack = location {
 
                 
@@ -179,27 +140,31 @@ class Model {
                     let user = User(snapshot: snapshot)
                     let target = Target(user: user, location: locationBack)
                     
-                    self.queryTargets.append(user)
+                    self.queryUsers.append(user)
 //                    targets.append(target)
-                    self.queryTarget.append(target)
+                    self.queryTargets.append(target)
                     
                     print(target.user?.name ?? "no name")
-                    print(self.queryTarget.count)
-                    self.addTargetDelegate?.addTarget(target: target)
-                                      
+                    print(self.queryTargets.count)
+//                    self.addTargetDelegate?.addTarget(target: target)
+                    
 //                    circleQuery?.observeReady({
 //                        completion(self.queryTarget)
 //                    })
                     
                 
                 })
-//                 initalize the targetData/spot class
 
-  
-                
-                
             
             }})
+        
+        circleQuery?.observeReady({
+            
+            completion(self.queryTargets)
+            
+        })
+        
+    
         
   
     }
@@ -227,44 +192,6 @@ class Model {
         }
     }
     
-    
-    
-    
-    
-    func returnTargets(myLocation: CLLocation){
-        //Query GeoFire for nearby users
-        //Set up query parameters
-        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
-        var keys = [String]()
-        var locations = [CLLocation]()
-        let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 500)
-        //       let circleQuery = geoFire?.query(at: myLocation, withRadius: 500)
-        
-        circleQuery?.observe(.keyEntered, with: {(string, location) in
-            if let stringBack = string, let locationBack = location {
-                keys.append(stringBack)
-                locations.append(locationBack)
-                print(stringBack)
-            }
-        })
-        
-        circleQuery?.observeReady({
-            for userUID in keys {
-                self.ref.child("users/\(userUID)").observe(.value, with: { snapshot in
-                    let value = snapshot.value as? [String: Any]
-                    print(value?["name"] as? String ?? "(ERROR)")
-                    let user = User(snapshot: snapshot)
-                    self.queryTargets.append(user)
-                })
-            }
-            
-        })
-        
-        
-        
-        
-    }
     
     
     

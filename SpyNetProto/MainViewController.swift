@@ -15,8 +15,7 @@ import GeoFire
 
 class MainViewController: UIViewController {
 
-   
-    
+
     
     override func loadView() {
         self.view = SKView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
@@ -35,6 +34,7 @@ class MainViewController: UIViewController {
         scene = FieldScene(size: skView.bounds.size)
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
+    
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
         locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
@@ -54,34 +54,18 @@ class MainViewController: UIViewController {
                                     Model.shared.getTargets3(myLocation: dummyLocation)
                                     
                                     
-//                                    Model.shared.getTargets2(myLocation: currentLocation!) { targets in
-//                                        
-//                                        scene.addTargetArray(targets: targets)
-//                                        if targets.count > 7 {
-//                                            for target in targets {
-//                                                print(target.user?.name ?? "no name in closure")
-//                                                scene.addTarget(target: target)
-//                                                
-//                                            }
-//                                        }
-
-//                                        
-//                                    }
+//                                    Model.shared.getTargets2(myLocation: dummyLocation) { targets in
+////
+////                                        scene.addTargetArray(targets: targets)
+//
 //                                        for target in targets {
-////                                            print(target.sprite?.position ?? "no position")
-////                                            print(target.sprite?.size ?? "no size")
+//                                            print(target.sprite?.position ?? "no position")
+//                                            print(target.sprite?.size ?? "no size")
 //                                            scene.addTarget(target: target)
 //                                            
 //                                        }
 //                                    }
-//
-//
-//                                        // for spot in spots ...scene.addspot2(spot)
-//                                    //include closure w getTargets that takes in locations/users and populates them using a scene.method.....
 //                                    
-//                                    }
-                                    
-                                    
                                     
                                 }
                                     

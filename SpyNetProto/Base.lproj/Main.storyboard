@@ -49,10 +49,10 @@
             </objects>
             <point key="canvasLocation" x="-3705" y="856"/>
         </scene>
-        <!--On Board View Controller-->
+        <!--On Board Controller-->
         <scene sceneID="a59-Vj-VEq">
             <objects>
-                <viewController id="G4A-rJ-aLp" customClass="OnBoardViewController" sceneMemberID="viewController">
+                <viewController id="G4A-rJ-aLp" customClass="OnBoardController" customModule="SpyNetProto" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qm8-Lv-zWu"/>
                         <viewControllerLayoutGuide type="bottom" id="z9L-9W-vWb"/>
@@ -105,11 +105,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="blurbField" destination="fkn-za-b1q" id="95G-Xh-BQw"/>
-                        <outlet property="codeName" destination="cpB-ML-iVY" id="8Oc-U9-j3H"/>
-                        <outlet property="profileImageView" destination="PqB-8x-3MD" id="dZH-tc-Vj7"/>
-                        <outlet property="uploadPhotoLabel" destination="bhh-b4-8Yw" id="xPW-wC-Fnv"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMainFromOnboard" id="lbB-5h-6VB"/>
+                        <outlet property="blurbField" destination="fkn-za-b1q" id="yJG-r8-AVb"/>
+                        <outlet property="codeName" destination="cpB-ML-iVY" id="H3r-J9-MOD"/>
+                        <outlet property="profileImageView" destination="PqB-8x-3MD" id="zEB-VY-5wE"/>
+                        <outlet property="uploadPhotoLabel" destination="bhh-b4-8Yw" id="snq-Yp-aAl"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="4Ny-Lt-8gs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Wk-1U-bIk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -118,6 +118,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gAO-I6-LmQ"/>
+        <segue reference="4Ny-Lt-8gs"/>
     </inferredMetricsTieBreakers>
 </document>
