@@ -21,7 +21,7 @@ class Model {
     
     var loggedInUser: User?
     var queryUsers: [User] = []
-    var queryTargets: [Target] = []
+    var queryTargets: [TargetSprite] = []
     var myLat: CGFloat?
     var myLong: CGFloat?
     var myOrigin: CLLocation?
@@ -93,12 +93,13 @@ class Model {
                     
 //                    self.queryTargets.append(user)
                     //                    targets.append(target)
-                    self.queryTargets.append(target)
+
                     
                     print(target.user?.name ?? "no name")
                     print(self.queryTargets.count)
-                    self.addTargetDelegate?.addTarget(target: target)
-
+//                    self.addTargetDelegate?.addTarget(target: target)
+                   
+                    self.addTargetDelegate?.addTargetSprites(target: target)
                     
                 })
 
@@ -142,7 +143,7 @@ class Model {
                     
                     self.queryUsers.append(user)
 //                    targets.append(target)
-                    self.queryTargets.append(target)
+//                    self.queryTargets.append(target)
                     
 //                    print(target.user?.name ?? "no name")
 //                    print(self.queryTargets.count)
@@ -160,7 +161,7 @@ class Model {
         
         circleQuery?.observeReady({
             
-            completion(self.queryTargets)
+//            completion(self.queryTargets)
             
         })
         
