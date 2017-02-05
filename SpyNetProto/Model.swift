@@ -144,8 +144,8 @@ class Model {
 //                    targets.append(target)
                     self.queryTargets.append(target)
                     
-                    print(target.user?.name ?? "no name")
-                    print(self.queryTargets.count)
+//                    print(target.user?.name ?? "no name")
+//                    print(self.queryTargets.count)
 //                    self.addTargetDelegate?.addTarget(target: target)
                     
 //                    circleQuery?.observeReady({
@@ -192,8 +192,111 @@ class Model {
         }
     }
     
+    class Mask {
+        var taken: Bool = false
+        var value: UInt32
+        init(value: UInt32) {
+            self.value = value
+        }
+    }
+    
+//    var arrayMasks: [Mask] {
+//        Mask(value: 1 << 0),
+//        Mask(value: 1 << 1),
+//        Mask(value: 1 << 2),
+//        Mask(value: 1 << 3)
+//    
+//    }
+    
+    var categoryMasks: [(UInt32, Bool)] = [
+//    (0x1 << 0, false),
+    (0x1 << 1, false),
+    (0x1 << 2, false),
+    (0x1 << 3, false),
+    (0x1 << 4, false),
+    (0x1 << 5, false),
+    (0x1 << 6, false),
+    (0x1 << 7, false),
+    (0x1 << 8, false),
+    (0x1 << 9, false),
+    (0x1 << 10, false),
+    (0x1 << 11, false),
+    (0x1 << 12, false),
+    (0x1 << 13, false),
+    (0x1 << 14, false),
+    (0x1 << 15, false),
+    (0x1 << 16, false),
+    (0x1 << 17, false),
+    (0x1 << 18, false),
+    (0x1 << 19, false),
+    (0x1 << 21, false),
+    (0x1 << 22, false),
+    (0x1 << 23, false),
+    (0x1 << 24, false),
+    (0x1 << 25, false),
+    (0x1 << 26, false),
+    (0x1 << 27, false),
+    (0x1 << 28, false),
+    (0x1 << 29, false),
+    (0x1 << 30, false),
+    (0x1 << 31, false)
+    ]
     
     
+    
+    
+    
+    
+    var categoryMasksBinary: [(UInt32, Bool)] = [
+        (0b1, false),
+        (0b10 << 1, false),
+        (0b11 << 2, false),
+        (0b100 << 3, false),
+        (0b101 << 4, false),
+        (0b110 << 5, false),
+        (0b111 << 6, false),
+        (0b1000 << 7, false),
+        (0b1001 << 8, false),
+        (0b1010 << 9, false),
+        (0b1011 << 10, false),
+        (0b1100 << 11, false),
+        (0b1101 << 12, false),
+        (0b1110 << 13, false),
+        (0b1011 << 14, false),
+        (0b1100 << 15, false),
+        (0b1101 << 16, false),
+        (0b1111 << 17, false),
+        (0b10000 << 18, false),
+        (0b10001 << 19, false),
+        (0b10010 << 21, false),
+        (0b10011 << 22, false),
+        (0b10100 << 23, false),
+        (0b10101 << 24, false),
+        (0b10111 << 25, false),
+        (0b11000 << 26, false),
+        (0b11001 << 27, false),
+        (0b11010 << 28, false),
+        (0b11011 << 29, false),
+        (0b11100 << 30, false),
+        (0b11101 << 31, false)
+    ]
+    
+    
+    func assignBitMask() -> UInt32? {
+     
+
+        for i in 0...categoryMasks.count {
+            if categoryMasks[i].1 == false {
+                categoryMasks[i].1 = true
+                return categoryMasks[i].0
+            }
+            
+        }
+        
+        
+
+        return nil
+    }
     
     
     let coordinates: [String: CLLocation] = [

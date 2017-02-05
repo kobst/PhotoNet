@@ -99,29 +99,167 @@ class User {
 }
 
 
+class TargetSprite: SKSpriteNode {
+    
+
+    func applySize(position: CGPoint) -> CGFloat {
+     
+        let newX = position.x - (Model.shared.myScreenOrigin.x)
+        let newY = position.y - (Model.shared.myScreenOrigin.y)
+        
+        let distance = sqrt((newX * newX) + (newY * newY))
+        var adjustedDist = CGFloat(3000 / distance)
+        
+        if adjustedDist < 50 {
+            adjustedDist = 50
+        }
+        if adjustedDist > 200 {
+            adjustedDist = 200
+        }
+        
+        let spriteSize = adjustedDist
+        return spriteSize
+        
+    }
+    
+    
+    
+    
+    func getPhysicsBody(position: CGPoint) -> SKPhysicsBody {
+        
+        //resizes and new physicsBodies..
+        let body = SKPhysicsBody(circleOfRadius: 50)
+        
+        body.affectedByGravity = true
+        body.isDynamic = true
+        body.density = 0.25
+        body.friction = 0.1
+        body.restitution = 0.95
+        body.allowsRotation = false
+        body.angularVelocity = 0
+        body.linearDamping = 1
+        body.angularDamping = 1
+    
+        return body
+        
+    }
+    
+    var target: Target?
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(texture: SKTexture!, color: SKColor, size: CGSize) {
+        self.target = nil
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+   
+    convenience init(target: Target, image: UIImage) {
+    
+            
+            let roundedImage = image.circle
+            let myTexture = SKTexture(image: roundedImage!)
+
+            self.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+            self.target = target
+            self.texture = myTexture
+            self.position = target.origPos
+            self.size = CGSize(width: 100, height: 100)
+            self.name = target.user!.name
+            let sizeFactor = applySize(position: target.origPos)
+            self.zPosition = 1 * sizeFactor
+            self.size = CGSize(width: sizeFactor, height: sizeFactor)
+            let body = getPhysicsBody(position: target.origPos)
+            self.physicsBody = body
+            self.physicsBody!.affectedByGravity = true
+            self.isUserInteractionEnabled = false
+            self.physicsBody!.isDynamic = true
+            self.physicsBody!.density = 0.25 * sizeFactor
+            self.physicsBody!.friction = 0.1 * sizeFactor
+            self.physicsBody!.restitution = 0.95
+            self.physicsBody!.allowsRotation = false
+            self.physicsBody!.angularVelocity = 0
+            self.physicsBody!.linearDamping = 1
+            self.physicsBody!.angularDamping = 1
+        
+        
+        
+        let gravMask = Model.shared.assignBitMask()
+        
+        let anchorGrav = SKFieldNode.springField()
+        anchorGrav.position = target.origPos
+        anchorGrav.isEnabled = true
+        anchorGrav.strength = 1.0
+        anchorGrav.name = "anchor\(target.user?.name)"
+        
+        if let validMask = gravMask {
+            print("\(validMask)..\(anchorGrav.position)...VALIDMASK")
+            physicsBody!.fieldBitMask = validMask
+            anchorGrav.categoryBitMask = validMask
+        }
+        
+
+
+    
+        }
+
+
+    }
+
+
+
+    
+
+
+
+
+
+
 class Target {
     var sprite: SKSpriteNode?
-    var user: User?
-    var scaleAdjust = CGFloat(10000)
+    var user: User? // make this a UID...
+    var scaleAdjust = CGFloat(15000)
     var lat: CLLocationDegrees
     var lon: CLLocationDegrees
+    var origPos: CGPoint
+//    var position: CGPoint {
+//        let origin = Model.shared.myOrigin
+//        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
+//        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
+//        let scaledX = originLat * scaleAdjust
+//        let scaledY = originLon * scaleAdjust
+//        //        print("\(scaledX)..\(scaledY).......InitialPosition******")
+//        return CGPoint(x: scaledX, y: scaledY)
+//        
+//    }
     init(user: User, location: CLLocation) {
         self.user = user
         self.lat = (location.coordinate.latitude)
         self.lon = (location.coordinate.longitude)
-    }
-    
-    
-    func givePosition() -> CGPoint {
         let origin = Model.shared.myOrigin
         let originLat = CGFloat(lat - (origin!.coordinate.latitude))
         let originLon = CGFloat(lon - (origin!.coordinate.longitude))
         let scaledX = originLat * scaleAdjust
         let scaledY = originLon * scaleAdjust
-        return CGPoint(x: scaledX, y: scaledY)
-        
-        
+        self.origPos = CGPoint(x: scaledX, y: scaledY)
     }
+    
+    
+    
+    
+//        let origin = Model.shared.myOrigin
+//        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
+//        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
+//        let scaledX = originLat * scaleAdjust
+//        let scaledY = originLon * scaleAdjust
+////        print("\(scaledX)..\(scaledY).......InitialPosition******")
+//        return CGPoint(x: scaledX, y: scaledY)
+//        
+//        
+//    }
     
 }
 
@@ -143,14 +281,15 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     let center = CGPoint(x: 0, y: 0)
     let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0, y: 0), radius: 10, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
-    let gravityCategory: UInt32 = 0x1 << 0
+    let gravityCategory: UInt32 = 1 << 31
     var cam: SKCameraNode!
     let gravField = SKFieldNode.springField()
     let background = SKSpriteNode(imageNamed: "horizonSpace")
     
+
     
     
-    
+  
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -175,7 +314,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         
-        //        let gravField = SKFieldNode.radialGravityField() // Create grav field
+  // Create grav field
        
         //        gravField.position.x = size.width/2; // Center on X axis
         //        gravField.position.y = size.height/2; // Center on Y axis (Now at center of screen)
@@ -183,9 +322,8 @@ class FieldScene: SKScene, AddTargetProtocol {
         gravField.position.y = 0
         gravField.isEnabled = true
         gravField.categoryBitMask = gravityCategory
-        gravField.strength = 10.0
-        
-        
+        gravField.strength = 8.0
+
 //        addChild(gravField);
         
 //        let gravNode = SKSpriteNode(imageNamed: "Spaceship")
@@ -226,8 +364,10 @@ class FieldScene: SKScene, AddTargetProtocol {
 //            let x = translation.x * -1.0
 //            let y = translation.y * -1.0
             
-            Model.shared.myScreenOrigin = CGPoint(x: cam.position.x - translation.x, y: cam.position.y - translation.y)
-            print(cam.position)
+            Model.shared.myScreenOrigin = CGPoint(x: Model.shared.myScreenOrigin.x - translation.x, y: Model.shared.myScreenOrigin.y - translation.y)
+            cam.position = Model.shared.myScreenOrigin
+            gravField.position = Model.shared.myScreenOrigin
+            print("\(Model.shared.myScreenOrigin)....ORIGIN")
             updateSpotSizes()
             
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
@@ -249,30 +389,51 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     func applySize(position: CGPoint) -> CGFloat {
+        print(".......\n...\(Model.shared.myScreenOrigin).....")
         let newX = position.x - (Model.shared.myScreenOrigin.x)
         let newY = position.y - (Model.shared.myScreenOrigin.y)
         
-        var distance = sqrt((newX * newX) + (newY * newY))
-
-        if distance < 50 {
-            distance = 50
+        let distance = sqrt((newX * newX) + (newY * newY))
+        var adjustedDist = CGFloat(3000 / distance)
+        
+        
+        if adjustedDist < 50 {
+            adjustedDist = 50
         }
-        if distance > 300 {
-            distance = 300
+        if adjustedDist > 200 {
+            adjustedDist = 200
         }
         
-        let spriteSize = CGFloat(10000 / distance)
+//        if distance < 2 {
+//            distance = 2
+//        }
+//        if distance > 20 {
+//            distance = 20
+//        }
+        
+        let spriteSize = adjustedDist
+//        print("\(spriteSize)...\(distance).......ss")
+        
+//        let spriteSize = CGFloat(distance * 10)
         return spriteSize
         
     }
     
     
+    
+    func addPhysicsBody(target: Target) {
+        
+        
+        
+    }
 
     
     func addTarget(target: Target) {
         let profileImageURL = target.user!.avatar
         //        let sizeFactor = spot.spotData.time * 10
         //        let roundedImage = maskRoundedImage(image: UIImage(named: profileImage)!, radius: Float(sizeFactor))
+    
+        
         
         Model.shared.fetchImage(stringURL: profileImageURL) { image in
             
@@ -284,31 +445,58 @@ class FieldScene: SKScene, AddTargetProtocol {
             let texture = SKTexture(image: roundedImage!)
             let sprite  = SKSpriteNode(texture: texture)
             
-//            let sizeFactor = self.applySize(position: target.position)
-//            sprite.position = target.position
-//            
+            sprite.position = target.origPos
             
-            sprite.position = target.givePosition()
-            let sizeFactor = self.applySize(position: sprite.position)
-            print("\(sizeFactor).....sizeFactor")
-            sprite.zPosition = 10
+            let sizeFactor = self.applySize(position: target.origPos)
+          
+            sprite.zPosition = 1 * sizeFactor
             sprite.size = CGSize(width: sizeFactor, height: sizeFactor)
-            sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
-            sprite.physicsBody?.affectedByGravity = false
-            sprite.physicsBody?.isDynamic = true
-            sprite.physicsBody?.density = 0.1 * sizeFactor
-            sprite.physicsBody?.friction = 0.1 * sizeFactor
-            sprite.physicsBody?.restitution = 0.95
-            sprite.physicsBody?.allowsRotation = false
-            sprite.physicsBody?.linearDamping = 1
-            sprite.physicsBody?.angularDamping = 1
-            sprite.physicsBody?.fieldBitMask = self.gravityCategory
-            target.sprite = sprite
-            print("\(sprite.position)......\(target.user!.name).....")
-            self.addChild(sprite)
-           
             
+            print("\(sprite.position)..\n.\(target.origPos).\n.\(sprite.size.width)...\n.\(target.lat).\(target.lon)...\n.")
+            
+            sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
+            sprite.physicsBody!.affectedByGravity = true
+            sprite.physicsBody!.isDynamic = true
+            sprite.physicsBody!.density = 0.25 * sizeFactor
+            sprite.physicsBody!.friction = 0.1 * sizeFactor
+            sprite.physicsBody!.restitution = 0.95
+            sprite.physicsBody!.allowsRotation = false
+            sprite.physicsBody!.angularVelocity = 0
+            sprite.physicsBody!.linearDamping = 1
+            sprite.physicsBody!.angularDamping = 1
+            sprite.isUserInteractionEnabled = false
+
+//            sprite.physicsBody!.charge = -0.1 * sizeFactor
+
+//            print("\(sprite.position)......\(target.user!.name).....")
+            
+            
+            let gravMask = Model.shared.assignBitMask()
+            
+            let anchorGrav = SKFieldNode.springField()
+            anchorGrav.position = target.origPos
+            anchorGrav.isEnabled = true
+            anchorGrav.strength = 1.0
+            anchorGrav.name = "anchor\(target.user?.name)"
+            
+            if let validMask = gravMask {
+                print("\(validMask)..\(anchorGrav.position)...VALIDMASK")
+                sprite.physicsBody!.fieldBitMask = validMask | self.gravityCategory
+                anchorGrav.categoryBitMask = validMask
+            }
+            
+            sprite.name = target.user!.name
+            target.sprite = sprite
+            
+            self.addChild(anchorGrav)
+            self.addChild(sprite)
+            
+           
         }
+        
+
+        
+        
     }
     
     
@@ -347,21 +535,46 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     func touchUp(atPoint pos : CGPoint) {
         
+        
+        
+        
     }
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        
+//        for touch in touches {
+//            
+//            let positionInScene = touch.location(in: self)
+//            let touchedNode = self.atPoint(positionInScene)
+//            
+//            if let name = touchedNode.name
+//            {
+//                print(name)
+//                
+//            }
+//            
+//        }
+//    
+//
+//    }
+    
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        let touch = touches.first
+        if let positionInScene = touch?.location(in: self) {
+            let nodeAtPoint = atPoint(positionInScene)
+            print(nodeAtPoint.name ?? "no name")
+        }
+    
+    
     }
     
+    
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let initial = touches.first?.location(in: self)
-        print("\(initial)....")
-        
-//        for touch in touches {
-//            let location = touch.location(in: self)
-//            print(location)
-//        }
-        
+
+
 
        
     }
@@ -383,11 +596,17 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         for target in Model.shared.queryTargets {
             
-            let sizeFactor = applySize(position: (target.sprite?.position)!)
+//            print("\(target.sprite!.position)..\n \(target.origPos)...\(target.sprite!.size.width)\n POS in UPDATESPOTSIZES")
             
-            target.sprite?.size = CGSize(width: sizeFactor, height: sizeFactor)
+            let sizeFactor = applySize(position: (target.origPos))
             
-            target.sprite?.physicsBody = SKPhysicsBody(circleOfRadius: sizeFactor / 2)
+            target.sprite!.size = CGSize(width: sizeFactor, height: sizeFactor)
+            
+//            target.sprite!.physicsBody = SKPhysicsBody(circleOfRadius: sizeFactor / 2)
+           
+        
+            
+            target.sprite!.zPosition = 1 * sizeFactor
         }
         
     }
@@ -397,7 +616,8 @@ class FieldScene: SKScene, AddTargetProtocol {
     
 //        updateSpotSizes()
         cam.position = Model.shared.myScreenOrigin
-        gravField.position = Model.shared.myScreenOrigin
+//        gravField.position = Model.shared.myScreenOrigin
+ 
         
        
     }
