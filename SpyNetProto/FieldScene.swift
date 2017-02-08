@@ -108,11 +108,12 @@ class TargetSprite: SKSpriteNode {
         let newY = position.y - (Model.shared.myScreenOrigin.y)
         
         let distance = sqrt((newX * newX) + (newY * newY))
-        var adjustedDist = CGFloat(3000 / distance)
+        var adjustedDist = CGFloat(4500 / distance) // match with other applySiz
         
         if adjustedDist < 50 {
             adjustedDist = 50
         }
+        
         if adjustedDist > 200 {
             adjustedDist = 200
         }
@@ -138,8 +139,9 @@ class TargetSprite: SKSpriteNode {
         body.angularVelocity = 0
         body.linearDamping = 1
         body.angularDamping = 1
-//        body.categoryBitMask = mask
     
+//        body.fieldBitMask = self.mask!
+        
         return body
         
     }
@@ -171,9 +173,9 @@ class TargetSprite: SKSpriteNode {
             self.size = CGSize(width: 100, height: 100)
             self.name = target.user!.name
             let sizeFactor = applySize(position: target.origPos)
-            self.zPosition = 1 * sizeFactor
+//            self.zPosition = 1 * sizeFactor
             self.size = CGSize(width: sizeFactor, height: sizeFactor)
-        let body = getPhysicsBody(position: target.origPos)
+        let body = getPhysicsBody(position: target.origPos )
             self.physicsBody = body
             self.physicsBody!.affectedByGravity = true
             self.isUserInteractionEnabled = false
@@ -224,7 +226,7 @@ class TargetSprite: SKSpriteNode {
 class Target {
     var sprite: SKSpriteNode?
     var user: User? // make this a UID...
-    var scaleAdjust = CGFloat(15000)
+    var scaleAdjust = CGFloat(9500)
     var lat: CLLocationDegrees
     var lon: CLLocationDegrees
     var origPos: CGPoint
@@ -242,7 +244,7 @@ class Target {
         self.user = user
         self.lat = (location.coordinate.latitude)
         self.lon = (location.coordinate.longitude)
-        let origin = Model.shared.myOrigin
+        let origin = Model.shared.myLocation
         let originLat = CGFloat(lat - (origin!.coordinate.latitude))
         let originLon = CGFloat(lon - (origin!.coordinate.longitude))
         let scaledX = originLat * scaleAdjust
@@ -283,6 +285,7 @@ protocol AddTargetProtocol: class {
 
 class FieldScene: SKScene, AddTargetProtocol {
     
+    weak var delegateMainVC: GoToDetail?
     let center = CGPoint(x: 0, y: 0)
     let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0, y: 0), radius: 10, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
     let gravityCategory: UInt32 = 1 << 30
@@ -393,17 +396,17 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     func applySize(position: CGPoint) -> CGFloat {
-        print(".......\n...\(Model.shared.myScreenOrigin).....")
+//        print(".......\n...\(Model.shared.myScreenOrigin).....")
         let newX = position.x - (Model.shared.myScreenOrigin.x)
         let newY = position.y - (Model.shared.myScreenOrigin.y)
         
         let distance = sqrt((newX * newX) + (newY * newY))
-        var adjustedDist = CGFloat(3000 / distance)
+        var adjustedDist = CGFloat(4500 / distance)
+        print("\(distance).dist....\(adjustedDist).adjustDist")
         
-        
-        if adjustedDist < 50 {
-            adjustedDist = 50
-        }
+//        if adjustedDist < 50 {
+//            adjustedDist = 50
+//        }
         if adjustedDist > 200 {
             adjustedDist = 200
         }
@@ -479,8 +482,8 @@ class FieldScene: SKScene, AddTargetProtocol {
             sprite.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2.0)
             sprite.physicsBody!.affectedByGravity = true
             sprite.physicsBody!.isDynamic = true
-            sprite.physicsBody!.density = 0.25 * sizeFactor
-            sprite.physicsBody!.friction = 0.1 * sizeFactor
+            sprite.physicsBody!.density = 10.0
+            sprite.physicsBody!.friction = 10.0
             sprite.physicsBody!.restitution = 0.95
             sprite.physicsBody!.allowsRotation = false
             sprite.physicsBody!.angularVelocity = 0
@@ -585,8 +588,20 @@ class FieldScene: SKScene, AddTargetProtocol {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         if let positionInScene = touch?.location(in: self) {
+            
+            
             let nodeAtPoint = atPoint(positionInScene)
             print(nodeAtPoint.name ?? "no name")
+            
+            if nodeAtPoint.name != nil {
+                let target = nodeAtPoint as! TargetSprite
+                print("\(target.target?.user?.name)...\(target.mask)....NODEATPT")
+                
+                delegateMainVC?.goToDetail(targetSprite: target)
+                
+                
+                
+            }
         }
     
     
@@ -618,8 +633,8 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         for targetSprite in Model.shared.queryTargets {
             
-//            print("\(target.sprite!.position)..\n \(target.origPos)...\(target.sprite!.size.width)\n POS in UPDATESPOTSIZES")
-            
+//            print("\(target.sprite!.position)..\n \(target.origPos)...\(target.sprite!.size.width)\n POS in UPDATESPOTSIZES") -- change applysize to mutating func
+//            targetSprite.applySize(position: (targetSprite.target?.origPos)!)
             let sizeFactor = applySize(position: (targetSprite.target?.origPos)!)
             
             targetSprite.size = CGSize(width: sizeFactor, height: sizeFactor)
@@ -627,7 +642,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             targetSprite.physicsBody = targetSprite.getPhysicsBody(position: (targetSprite.target?.origPos)!)
 //
             targetSprite.physicsBody!.fieldBitMask = targetSprite.mask! | gravityCategory
-            print("\(targetSprite.mask)...MASK")
+//            print("\(targetSprite.mask)...MASK")  // should do this in getPhysicsBody.
 //            targetSprite.zPosition = 1 * sizeFactor
         }
         

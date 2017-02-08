@@ -92,13 +92,14 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
             let blurbRef = ref.child("blurb")
             blurbRef.setValue(blurb)
             
-            
+            self.performSegue(withIdentifier: "toMain", sender: nil)
+  
             
         }
         
         
        
-         performSegue(withIdentifier: "toMain", sender: nil)
+//         performSegue(withIdentifier: "toMain", sender: nil)
 
         
         

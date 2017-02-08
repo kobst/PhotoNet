@@ -13,9 +13,33 @@ import INTULocationManager
 import GeoFire
 
 
-class MainViewController: UIViewController {
+protocol GoToDetail: class {
+    
+    func goToDetail(targetSprite: TargetSprite)
+    
+}
 
+class MainViewController: UIViewController, GoToDetail {
+    
+    var selectedSprite: TargetSprite?
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toDetail" {
+            
+            let detailVC = segue.destination as! DetailViewController
+            detailVC.targetSprite = selectedSprite
+            
+        }
+    }
+    
+    
+    func goToDetail(targetSprite: TargetSprite) {
+        
+        selectedSprite = targetSprite
+        performSegue(withIdentifier: "toDetail", sender: nil)
+        
+        
+    }
     
     override func loadView() {
         self.view = SKView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
@@ -32,6 +56,7 @@ class MainViewController: UIViewController {
         
         // Create and configure the scene.
         scene = FieldScene(size: skView.bounds.size)
+        scene.delegateMainVC = self
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
     
@@ -44,11 +69,12 @@ class MainViewController: UIViewController {
                                 if status == INTULocationStatus.success {
                                     print("got location");
                                     
-                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+//                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+                                    let dummyLocation = Model.shared.makeFakeLocation()
 //                                    Model.shared.myOrigin = currentLocation
 //                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
 //                                    Model.shared.getTargets3(myLocation: currentLocation!)
-                                    Model.shared.myOrigin = dummyLocation
+                                    Model.shared.myLocation = dummyLocation
                                     print("\(currentLocation).....currentlocation.")
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
                                     Model.shared.getTargets3(myLocation: dummyLocation)

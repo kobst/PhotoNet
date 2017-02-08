@@ -11,9 +11,34 @@ import FirebaseStorage
 import Firebase
 import CoreLocation
 import GeoFire
+import AVFoundation
+
+struct PermisisionManager {
+    static var cameraAccessGranted : Bool {
+        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized
+    }
+    
+    static func requestCameraAccess(completion: @escaping (_ granted : Bool) -> Void) {
+        switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) {
+        case .authorized:
+            DispatchQueue.main.async { completion(true) }
+        case .restricted, .denied:
+            DispatchQueue.main.async { completion(false) }
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { granted in
+                DispatchQueue.main.async { completion(granted) }
+            }
+        }
+    }
+    
+}
 
 
 class Model {
+    
+    let msApiKey = "c978b7500d5b4a2e97bd20fdfb9bf03f"
+    let msApiKey2 = "8a26a031b4454ec0802ec99ddc7a3f7d"
+    
     
     static var shared = Model()
 
@@ -24,7 +49,7 @@ class Model {
     var queryTargets: [TargetSprite] = []
     var myLat: CGFloat?
     var myLong: CGFloat?
-    var myOrigin: CLLocation?
+    var myLocation: CLLocation?
     var myScreenOrigin = CGPoint(x: 0, y: 0)
     
     weak var addTargetDelegate: AddTargetProtocol?
@@ -82,10 +107,10 @@ class Model {
 //        let fakeLocation = makeFakeLocation()
         let circleQuery = geoFire?.query(at: myLocation, withRadius: 5.5)
         
-        circleQuery?.observe(.keyEntered, with: {(string, location) in
+        circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
             if let validUID = string, let locationBack = location {
                 
-                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
+                self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
                     //                    let value = snapshot.value as? [String: Any]
                     //                    print(value?["name"] as? String ?? "(ERROR)")
                     let user = User(snapshot: snapshot)
@@ -96,10 +121,10 @@ class Model {
 
                     
                     print(target.user?.name ?? "no name")
-                    print(self.queryTargets.count)
+                    print(self?.queryTargets.count)
 //                    self.addTargetDelegate?.addTarget(target: target)
                    
-                    self.addTargetDelegate?.addTargetSprites(target: target)
+                    self?.addTargetDelegate?.addTargetSprites(target: target)
                     
                 })
 

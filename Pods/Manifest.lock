@@ -59,6 +59,7 @@ PODS:
   - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
   - GTMSessionFetcher/Core (1.1.8)
   - INTULocationManager (4.2.0)
+  - ProjectOxfordFace (1.2.0)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -68,6 +69,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - GeoFire (from `https://github.com/firebase/geofire-objc`)
   - INTULocationManager (~> 4.2)
+  - ProjectOxfordFace
 
 EXTERNAL SOURCES:
   GeoFire:
@@ -93,7 +95,8 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   INTULocationManager: 73f8254b3d05c897c56bb13c190e5b7c648c0998
+  ProjectOxfordFace: eeb628b3d91ffe4f8fcec151abf26941975479d3
 
-PODFILE CHECKSUM: 8264bce4ca8ee6eb1bfb42acc5918745b22bb6e5
+PODFILE CHECKSUM: fbeff63b65a6df4791dd5878e3142dedee62b03c
 
 COCOAPODS: 1.2.0.rc.1

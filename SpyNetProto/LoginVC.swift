@@ -102,6 +102,7 @@ class LoginVC: UIViewController {
             let userUID = validUser.uid
             Model.shared.fetchUser(UID: userUID, completionHandler: { (user) in
                 Model.shared.loggedInUser = user
+                UserDefaults.standard.set(userUID, forKey: "uid")
                 self.performSegue(withIdentifier: "toMain", sender: nil)
         })
             
@@ -159,7 +160,8 @@ class LoginVC: UIViewController {
             
             Model.shared.loggedInUser = User(uid: validUser.uid)
             
-            print("GOT USER --------\n --------")
+            UserDefaults.standard.set(validUser.uid, forKey: "uid")
+          
             let baseRef = FIRDatabase.database().reference()
             let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
             
