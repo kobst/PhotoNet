@@ -62,6 +62,19 @@ class MainViewController: UIViewController, GoToDetail {
     
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
+        
+        locMgr.subscribeToHeadingUpdates { (heading, status) in
+          
+            if status == .success {
+                
+          
+                print(heading?.trueHeading ?? "no heading")
+                
+                
+            }
+            
+        }
+        
         locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
                                timeout: 5,
                                delayUntilAuthorized: true,

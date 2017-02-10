@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import INTULocationManager
 
 
 //#import <ProjectOxfordFace/MPOFaceSDK.h>
@@ -15,13 +16,29 @@ import AVFoundation
 
 class DetailViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    
+    @IBOutlet weak var abortButton: UIButton!
+ 
+    @IBOutlet weak var engageButton: UIButton!
     let captureSession = AVCaptureSession()
     var device: AVCaptureDevice?
     
+    @IBOutlet weak var attemptedImageView: UIImageView!
     
     @IBOutlet weak var profileImageView: UIImageView!
     
+    var attemptedImageOrigin = CGPoint()
+    var profileImageOrigin = CGPoint()
+    
     @IBOutlet weak var name: UILabel!
+    
+    var centerImageOrigin: CGPoint {
+        
+        let midx  = (attemptedImageView.frame.origin.x + profileImageView.frame.origin.x) / 2.0
+        let midy = (attemptedImageView.frame.origin.y + profileImageView.frame.origin.y) / 2.0
+        return CGPoint(x: midx, y: midy)
+        
+    }
     
     var targetSprite: TargetSprite?
 
@@ -29,11 +46,93 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
 //    
 //    let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
     
+   
+    
+    
+    func makeAttempt() {
+        
+        
+        
+        let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
+        locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
+                               timeout: 5,
+                               delayUntilAuthorized: true,
+                               block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
+                                if status == INTULocationStatus.success {
+                                    print("got location");
+                                    
+                                    let newAttempt = Attempt(target: (self.targetSprite?.target?.user?.uid)!, taker: (Model.shared.loggedInUser?.uid)!, location: currentLocation!, photo: self.profileImageView.image!)
+                                    
+                                    Model.shared.setNewAttempt(attempt: newAttempt)
+                                    
+                                    
+                                    
+                                }
+                                    
+                                else {
+                                    print("no location")
+                                }
+                                
+        })
+        
+        
+        
+
+        
+    }
+    
+    
+    func compareImage() {
+        print(centerImageOrigin)
+        print(attemptedImageOrigin)
+        print(profileImageOrigin)
+        
+        let distY  =  profileImageView.frame.origin.y - attemptedImageView.frame.origin.y
+        
+        makeAttempt()
+
+        UIView.animate(withDuration: 6.0) {
+//            self.attemptedImageView.frame.origin = self.centerImageOrigin
+//            self.profileImageView.frame.origin = self.centerImageOrigin
+            
+            self.profileImageView.frame.origin.y =  self.profileImageView.frame.origin.y - distY
+            self.attemptedImageView.frame.origin.y = self.attemptedImageView.frame.origin.y + distY
+            self.attemptedImageView.alpha = 0.50
+            self.profileImageView.alpha = 0.50
+        }
+        
+        let duration = 2.0
+        let delay = 1.0
+        
+//        UIView.animateKeyframes(withDuration: duration, delay: delay, options: [.repeat], animations: {
+//            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1/4, animations: {
+//                self.attemptedImageView.frame.origin = self.attemptedImageOrigin
+//                self.profileImageView.frame.origin = self.profileImageOrigin
+//                self.attemptedImageView.alpha = 0.95
+//                self.profileImageView.alpha = 0.95
+//            })
+//            UIView.addKeyframe(withRelativeStartTime: 1/3, relativeDuration: 3/4, animations: {
+//                self.attemptedImageView.frame.origin = self.centerImageOrigin
+//                self.profileImageView.frame.origin = self.centerImageOrigin
+//                self.attemptedImageView.alpha = 0.50
+//                self.profileImageView.alpha = 0.50
+//            })
+//        }, completion: nil
+//        )
+//        
+    }
+    
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            profileImageView.image = pickedImage
-        
+            attemptedImageView.image = pickedImage.circle
+            
+//            abortButton.isHidden = true
+            abortButton.frame.origin = CGPoint(x: 0, y: 0)
+            engageButton.isHidden = true
+            self.compareImage()
+            
+            
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -89,6 +188,8 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
         
 
+        attemptedImageOrigin = attemptedImageView.frame.origin
+        profileImageOrigin = profileImageView.frame.origin
         
         
     }

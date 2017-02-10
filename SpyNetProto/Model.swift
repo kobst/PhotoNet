@@ -13,6 +13,29 @@ import CoreLocation
 import GeoFire
 import AVFoundation
 
+
+
+class Attempt {
+    var lat: CLLocationDegrees
+    var lon: CLLocationDegrees
+    var time: String
+    var target: String
+    var taker: String
+    var photo: UIImage
+    init(target: String, taker: String, location: CLLocation, photo: UIImage) {
+        lat = location.coordinate.latitude
+        lon = location.coordinate.longitude
+        time = String(describing: Date())
+        self.target = target
+        self.taker = taker
+        self.photo = photo
+    }
+    
+    
+    
+    
+}
+
 struct PermisisionManager {
     static var cameraAccessGranted : Bool {
         return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .authorized
@@ -30,6 +53,10 @@ struct PermisisionManager {
             }
         }
     }
+    
+    
+
+    
     
 }
 
@@ -139,6 +166,33 @@ class Model {
     
     
     
+    func setNewAttempt(attempt: Attempt) {
+        
+    
+        let baseRef = FIRDatabase.database().reference()
+        let ref = baseRef.child("attempts").childByAutoId()
+        let data = UIImageJPEGRepresentation(attempt.photo, 0.1)!
+        let storageRef = FIRStorage.storage().reference()
+        let imageUID = NSUUID().uuidString
+        let imageRef = storageRef.child(imageUID)
+        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
+            let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
+            
+            let attemptData = [
+                "target": attempt.target,
+                "taker": attempt.taker,
+                "lat": attempt.lat,
+                "lon": attempt.lon,
+                "time": attempt.time,
+                "photo": imageURL ?? "no photo available"
+        ] as [String : Any]
+        
+        ref.setValue(attemptData)
+        
+    }
+    
+    }
+    
     
     func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
 //    func getTargets2(myLocation: CLLocation) {
@@ -154,7 +208,7 @@ class Model {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
 //        var targets = [Target]()
         let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 1)
+        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 0.25)
         
         let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
             if let validUID = string, let locationBack = location {
@@ -401,5 +455,5 @@ class Model {
     
     
 
-}
 
+}
