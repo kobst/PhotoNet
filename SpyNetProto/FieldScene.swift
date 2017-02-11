@@ -102,7 +102,7 @@ class User {
 class TargetSprite: SKSpriteNode {
     
 
-    func applySize() -> CGFloat {
+    func applySize() {
      
 //        let newX = position.x - (Model.shared.myScreenOrigin.x)
 //        let newY = position.y - (Model.shared.myScreenOrigin.y)
@@ -111,52 +111,104 @@ class TargetSprite: SKSpriteNode {
 //        target?.origPos
         // 20 dist -> 150 adjSize , 180 -> 40
         
-        var adjustedDist = CGFloat((3000 / distance + 25)) // match with other applySiz
+//        var adjustedDist = CGFloat((3000 / distance + 25)) // match with other applySiz
         
-        print("\(adjustedDist)..adjD \n \(distance)..dist \n")
-        if adjustedDist < 50 {
-            adjustedDist = 50
-      
+        var adjSize = (distance / -2.0) + 150
+        
+        print("\(adjSize)..adjSize \n \(distance)..dist \n")
+       
+        
+        if adjSize < 75 {
+
+            self.alpha = 0
             
         }
+    
         
-        if adjustedDist > 170 {
-            adjustedDist = 170
-        
+        if adjSize > 75 {
+            
+            self.alpha = ((adjSize - 75) / 50.0) + 0.5
         }
+    
+        self.nameLabel?.isHidden = adjSize > 100 ? false : true
+        
+//        if adjSize > 100 {
+//            self.nameLabel?.isHidden = false
+//        }
+//        
+//        if adjSize < 100 {
+//            
+//        }
         
         
-        self.alpha = ((adjustedDist/100.0) - 0.5)
-        return adjustedDist
+//        self.alpha = ((adjustedDist/100.0) - 0.5)
+        
+        
+        self.size.height = adjSize
+        self.size.width = adjSize
+        
+       
+        
+        
+//        return adjSize
         
     }
     
-    
-    
-    
-    func getPhysicsBody(position: CGPoint) -> SKPhysicsBody {
-        let size = applySize()
+    func changePhysicsBody() {
+        
+            self.physicsBody = nil
+
+//            let size = self.applySize()
+//        if self.size.width > 0 {
+//            size = 1.0
+//        }
+//        else {
+//            size =
+//        }
+        
+        let size = self.size.width > 1 ? self.size.width : 1
+        
         let body = SKPhysicsBody(circleOfRadius: size / 2.0)
-      
-        body.affectedByGravity = true
-        body.isDynamic = true
-        body.density = 0.25
-        body.friction = 0.1
-        body.restitution = 0.95
-        body.allowsRotation = false
-        body.angularVelocity = 0
-        body.linearDamping = 1
-        body.angularDamping = 1
+            
+            body.affectedByGravity = true
+            body.isDynamic = true
+            body.density = 0.25
+            body.friction = 0.85
+            body.restitution = 0.95
+            body.allowsRotation = false
+            body.angularVelocity = 0
+            body.linearDamping = 1
+            body.angularDamping = 1
+            body.fieldBitMask = self.mask!
+        
+            self.physicsBody = body
+            
     
-//        body.fieldBitMask = self.mask!
-        
-        return body
-        
     }
     
+    
+//    func getPhysicsBody(position: CGPoint) -> SKPhysicsBody {
+////        let size = applySize()
+//        let body = SKPhysicsBody(circleOfRadius: self.size.width / 2.0)
+//      
+//        body.affectedByGravity = true
+//        body.isDynamic = true
+//        body.density = 0.25
+//        body.friction = 0.1
+//        body.restitution = 0.95
+//        body.allowsRotation = false
+//        body.angularVelocity = 0
+//        body.linearDamping = 1
+//        body.angularDamping = 1
+//    
+////        body.fieldBitMask = self.mask!
+//        
+//        return body
+//    }
+//    
     var target: Target?
     var anchorGrav: SKFieldNode?
-    var scoreLabel: SKLabelNode?
+    var nameLabel: SKLabelNode?
     
     var distance: CGFloat {
         
@@ -203,18 +255,20 @@ class TargetSprite: SKSpriteNode {
 //            let sizeFactor = applySize(position: target.origPos)
 //            self.zPosition = 1 * sizeFactor
 //            self.size = CGSize(width: sizeFactor, height: sizeFactor)
-        let body = getPhysicsBody(position: target.origPos )
-            self.physicsBody = body
-            self.physicsBody!.affectedByGravity = true
-            self.isUserInteractionEnabled = false
-            self.physicsBody!.isDynamic = true
-            self.physicsBody!.density = 0.25
-            self.physicsBody!.friction = 0.5
-            self.physicsBody!.restitution = 0.95
-            self.physicsBody!.allowsRotation = false
-            self.physicsBody!.angularVelocity = 0
-            self.physicsBody!.linearDamping = 1
-            self.physicsBody!.angularDamping = 1
+//        let body = getPhysicsBody(position: target.origPos )
+//        self.changePhysicsBody()
+////            self.physicsBody = body
+//            self.physicsBody!.affectedByGravity = true
+//            self.isUserInteractionEnabled = false
+//            self.physicsBody!.isDynamic = true
+//            self.physicsBody!.density = 0.25
+//            self.physicsBody!.friction = 0.5
+//            self.physicsBody!.restitution = 0.95
+//            self.physicsBody!.allowsRotation = false
+//            self.physicsBody!.angularVelocity = 0
+//            self.physicsBody!.linearDamping = 1
+//            self.physicsBody!.angularDamping = 1
+//        self.applySize()
         
         
         
@@ -228,19 +282,19 @@ class TargetSprite: SKSpriteNode {
         
         if let validMask = gravMask {
             print("\(validMask)..\(anchorGrav?.position)...VALIDMASK")
-            physicsBody!.fieldBitMask = validMask
+//            physicsBody!.fieldBitMask = validMask
             anchorGrav?.categoryBitMask = validMask
             self.mask = validMask
             
         }
         
-        scoreLabel = SKLabelNode()
-        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
-        scoreLabel?.text = "Score: 0"
-        scoreLabel?.horizontalAlignmentMode = .center
-        scoreLabel?.position = CGPoint(x: 0, y: 0)
-
-        self.addChild(scoreLabel!)
+        nameLabel = SKLabelNode()
+        nameLabel = SKLabelNode(fontNamed: "Chalkduster")
+        nameLabel?.text = self.target?.user?.name
+        nameLabel?.horizontalAlignmentMode = .center
+        nameLabel?.position = CGPoint(x: 0, y: 0)
+        nameLabel?.isHidden = true
+        self.addChild(nameLabel!)
 //        return labelNode
         
         
@@ -432,39 +486,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     
-//    
-//    
-//    func applySize(position: CGPoint) -> CGFloat {
-////        print(".......\n...\(Model.shared.myScreenOrigin).....")
-//        let newX = position.x - (Model.shared.myScreenOrigin.x)
-//        let newY = position.y - (Model.shared.myScreenOrigin.y)
-//        
-//        let distance = sqrt((newX * newX) + (newY * newY))
-//        var adjustedDist = CGFloat(3500 / distance + 10)
-//        print("\(distance).dist....\(adjustedDist).adjustDist")
-//        
-//        if adjustedDist < 50 {
-//            adjustedDist = 50
-//        }
-//        if adjustedDist > 200 {
-//            adjustedDist = 200
-//        }
-//        
-////        if distance < 2 {
-////            distance = 2
-////        }
-////        if distance > 20 {
-////            distance = 20
-////        }
-//        
-//        let spriteSize = adjustedDist
-////        print("\(spriteSize)...\(distance).......ss")
-//        
-////        let spriteSize = CGFloat(distance * 10)
-//        return spriteSize
-//        
-//    }
-    
+
     
     
     func addTargetSprites(target: Target) {
@@ -478,9 +500,14 @@ class FieldScene: SKScene, AddTargetProtocol {
             }
             
             let sprite = TargetSprite(target: target, image: returnedImage)
+//            sprite.applySize()
+//            sprite.changePhysicsBody()
             Model.shared.queryTargets.append(sprite)
             self.addChild(sprite)
             self.addChild(sprite.anchorGrav!)
+            sprite.applySize()
+            sprite.changePhysicsBody()
+       
         }
         
         
@@ -671,19 +698,11 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         
         for targetSprite in Model.shared.queryTargets {
-            
-//            print("\(target.sprite!.position)..\n \(target.origPos)...\(target.sprite!.size.width)\n POS in UPDATESPOTSIZES") -- change applysize to mutating func
-//            targetSprite.applySize(position: (targetSprite.target?.origPos)!)
-//            let sizeFactor = applySize(position: (targetSprite.target?.origPos)!)
-            let size2 = targetSprite.applySize()
-            
-            targetSprite.size = CGSize(width: size2, height: size2)
-            
-            targetSprite.physicsBody = targetSprite.getPhysicsBody(position: (targetSprite.target?.origPos)!)
-//
+    
+            targetSprite.applySize()
+            targetSprite.changePhysicsBody()
             targetSprite.physicsBody!.fieldBitMask = targetSprite.mask! | gravityCategory
-//            print("\(targetSprite.mask)...MASK")  // should do this in getPhysicsBody.
-//            targetSprite.zPosition = 1 * sizeFactor
+
         }
         
     }
@@ -700,3 +719,51 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
 }
 
+
+
+
+
+//
+//
+//    func applySize(position: CGPoint) -> CGFloat {
+////        print(".......\n...\(Model.shared.myScreenOrigin).....")
+//        let newX = position.x - (Model.shared.myScreenOrigin.x)
+//        let newY = position.y - (Model.shared.myScreenOrigin.y)
+//
+//        let distance = sqrt((newX * newX) + (newY * newY))
+//        var adjustedDist = CGFloat(3500 / distance + 10)
+//        print("\(distance).dist....\(adjustedDist).adjustDist")
+//
+//        if adjustedDist < 50 {
+//            adjustedDist = 50
+//        }
+//        if adjustedDist > 200 {
+//            adjustedDist = 200
+//        }
+//
+////        if distance < 2 {
+////            distance = 2
+////        }
+////        if distance > 20 {
+////            distance = 20
+////        }
+//
+//        let spriteSize = adjustedDist
+////        print("\(spriteSize)...\(distance).......ss")
+//
+////        let spriteSize = CGFloat(distance * 10)
+//        return spriteSize
+//
+//    }
+
+
+
+//            targetSprite.physicsBody = targetSprite.getPhysicsBody(position: (targetSprite.target?.origPos)!)
+//            print("\(target.sprite!.position)..\n \(target.origPos)...\(target.sprite!.size.width)\n POS in UPDATESPOTSIZES") -- change applysize to mutating func
+//            targetSprite.applySize(position: (targetSprite.target?.origPos)!)
+//            let sizeFactor = applySize(position: (targetSprite.target?.origPos)!)
+//            let size2 = targetSprite.applySize()
+//
+//            targetSprite.size = CGSize(width: size2, height: size2)
+
+//            print(targetSprite.target?.origPos ?? "no origPOs?")

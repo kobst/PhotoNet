@@ -88,7 +88,7 @@ class MainViewController: UIViewController, GoToDetail {
 //                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
 //                                    Model.shared.getTargets3(myLocation: currentLocation!)
                                     Model.shared.myLocation = dummyLocation
-                                    print("\(currentLocation).....currentlocation.")
+                                    print("\(currentLocation).....CL.")
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
                                     Model.shared.getTargets3(myLocation: dummyLocation)
                                     

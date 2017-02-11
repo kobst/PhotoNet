@@ -12,7 +12,7 @@ import Firebase
 import CoreLocation
 import GeoFire
 import AVFoundation
-
+import ProjectOxfordFace
 
 
 class Attempt {
@@ -65,6 +65,7 @@ class Model {
     
     let msApiKey = "c978b7500d5b4a2e97bd20fdfb9bf03f"
     let msApiKey2 = "8a26a031b4454ec0802ec99ddc7a3f7d"
+   
     
     
     static var shared = Model()
@@ -148,7 +149,7 @@ class Model {
 
                     
                     print(target.user?.name ?? "no name")
-                    print(self?.queryTargets.count)
+                    print(self?.queryTargets.count ?? "no count")
 //                    self.addTargetDelegate?.addTarget(target: target)
                    
                     self?.addTargetDelegate?.addTargetSprites(target: target)
@@ -157,6 +158,9 @@ class Model {
 
                 
             }})
+        
+        
+ 
         
 
         
@@ -238,11 +242,11 @@ class Model {
             
             }})
         
-        circleQuery?.observeReady({
-            
-//            completion(self.queryTargets)
-            
-        })
+//        circleQuery?.observeReady({
+//            
+////            completion(self.queryTargets)
+//            
+//        })
         
     
         

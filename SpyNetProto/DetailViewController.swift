@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import INTULocationManager
+import ProjectOxfordFace
 
 
 //#import <ProjectOxfordFace/MPOFaceSDK.h>
@@ -41,7 +42,12 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     var targetSprite: TargetSprite?
+    
+    var targetFaceID: String?
+    var attemptedFaceID: String?
 
+    let faceClient = MPOFaceServiceClient(subscriptionKey: Model.shared.msApiKey)
+    
 //    let picker = UIImagePickerController()
 //    
 //    let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
@@ -82,14 +88,26 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     
+    func compareFaces() {
+        
+            let _ = faceClient?.verify(withFirstFaceId: attemptedFaceID, faceId2: targetFaceID, completionBlock: { (result, error) in
+                
+                if let goodResult = result {
+                    print(goodResult.isIdentical)
+                }
+                
+                
+            })
+        
+        
+    }
+    
     func compareImage() {
         print(centerImageOrigin)
         print(attemptedImageOrigin)
         print(profileImageOrigin)
         
         let distY  =  profileImageView.frame.origin.y - attemptedImageView.frame.origin.y
-        
-        makeAttempt()
 
         UIView.animate(withDuration: 6.0) {
 //            self.attemptedImageView.frame.origin = self.centerImageOrigin
@@ -101,25 +119,27 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.profileImageView.alpha = 0.50
         }
         
-        let duration = 2.0
-        let delay = 1.0
         
-//        UIView.animateKeyframes(withDuration: duration, delay: delay, options: [.repeat], animations: {
-//            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1/4, animations: {
-//                self.attemptedImageView.frame.origin = self.attemptedImageOrigin
-//                self.profileImageView.frame.origin = self.profileImageOrigin
-//                self.attemptedImageView.alpha = 0.95
-//                self.profileImageView.alpha = 0.95
-//            })
-//            UIView.addKeyframe(withRelativeStartTime: 1/3, relativeDuration: 3/4, animations: {
-//                self.attemptedImageView.frame.origin = self.centerImageOrigin
-//                self.profileImageView.frame.origin = self.centerImageOrigin
-//                self.attemptedImageView.alpha = 0.50
-//                self.profileImageView.alpha = 0.50
-//            })
-//        }, completion: nil
-//        )
-//        
+        var faceData = Data()
+        faceData = UIImageJPEGRepresentation(attemptedImageView.image!, 0.5)!
+ 
+        
+        let _ = faceClient?.detect(with: faceData, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
+            
+            if faces != nil {
+                self.attemptedFaceID = faces?[0].faceId
+                print(self.attemptedFaceID ?? "no face")
+                self.compareFaces()
+                
+            }
+            
+        })
+        
+        
+        
+        
+         makeAttempt()
+        
     }
     
     
@@ -191,6 +211,22 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         attemptedImageOrigin = attemptedImageView.frame.origin
         profileImageOrigin = profileImageView.frame.origin
         
+
+    
+        
+        let _ = faceClient?.detect(withUrl: targetSprite?.target?.user?.avatar, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
+            
+            if faces != nil {
+                self.targetFaceID = faces?[0].faceId
+                print(self.targetFaceID)
+            }
+            
+
+            
+        })
+        
+
+
         
     }
 
