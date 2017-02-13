@@ -16,6 +16,7 @@ import GeoFire
 protocol GoToDetail: class {
     
     func goToDetail(targetSprite: TargetSprite)
+    func goToProfile()
     
 }
 
@@ -33,6 +34,12 @@ class MainViewController: UIViewController, GoToDetail {
     }
     
     
+    
+    func goToProfile() {
+        
+        performSegue(withIdentifier: "toProfile", sender: nil)
+    }
+    
     func goToDetail(targetSprite: TargetSprite) {
         
         selectedSprite = targetSprite
@@ -40,6 +47,9 @@ class MainViewController: UIViewController, GoToDetail {
         
         
     }
+    
+     @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
+    
     
     override func loadView() {
         self.view = SKView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))

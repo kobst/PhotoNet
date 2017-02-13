@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseStorage
-
+import ProjectOxfordFace
 
 class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -24,7 +24,10 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     
     
+    var editingMode = false
     var imagePicked = false
+    
+    let faceClient = MPOFaceServiceClient(subscriptionKey: Model.shared.msApiKey)
     
     @IBOutlet weak var profileImageView: UIImageView!
     
@@ -38,7 +41,6 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
     @IBOutlet weak var blurbField: UITextView!
     
     
-
     @IBAction func completeRegistration(_ sender: Any) {
         
         if imagePicked == false {
@@ -50,30 +52,54 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
             return
         }
         
-        guard let codeName = codeName.text else {
+        guard let _ = codeName.text else {
             alert(message: "please enter a code name")
             return
         }
         
-        guard let blurb = blurbField.text else {
+        guard let _ = blurbField.text else {
             alert(message: "please enter non-classified vital")
             return
             
         }
         
+
         
         var data = Data()
         data = UIImageJPEGRepresentation(imageUploaded, 0.1)!
         
-        //        let metaData = FIRStorageMetadata()
-        //        metaData.contentType = "image/jpg"
+        let _ = faceClient?.detect(with: data, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
+            
+            if (faces?.count)! != 1  {
+                self.alert(message: "please enter a photo with one actual face dummy")
+
+            }
+            
+            else {
+                
+                self.setUser(data: data)
+                
+            }
+            
+            
+            
+        })
+        
+        
+
+
+    }
+    
+    
+    
+    func setUser(data: Data) {
         
         let storageRef = FIRStorage.storage().reference()
         let imageUID = NSUUID().uuidString
         let imageRef = storageRef.child(imageUID)
         
-        Model.shared.loggedInUser?.blurb = blurb
-        Model.shared.loggedInUser?.name = codeName
+        Model.shared.loggedInUser?.blurb = blurbField.text
+        Model.shared.loggedInUser?.name = codeName.text!
         
         imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
             let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
@@ -87,95 +113,27 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
             avatarRef.setValue(imageURL)
             
             let nameRef = ref.child("name")
-            nameRef.setValue(codeName)
+            nameRef.setValue(self.codeName.text!)
             
             let blurbRef = ref.child("blurb")
-            blurbRef.setValue(blurb)
+            blurbRef.setValue(self.blurbField.text)
             
             self.performSegue(withIdentifier: "toMain", sender: nil)
-  
+            
             
         }
         
         
-       
-//         performSegue(withIdentifier: "toMain", sender: nil)
-
-        
-        
-        
-        
         
     }
-    
-//    @IBAction func completeRegistration(_ sender: Any) {
-//        
-//        if imagePicked == false {
-//            alert(message: "please upload a photo")
-//        }
-//        
-//        guard let imageUploaded = profileImageView.image else {
-//            alert(message: "please upload a photo")
-//            return
-//        }
-//        
-//        guard let codeName = codeName.text else {
-//            alert(message: "please enter a code name")
-//            return
-//        }
-//        
-//        guard let blurb = blurbField.text else {
-//            alert(message: "please enter non-classified vital")
-//            return
-//            
-//        }
-//        
-//        
-//        
-//        var data = Data()
-//        data = UIImageJPEGRepresentation(imageUploaded, 0.1)!
-//        
-//        //        let metaData = FIRStorageMetadata()
-//        //        metaData.contentType = "image/jpg"
-//        
-//        let storageRef = FIRStorage.storage().reference()
-//        let imageUID = NSUUID().uuidString
-//        let imageRef = storageRef.child(imageUID)
-//        
-//        Model.shared.loggedInUser?.blurb = blurb
-//        Model.shared.loggedInUser?.name = codeName
-//        
-//        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
-//            let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
-//            
-//            
-//            let baseRef = FIRDatabase.database().reference()
-//            let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
-//            
-////            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
-//            let avatarRef = ref.child("avatar")
-//            avatarRef.setValue(imageURL)
-//            
-//            let nameRef = ref.child("name")
-//            nameRef.setValue(codeName)
-//            
-//            let blurbRef = ref.child("blurb")
-//            blurbRef.setValue(blurb)
-//            
-//        }
-//        
-//        
-//        performSegue(withIdentifier: "toMainFromOnboard", sender: nil)
-//        
-//    }
-    
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-            
+            hideKeyboardWhenTappedAround()
+        
             profileImageView.isUserInteractionEnabled = true
             
             profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImage)))
@@ -185,6 +143,8 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
 
     
     
+    
+ 
     
     
     func handleSelectProfileImage() {
@@ -231,3 +191,72 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
     
 
 }
+
+
+
+
+
+
+
+//    @IBAction func completeRegistration(_ sender: Any) {
+//
+//        if imagePicked == false {
+//            alert(message: "please upload a photo")
+//        }
+//
+//        guard let imageUploaded = profileImageView.image else {
+//            alert(message: "please upload a photo")
+//            return
+//        }
+//
+//        guard let codeName = codeName.text else {
+//            alert(message: "please enter a code name")
+//            return
+//        }
+//
+//        guard let blurb = blurbField.text else {
+//            alert(message: "please enter non-classified vital")
+//            return
+//
+//        }
+//
+//
+//
+//        var data = Data()
+//        data = UIImageJPEGRepresentation(imageUploaded, 0.1)!
+//
+//        //        let metaData = FIRStorageMetadata()
+//        //        metaData.contentType = "image/jpg"
+//
+//        let storageRef = FIRStorage.storage().reference()
+//        let imageUID = NSUUID().uuidString
+//        let imageRef = storageRef.child(imageUID)
+//
+//        Model.shared.loggedInUser?.blurb = blurb
+//        Model.shared.loggedInUser?.name = codeName
+//
+//        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
+//            let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
+//
+//
+//            let baseRef = FIRDatabase.database().reference()
+//            let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
+//
+////            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
+//            let avatarRef = ref.child("avatar")
+//            avatarRef.setValue(imageURL)
+//
+//            let nameRef = ref.child("name")
+//            nameRef.setValue(codeName)
+//
+//            let blurbRef = ref.child("blurb")
+//            blurbRef.setValue(blurb)
+//
+//        }
+//
+//
+//        performSegue(withIdentifier: "toMainFromOnboard", sender: nil)
+//
+//    }
+
+

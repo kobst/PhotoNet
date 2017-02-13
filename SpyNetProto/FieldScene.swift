@@ -385,7 +385,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     var cam: SKCameraNode!
     let gravField = SKFieldNode.springField()
     let background = SKSpriteNode(imageNamed: "horizonSpace")
-    
+    var profileNode: SKSpriteNode!
 
     
     
@@ -418,11 +418,7 @@ class FieldScene: SKScene, AddTargetProtocol {
        
         //        gravField.position.x = size.width/2; // Center on X axis
         //        gravField.position.y = size.height/2; // Center on Y axis (Now at center of screen)
-        gravField.position.x = 0
-        gravField.position.y = 0
-        gravField.isEnabled = true
-        gravField.categoryBitMask = gravityCategory
-        gravField.strength = 8.0
+
 
 //        addChild(gravField);
         
@@ -467,6 +463,9 @@ class FieldScene: SKScene, AddTargetProtocol {
             Model.shared.myScreenOrigin = CGPoint(x: Model.shared.myScreenOrigin.x - translation.x, y: Model.shared.myScreenOrigin.y - translation.y)
             cam.position = Model.shared.myScreenOrigin
             gravField.position = Model.shared.myScreenOrigin
+            
+            profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+            
             print("\(Model.shared.myScreenOrigin)....ORIGIN")
             updateSpotSizes()
             
@@ -590,6 +589,18 @@ class FieldScene: SKScene, AddTargetProtocol {
 //        
 //    }
     
+    func makeProfileNode() -> SKSpriteNode {
+        
+        let profileImage = UIImage(named: "plus")?.circle
+        let profileTexture = SKTexture(image: profileImage!)
+        let profileNode = SKSpriteNode(texture: profileTexture)
+        profileNode.size.width = 50
+        profileNode.size.height = 50
+        profileNode.name = "profileButtonXOXO"
+        return profileNode
+        
+        
+    }
     
     
     override func didMove(to view: SKView) {
@@ -604,6 +615,17 @@ class FieldScene: SKScene, AddTargetProtocol {
         //position the camera on the gamescene.
         cam.position = CGPoint(x: 0, y: 0)
         Model.shared.myScreenOrigin = CGPoint(x: 0, y: 0)
+        
+        profileNode = makeProfileNode()
+        profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+        self.addChild(profileNode)
+        
+        
+//        gravField.position = Model.shared.myScreenOrigin
+//        gravField.isEnabled = true
+//        gravField.categoryBitMask = gravityCategory
+//        gravField.strength = 1.0
+//        self.addChild(gravField)
         
         
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanFrom))
@@ -660,12 +682,20 @@ class FieldScene: SKScene, AddTargetProtocol {
             print(nodeAtPoint.name ?? "no name")
             
             if nodeAtPoint.name != nil {
-                let target = nodeAtPoint as! TargetSprite
-                print("\(target.target?.user?.name)...\(target.mask)....NODEATPT")
-                
-                delegateMainVC?.goToDetail(targetSprite: target)
-                
-                
+                if nodeAtPoint.name == "profileButtonXOXO" {
+                    print("profiel seleceted \n \n profile selected \n ")
+                    delegateMainVC?.goToProfile()
+                    
+                }
+                else {
+                    
+                    let target = nodeAtPoint as! TargetSprite
+                    print("\(target.target?.user?.name)...\(target.mask)....")
+                    
+                    delegateMainVC?.goToDetail(targetSprite: target)
+                    
+                }
+
                 
             }
         }

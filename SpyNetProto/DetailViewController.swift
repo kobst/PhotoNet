@@ -33,6 +33,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @IBOutlet weak var name: UILabel!
     
+    @IBOutlet weak var resultLabel: UILabel!
     var centerImageOrigin: CGPoint {
         
         let midx  = (attemptedImageView.frame.origin.x + profileImageView.frame.origin.x) / 2.0
@@ -52,12 +53,9 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
 //    
 //    let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a source", preferredStyle: .actionSheet)
     
-   
     
     
-    func makeAttempt() {
-        
-        
+    func makeAttempt(result: Bool) {
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
         locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
@@ -67,12 +65,11 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
                                 if status == INTULocationStatus.success {
                                     print("got location");
                                     
-                                    let newAttempt = Attempt(target: (self.targetSprite?.target?.user?.uid)!, taker: (Model.shared.loggedInUser?.uid)!, location: currentLocation!, photo: self.profileImageView.image!)
+                                    let newAttempt = Attempt(target: (self.targetSprite?.target?.user?.uid)!, taker: (Model.shared.loggedInUser?.uid)!, location: currentLocation!, photo: self.profileImageView.image!, success: result)
                                     
                                     Model.shared.setNewAttempt(attempt: newAttempt)
                                     
-                                    
-                                    
+                                
                                 }
                                     
                                 else {
@@ -88,21 +85,77 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     
+    func showResult(success: Bool) {
+        
+        resultLabel.isHidden = false
+        
+        if success {
+            resultLabel.text = "SUCCESS - 100 Pts"
+            resultLabel.backgroundColor = UIColor.green
+
+        }
+        
+        if !success {
+            resultLabel.text = "ATTEMPT MISSED"
+            resultLabel.backgroundColor = UIColor.red
+
+        }
+        
+        
+        UIView.animate(withDuration: 1.0, delay: 1.5, options: .curveEaseInOut, animations: {
+            self.resultLabel.alpha = 0
+        }, completion: { _ in
+             self.dismiss(animated: true, completion: nil)
+        })
+        
+
+        
+
+        
+        
+//        let popVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SuccessPopUp") as! SuccessViewController
+//        
+//        if success {
+//            popVC.result = .success
+//        }
+//        
+//        if !success {
+//            popVC.result = .failed
+//        }
+//        
+//        self.addChildViewController(popVC)
+//        popVC.view.frame = self.view.frame
+//        self.view.addSubview(popVC.view)
+//        popVC.didMove(toParentViewController: self)
+        
+    }
+    
     func compareFaces() {
         
             let _ = faceClient?.verify(withFirstFaceId: attemptedFaceID, faceId2: targetFaceID, completionBlock: { (result, error) in
                 
                 if let goodResult = result {
                     print(goodResult.isIdentical)
+                    
+                    self.showResult(success: goodResult.isIdentical)
+                    self.makeAttempt(result: goodResult.isIdentical)
+                    
                 }
                 
+                else {
+                    print("inconclusive")
+                    
+                    
+                    
+                    
+                }
                 
             })
         
         
     }
     
-    func compareImage() {
+    func setImage() {
         print(centerImageOrigin)
         print(attemptedImageOrigin)
         print(profileImageOrigin)
@@ -115,8 +168,8 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
             
             self.profileImageView.frame.origin.y =  self.profileImageView.frame.origin.y - distY
             self.attemptedImageView.frame.origin.y = self.attemptedImageView.frame.origin.y + distY
-            self.attemptedImageView.alpha = 0.50
-            self.profileImageView.alpha = 0.50
+            self.attemptedImageView.alpha = 1.0
+            self.profileImageView.alpha = 1.0
         }
         
         
@@ -126,19 +179,33 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         let _ = faceClient?.detect(with: faceData, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
             
-            if faces != nil {
+            if (faces?.count)! > 0 {
                 self.attemptedFaceID = faces?[0].faceId
                 print(self.attemptedFaceID ?? "no face")
                 self.compareFaces()
+            }
+            
+            else {
+                print("no faces")
+                self.resultLabel.text = "No Targets Identified"
+                self.resultLabel.backgroundColor = UIColor.yellow
+                self.resultLabel.isHidden = false
+                self.attemptedImageView.image = nil
+               
+                UIView.animate(withDuration: 2.5, animations: { 
+                    self.resultLabel.alpha = 0
+                })
+//                self.resultLabel.isHidden = true
+                self.engageButton.isHidden = false
+                self.engageButton.isEnabled = true
+                
                 
             }
             
         })
         
+    
         
-        
-        
-         makeAttempt()
         
     }
     
@@ -150,7 +217,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
 //            abortButton.isHidden = true
             abortButton.frame.origin = CGPoint(x: 0, y: 0)
             engageButton.isHidden = true
-            self.compareImage()
+            self.setImage()
             
             
         }
@@ -199,6 +266,8 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        resultLabel.isHidden = true
+        
         
         name.text = targetSprite?.name!
         let cgVersion = targetSprite?.texture!.cgImage()
@@ -212,13 +281,14 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         profileImageOrigin = profileImageView.frame.origin
         
 
-    
         
         let _ = faceClient?.detect(withUrl: targetSprite?.target?.user?.avatar, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
             
-            if faces != nil {
+            if (faces?.count)! > 0 {
                 self.targetFaceID = faces?[0].faceId
-                print(self.targetFaceID)
+                print("got face \n")
+                print(faces?[0].faceId ?? "no face")
+
             }
             
 

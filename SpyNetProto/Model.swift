@@ -21,16 +21,45 @@ class Attempt {
     var time: String
     var target: String
     var taker: String
-    var photo: UIImage
-    init(target: String, taker: String, location: CLLocation, photo: UIImage) {
+    var photo = UIImage(named: "beckett")!
+    var success: Bool
+    
+    init(target: String, taker: String, location: CLLocation, photo: UIImage, success: Bool) {
         lat = location.coordinate.latitude
         lon = location.coordinate.longitude
         time = String(describing: Date())
         self.target = target
         self.taker = taker
         self.photo = photo
+        self.success = success
     }
     
+    
+    init(snapshot: FIRDataSnapshot) {
+        
+        let dict = snapshot.value as! [String : Any]
+        lat = dict["lat"] as! CLLocationDegrees
+        lon = dict["lon"] as! CLLocationDegrees
+        time = dict["time"] as! String
+        target = dict["target"] as! String
+        taker = dict["taker"] as! String
+        let successString = dict["success"] as! String
+        success = successString == "fail" ? false : true
+        
+        let imageURL = dict["photo"] as! String
+      
+        Model.shared.fetchImage(stringURL: imageURL) { (image) in
+            if let returnedImage = image {
+                
+                self.photo = returnedImage
+                
+            }
+
+        }
+        
+        
+        
+    }
     
     
     
@@ -172,7 +201,7 @@ class Model {
     
     func setNewAttempt(attempt: Attempt) {
         
-    
+        let result = attempt.success ? "success" : "fail"
         let baseRef = FIRDatabase.database().reference()
         let ref = baseRef.child("attempts").childByAutoId()
         let data = UIImageJPEGRepresentation(attempt.photo, 0.1)!
@@ -188,7 +217,8 @@ class Model {
                 "lat": attempt.lat,
                 "lon": attempt.lon,
                 "time": attempt.time,
-                "photo": imageURL ?? "no photo available"
+                "photo": imageURL ?? "no photo available",
+                "success": result
         ] as [String : Any]
         
         ref.setValue(attemptData)

@@ -44,24 +44,25 @@ class SplashViewController: UIViewController {
         
         print("viewdidload \n \n \n \n \n \n viewdidload")
         
-//        let userUID = UserDefaults.standard.value(forKey: "uid")
-//        userUID = UserDefaults.standard.value(forKey: "uid") as! String?
         
-        userUID = "FbuuG386AhPGBofomp75aXqhE5W2"
+        
+//        let userUID = UserDefaults.standard.value(forKey: "uid")
+        let userUID = UserDefaults.standard.value(forKey: "uid") as! String?
+        
         if let validUID = userUID {
             print("validUID")
-            Model.shared.fetchUser(UID: validUID , completionHandler: { (user) in
+            Model.shared.fetchUser(UID: validUID, completionHandler: { (user) in
                 Model.shared.loggedInUser = user
                 print("in fetch user \n \n \n fetch user")
-//                self.performSegue(withIdentifier: "toMain", sender: self)
+                self.performSegue(withIdentifier: "toMain", sender: self)
             })
         }
 //
-//        else {
-//            print("not valid")
-//            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
-//            
-//        }
+        else {
+            print("not valid")
+            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
+            
+        }
         
     }
 
