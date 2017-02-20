@@ -103,11 +103,17 @@ class Model {
     
     var loggedInUser: User?
     var queryUsers: [User] = []
-    var queryTargets: [TargetSprite] = []
+//    var queryTargets: [TargetSprite] = []
+    var queryTargets: [TargetSpriteVar] = []
+    var sceneTweets: [TweetData] = []
+    var sceneTargets: [Target] = []
     var myLat: CGFloat?
     var myLong: CGFloat?
     var myLocation: CLLocation?
     var myScreenOrigin = CGPoint(x: 0, y: 0)
+    
+
+    
     
     weak var addTargetDelegate: AddTargetProtocol?
     
@@ -162,7 +168,7 @@ class Model {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         //        var targets = [Target]()
 //        let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: myLocation, withRadius: 5.5)
+        let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5)
         
         circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
             if let validUID = string, let locationBack = location {
@@ -189,12 +195,53 @@ class Model {
             }})
         
         
- 
+    }
+    
+    
+    
+    
+    
+    func getTargets4(myLocation: CLLocation) {
         
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+        //        var targets = [Target]()
+        //        let fakeLocation = makeFakeLocation()
+        let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5)
+        
+        circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
+            if let validUID = string, let locationBack = location {
+                
+                self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
+                    //                    let value = snapshot.value as? [String: Any]
+                    //                    print(value?["name"] as? String ?? "(ERROR)")
+                    let user = User(snapshot: snapshot)
+                    let target = Target(user: user, location: locationBack)
+             
 
+                    print(target.user?.name ?? "no name")
+                    print(self?.queryTargets.count ?? "no count")
+                    //                    self.addTargetDelegate?.addTarget(target: target)
+                    
+                    self?.addTargetDelegate?.addTargetSprites(target: target)
+                    
+                })
+                
+                
+            }})
         
         
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -227,61 +274,61 @@ class Model {
     
     }
     
-    
-    func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
-//    func getTargets2(myLocation: CLLocation) {
-        //Query GeoFire for nearby users
-        //Set up query parameters
-        //        var keys = [String]()
-        //        var locations = [CLLocation]()
-//        keys.append(stringBack)
-//        locations.append(locationBack)
-//        print(stringBack)
-        
-        
-        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
-//        var targets = [Target]()
-        let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 0.25)
-        
-        let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
-            if let validUID = string, let locationBack = location {
-
-                
-                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
-//                    let value = snapshot.value as? [String: Any]
-//                    print(value?["name"] as? String ?? "(ERROR)")
-                    let user = User(snapshot: snapshot)
-                    let target = Target(user: user, location: locationBack)
-                    
-                    self.queryUsers.append(user)
-//                    targets.append(target)
-//                    self.queryTargets.append(target)
-                    
-//                    print(target.user?.name ?? "no name")
-//                    print(self.queryTargets.count)
-//                    self.addTargetDelegate?.addTarget(target: target)
-                    
-//                    circleQuery?.observeReady({
-//                        completion(self.queryTarget)
-//                    })
-                    
-                
-                })
-
-            
-            }})
-        
-//        circleQuery?.observeReady({
+//    
+//    func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
+////    func getTargets2(myLocation: CLLocation) {
+//        //Query GeoFire for nearby users
+//        //Set up query parameters
+//        //        var keys = [String]()
+//        //        var locations = [CLLocation]()
+////        keys.append(stringBack)
+////        locations.append(locationBack)
+////        print(stringBack)
+//        
+//        
+//        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+////        var targets = [Target]()
+//        let fakeLocation = makeFakeLocation()
+//        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 0.25)
+//        
+//        let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
+//            if let validUID = string, let locationBack = location {
+//
+//                
+//                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
+////                    let value = snapshot.value as? [String: Any]
+////                    print(value?["name"] as? String ?? "(ERROR)")
+//                    let user = User(snapshot: snapshot)
+//                    let target = Target(user: user, location: locationBack)
+//                    
+//                    self.queryUsers.append(user)
+////                    targets.append(target)
+////                    self.queryTargets.append(target)
+//                    
+////                    print(target.user?.name ?? "no name")
+////                    print(self.queryTargets.count)
+////                    self.addTargetDelegate?.addTarget(target: target)
+//                    
+////                    circleQuery?.observeReady({
+////                        completion(self.queryTarget)
+////                    })
+//                    
+//                
+//                })
+//
 //            
-////            completion(self.queryTargets)
-//            
-//        })
-        
-    
-        
-  
-    }
+//            }})
+//        
+////        circleQuery?.observeReady({
+////            
+//////            completion(self.queryTargets)
+////            
+////        })
+//        
+//    
+//        
+//  
+//    }
     
 
             
@@ -357,9 +404,41 @@ class Model {
     ]
     
     
-    
-    
-    
+//    
+//    var categoryMasksDict: [UInt32 : Bool] = [
+//         0x1 << 1 : false,
+//         0x1 << 2 : false,
+//         0x1 << 3 : false,
+//         0x1 << 4 : false,
+//         0x1 << 5 : false,
+//         0x1 << 6 : false,
+//         0x1 << 7 : false,
+//         0x1 << 8 : false,
+//         0x1 << 9 : false,
+//         0x1 << 10 : false,
+//         0x1 << 11 : false,
+//         0x1 << 12 : false,
+//         0x1 << 13 : false,
+//         0x1 << 14 : false,
+//         0x1 << 15 : false,
+//         0x1 << 16 : false,
+//         0x1 << 17 : false,
+//         0x1 << 18 : false,
+//         0x1 << 19 : false,
+//         0x1 << 20 : false,
+//         0x1 << 21 : false,
+//         0x1 << 22 : false,
+//         0x1 << 23 : false,
+//         0x1 << 24 : false,
+//         0x1 << 25 : false,
+//         0x1 << 26 : false,
+//         0x1 << 27 : false,
+//         0x1 << 28 : false,
+//         0x1 << 29 : false,
+//         0x1 << 30 : false,
+//         0x1 << 31 : false,
+//    ]
+//    
     
     var categoryMasksBinary: [(UInt32, Bool)] = [
         (0b1, false),
@@ -397,19 +476,43 @@ class Model {
     
     
     func assignBitMask() -> UInt32? {
-     
-
+      
         for i in 0...categoryMasks.count {
             if categoryMasks[i].1 == false {
                 categoryMasks[i].1 = true
                 return categoryMasks[i].0
+                break
             }
-            
+            print("\(i)..\n..")
         }
-        
-        
 
         return nil
+    }
+    
+//    
+//    func assignBitMaskDict() -> UInt32? {
+//        
+//        for entry in categoryMasksDict  {
+//            if entry.value == false {
+//                entry.value = true
+//                return entry.key
+//            }
+//        }
+//        return nil
+//    }
+    
+    
+    
+    func makeBitMaskAvailable(maskNum: UInt32) {
+        print("MADE AVAILABLE \n\n MADE AVAILABLE \n\n")
+        for i in 0...categoryMasks.count {
+            if categoryMasks[i].0 == maskNum {
+                categoryMasks[i].1 = false
+                break
+            }
+        }
+        
+    
     }
     
     

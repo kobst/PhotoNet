@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import Firebase
 import GeoFire
+import Fabric
+import TwitterKit
 
 
 @UIApplicationMain
@@ -22,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
     
         FIRApp.configure()
+        
+        Fabric.with([Twitter.self])
+//        Twitter.sharedInstance().start(withConsumerKey: "eSaPtWkPEBS0KZOxRCvvvvvvvvQWfMU", consumerSecret: "xxt97EAmwhgQ06V7yKm9w7kqH")
         
         return true
     }

@@ -17,6 +17,8 @@
 		846DCA8D1E3BBF7900CAE31E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */; };
 		846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */; };
 		846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA911E3BCD5C00CAE31E /* Model.swift */; };
+		848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A01791E53EFB2002FBBAF /* TwitterModel.swift */; };
+		848A017D1E552C82002FBBAF /* TweetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */; };
 		84D2BC231E393894001EABC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2BC221E393894001EABC2 /* AppDelegate.swift */; };
 		84D2BC251E393894001EABC2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2BC241E393894001EABC2 /* MainViewController.swift */; };
 		84D2BC281E393894001EABC2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84D2BC261E393894001EABC2 /* Main.storyboard */; };
@@ -38,6 +40,8 @@
 		846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardViewController.swift; sourceTree = "<group>"; };
 		846DCA911E3BCD5C00CAE31E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		848A01791E53EFB2002FBBAF /* TwitterModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterModel.swift; sourceTree = "<group>"; };
+		848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetDetailViewController.swift; sourceTree = "<group>"; };
 		84D2BC1F1E393894001EABC2 /* SpyNetProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpyNetProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84D2BC221E393894001EABC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84D2BC241E393894001EABC2 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				84D2BC221E393894001EABC2 /* AppDelegate.swift */,
+				848A01791E53EFB2002FBBAF /* TwitterModel.swift */,
 				84D2BC241E393894001EABC2 /* MainViewController.swift */,
 				846DCA911E3BCD5C00CAE31E /* Model.swift */,
 				8421C8F21E5110E200B0B39B /* SuccessViewController.swift */,
@@ -99,6 +104,7 @@
 				8439C9601E3A930C00E72B7A /* FieldScene.swift */,
 				846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */,
 				84D2BC261E393894001EABC2 /* Main.storyboard */,
+				848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */,
 				8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */,
 				844F990E1E47A7EC005EDABB /* SplashViewController.swift */,
 				846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */,
@@ -134,6 +140,7 @@
 				84D2BC1D1E393894001EABC2 /* Resources */,
 				C936415DF1596255892ED529 /* [CP] Embed Pods Frameworks */,
 				EFE2B8F3E9E8A7C8CA8769D1 /* [CP] Copy Pods Resources */,
+				848A017B1E540473002FBBAF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -209,6 +216,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		848A017B1E540473002FBBAF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 7ce1ea32354a89edc326daf15ef65b18d6aadccf 12d1216f75d969030c60c521869a04a98df64303a268e1d8967fa020dbef272e";
+		};
 		C936415DF1596255892ED529 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -251,10 +271,12 @@
 				846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */,
 				844F990F1E47A7EC005EDABB /* SplashViewController.swift in Sources */,
 				84D2BC231E393894001EABC2 /* AppDelegate.swift in Sources */,
+				848A017D1E552C82002FBBAF /* TweetDetailViewController.swift in Sources */,
 				846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */,
 				8421C8EF1E4FF18300B0B39B /* ProfileViewController.swift in Sources */,
 				8439C9611E3A930C00E72B7A /* FieldScene.swift in Sources */,
 				844F99131E47D6CB005EDABB /* DetailViewController.swift in Sources */,
+				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				8421C8F31E5110E200B0B39B /* SuccessViewController.swift in Sources */,
 				84D2BC2B1E393894001EABC2 /* SpyNetProto.xcdatamodeld in Sources */,

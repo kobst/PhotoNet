@@ -17,6 +17,7 @@ protocol GoToDetail: class {
     
     func goToDetail(targetSprite: TargetSprite)
     func goToProfile()
+    func goToTweet(targetSprite: TargetSprite)
     
 }
 
@@ -30,6 +31,13 @@ class MainViewController: UIViewController, GoToDetail {
             let detailVC = segue.destination as! DetailViewController
             detailVC.targetSprite = selectedSprite
             
+        }
+        
+        
+        if segue.identifier == "toTweet" {
+            
+            let detailVC = segue.destination as! TweetDetailViewController
+            detailVC.targetSprite = selectedSprite
         }
     }
     
@@ -45,6 +53,13 @@ class MainViewController: UIViewController, GoToDetail {
         selectedSprite = targetSprite
         performSegue(withIdentifier: "toDetail", sender: nil)
         
+        
+    }
+    
+    
+    func goToTweet(targetSprite: TargetSprite) {
+        selectedSprite = targetSprite
+         performSegue(withIdentifier: "toTweet", sender: nil)
         
     }
     
@@ -72,18 +87,14 @@ class MainViewController: UIViewController, GoToDetail {
     
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
+ //
         
-        locMgr.subscribeToHeadingUpdates { (heading, status) in
-          
-            if status == .success {
-                
-          
-                print(heading?.trueHeading ?? "no heading")
-                
-                
-            }
-            
-        }
+ // get heading....
+//        locMgr.subscribeToHeadingUpdates { (heading, status) in
+//            if status == .success {
+//                print(heading?.trueHeading ?? "no heading")
+//            }
+//        }
         
         locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
                                timeout: 5,
@@ -98,9 +109,20 @@ class MainViewController: UIViewController, GoToDetail {
 //                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
 //                                    Model.shared.getTargets3(myLocation: currentLocation!)
                                     Model.shared.myLocation = dummyLocation
+                                    
                                     print("\(currentLocation).....CL.")
+                                    
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
-                                    Model.shared.getTargets3(myLocation: dummyLocation)
+                                    
+//                                    Model.shared.getTargets3(myLocation: dummyLocation)
+                                    
+                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
+                                    
+                                    
+                                    //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)
+                                    //
+                                    //                                    Modelv2.shared.getTweetData(totalMapSenders: distMap)
+
                                     
                                     
 //                                    Model.shared.getTargets2(myLocation: dummyLocation) { targets in

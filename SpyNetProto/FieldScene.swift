@@ -98,25 +98,153 @@ class User {
     
 }
 
+class TargetSpriteVar: SKSpriteNode {
+    
+    
+    func applySize() {
+        
+        var adjSize = (distance / -2.0) + 150
+        
+        //        print("\(adjSize)..adjSize \n \(distance)..dist \n")
+        
+        if adjSize < 75 {
+            
+            self.alpha = 0
+        }
+        
+        if adjSize > 75 {
+            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+        }
+        
+        self.nameLabel?.isHidden = adjSize > 100 ? false : true
+        self.size.height = adjSize
+        self.size.width = adjSize
+        
+    }
+    
+    
+    
+    func changePhysicsBody() {
+        
+        self.physicsBody = nil
+        
+        let size = self.size.width > 1 ? self.size.width : 1
+        
+        let body = SKPhysicsBody(circleOfRadius: size / 2.0)
+        
+        body.affectedByGravity = true
+        body.isDynamic = true
+        body.density = 0.25
+        body.friction = 0.85
+        body.restitution = 0.95
+        body.allowsRotation = false
+        body.angularVelocity = 0
+        body.linearDamping = 1
+        body.angularDamping = 1
+        //            body.fieldBitMask = self.mask!
+        
+        self.physicsBody = body
+        
+        
+    }
+    
+    
+    
+//    enum OnView {
+//        case offScreen
+//        case onScreen
+//    }
+    
+//    var target: Target?
+    //    var tweetData: TweetData?
+    var anchorGrav = SKFieldNode()
+    var mask: UInt32?
+    var nameLabel: SKLabelNode?
+//    var status: OnView = .offScreen
+    
+    var distance: CGFloat {
+        
+        let newX = position.x - (Model.shared.myScreenOrigin.x)
+        let newY = position.y - (Model.shared.myScreenOrigin.y)
+        
+        return sqrt((newX * newX) + (newY * newY))
+        
+    }
+    
+    
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(texture: SKTexture!, color: SKColor, size: CGSize) {
+//        self.target = nil
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+    
+    convenience init(target: Target, image: UIImage) {
+        
+        
+        let roundedImage = image.circle
+        let myTexture = SKTexture(image: roundedImage!)
+        
+        self.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+//        self.target = target
+        self.texture = myTexture
+        self.position = target.origPos
+        self.size = CGSize(width: 50, height: 50)
+        if let goodUserName = target.user?.name {
+            self.name = goodUserName
+        }
+        if let tweetUserName = target.tweet?.senderID {
+            self.name = tweetUserName
+        }
+        
+        
+        
+//        let gravMask = Model.shared.assignBitMask()
+        
+        self.anchorGrav = SKFieldNode.springField()
+        self.anchorGrav.position = target.origPos
+        self.anchorGrav.isEnabled = true
+        self.anchorGrav.strength = 1.0
+        //        self.anchorGrav.name = "anchor\(target.user?.name)"
+        
+//        if let validMask = gravMask {
+//            print("\(validMask)..\(anchorGrav.position)...VALIDMASK")
+//            //            physicsBody!.fieldBitMask = validMask
+//            anchorGrav.categoryBitMask = validMask
+//            self.mask = validMask
+//            
+//        }
+        
+        nameLabel = SKLabelNode()
+        nameLabel = SKLabelNode(fontNamed: "Chalkduster")
+        nameLabel?.text = name
+        nameLabel?.horizontalAlignmentMode = .center
+        nameLabel?.position = CGPoint(x: 0, y: 0)
+        nameLabel?.isHidden = true
+        self.addChild(nameLabel!)
+        
+        
+    }
+}
+    
+
+
+
 
 class TargetSprite: SKSpriteNode {
     
 
     func applySize() {
-     
-//        let newX = position.x - (Model.shared.myScreenOrigin.x)
-//        let newY = position.y - (Model.shared.myScreenOrigin.y)
-//        
-//        let distance = sqrt((newX * newX) + (newY * newY))
-//        target?.origPos
-        // 20 dist -> 150 adjSize , 180 -> 40
-        
-//        var adjustedDist = CGFloat((3000 / distance + 25)) // match with other applySiz
         
         var adjSize = (distance / -2.0) + 150
         
-        print("\(adjSize)..adjSize \n \(distance)..dist \n")
-       
+//        print("\(adjSize)..adjSize \n \(distance)..dist \n")
+    
         
         if adjSize < 75 {
 
@@ -126,45 +254,21 @@ class TargetSprite: SKSpriteNode {
     
         
         if adjSize > 75 {
-            
+
             self.alpha = ((adjSize - 75) / 50.0) + 0.5
         }
     
         self.nameLabel?.isHidden = adjSize > 100 ? false : true
-        
-//        if adjSize > 100 {
-//            self.nameLabel?.isHidden = false
-//        }
-//        
-//        if adjSize < 100 {
-//            
-//        }
-        
-        
-//        self.alpha = ((adjustedDist/100.0) - 0.5)
-        
-        
         self.size.height = adjSize
         self.size.width = adjSize
         
-       
-        
-        
-//        return adjSize
-        
     }
+    
+    
     
     func changePhysicsBody() {
         
-            self.physicsBody = nil
-
-//            let size = self.applySize()
-//        if self.size.width > 0 {
-//            size = 1.0
-//        }
-//        else {
-//            size =
-//        }
+        self.physicsBody = nil
         
         let size = self.size.width > 1 ? self.size.width : 1
         
@@ -179,7 +283,7 @@ class TargetSprite: SKSpriteNode {
             body.angularVelocity = 0
             body.linearDamping = 1
             body.angularDamping = 1
-            body.fieldBitMask = self.mask!
+//            body.fieldBitMask = self.mask!
         
             self.physicsBody = body
             
@@ -187,28 +291,18 @@ class TargetSprite: SKSpriteNode {
     }
     
     
-//    func getPhysicsBody(position: CGPoint) -> SKPhysicsBody {
-////        let size = applySize()
-//        let body = SKPhysicsBody(circleOfRadius: self.size.width / 2.0)
-//      
-//        body.affectedByGravity = true
-//        body.isDynamic = true
-//        body.density = 0.25
-//        body.friction = 0.1
-//        body.restitution = 0.95
-//        body.allowsRotation = false
-//        body.angularVelocity = 0
-//        body.linearDamping = 1
-//        body.angularDamping = 1
-//    
-////        body.fieldBitMask = self.mask!
-//        
-//        return body
-//    }
-//    
+    
+    enum OnView {
+        case offScreen
+        case onScreen
+    }
+    
     var target: Target?
-    var anchorGrav: SKFieldNode?
+//    var tweetData: TweetData?
+    var anchorGrav = SKFieldNode()
+    var mask: UInt32?
     var nameLabel: SKLabelNode?
+    var status: OnView = .offScreen
     
     var distance: CGFloat {
         
@@ -219,16 +313,8 @@ class TargetSprite: SKSpriteNode {
         
     }
     
-//    {
-//        var labelNode = SKLabelNode()
-//        labelNode = SKLabelNode(fontNamed: "Chalkduster")
-//        labelNode.text = "Score: 0"
-//        labelNode.horizontalAlignmentMode = .right
-//        labelNode.position = CGPoint(x: 980, y: 700)
-//        self.addChild(labelNode)
-//        return labelNode
-//    }
-    var mask: UInt32?
+
+  
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -251,60 +337,88 @@ class TargetSprite: SKSpriteNode {
             self.texture = myTexture
             self.position = target.origPos
             self.size = CGSize(width: 50, height: 50)
-            self.name = target.user!.name
-//            let sizeFactor = applySize(position: target.origPos)
-//            self.zPosition = 1 * sizeFactor
-//            self.size = CGSize(width: sizeFactor, height: sizeFactor)
-//        let body = getPhysicsBody(position: target.origPos )
-//        self.changePhysicsBody()
-////            self.physicsBody = body
-//            self.physicsBody!.affectedByGravity = true
-//            self.isUserInteractionEnabled = false
-//            self.physicsBody!.isDynamic = true
-//            self.physicsBody!.density = 0.25
-//            self.physicsBody!.friction = 0.5
-//            self.physicsBody!.restitution = 0.95
-//            self.physicsBody!.allowsRotation = false
-//            self.physicsBody!.angularVelocity = 0
-//            self.physicsBody!.linearDamping = 1
-//            self.physicsBody!.angularDamping = 1
-//        self.applySize()
+        if let goodUserName = target.user?.name {
+             self.name = goodUserName
+        }
+        if let tweetUserName = target.tweet?.senderID {
+            self.name = tweetUserName
+        }
         
-        
+            self.zPosition = CGFloat(arc4random()%500)
+
         
         let gravMask = Model.shared.assignBitMask()
         
         self.anchorGrav = SKFieldNode.springField()
-        self.anchorGrav?.position = target.origPos
-        self.anchorGrav?.isEnabled = true
-        self.anchorGrav?.strength = 1.0
-        self.anchorGrav?.name = "anchor\(target.user?.name)"
+        self.anchorGrav.position = target.origPos
+        self.anchorGrav.isEnabled = true
+        self.anchorGrav.strength = 1.0
+//        self.anchorGrav.name = "anchor\(target.user?.name)"
         
         if let validMask = gravMask {
-            print("\(validMask)..\(anchorGrav?.position)...VALIDMASK")
+            print("\(validMask)..\(anchorGrav.position)...VALIDMASK")
 //            physicsBody!.fieldBitMask = validMask
-            anchorGrav?.categoryBitMask = validMask
+            anchorGrav.categoryBitMask = validMask
             self.mask = validMask
             
         }
         
         nameLabel = SKLabelNode()
         nameLabel = SKLabelNode(fontNamed: "Chalkduster")
-        nameLabel?.text = self.target?.user?.name
+        nameLabel?.text = name
         nameLabel?.horizontalAlignmentMode = .center
         nameLabel?.position = CGPoint(x: 0, y: 0)
         nameLabel?.isHidden = true
         self.addChild(nameLabel!)
-//        return labelNode
-        
-        
-        
-
 
     
         }
 
 
+//    
+//    convenience init(tweetData: TweetData, textureImage: UIImage) {
+//        
+//        
+////        let roundedImage = tweetData.idImage.circle
+//        let roundedImage = textureImage.circle
+//        let myTexture = SKTexture(image: roundedImage!)
+//        
+//        self.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+//        self.tweetData = tweetData
+//        self.texture = myTexture
+//        self.position = tweetData.origPos
+//        self.size = CGSize(width: 50, height: 50)
+//        self.name = tweetData.senderID
+//        
+//        
+//        let gravMask = Model.shared.assignBitMask()
+//        
+//        self.anchorGrav = SKFieldNode.springField()
+//        self.anchorGrav.position = tweetData.origPos
+//        self.anchorGrav.isEnabled = true
+//        self.anchorGrav.strength = 1.0
+//        self.anchorGrav.name = "anchor\(tweetData.senderID)"
+//        
+//        if let validMask = gravMask {
+//            print("\(validMask)..\(anchorGrav.position)...VALIDMASK")
+//            //            physicsBody!.fieldBitMask = validMask
+//            anchorGrav.categoryBitMask = validMask
+//            self.mask = validMask
+//            
+//        }
+//        
+//        nameLabel = SKLabelNode()
+//        nameLabel = SKLabelNode(fontNamed: "Chalkduster")
+//        nameLabel?.text = tweetData.senderID
+//        nameLabel?.horizontalAlignmentMode = .center
+//        nameLabel?.position = CGPoint(x: 0, y: 0)
+//        nameLabel?.isHidden = true
+//        self.addChild(nameLabel!)
+//        
+//        
+//    }
+    
+    
     }
 
 
@@ -317,22 +431,25 @@ class TargetSprite: SKSpriteNode {
 
 
 class Target {
-    var sprite: SKSpriteNode?
+//    var sprite: SKSpriteNode?
+    
+    enum OnView {
+        case offScreen
+        case onScreen
+    }
+    
     var user: User? // make this a UID...
-    var scaleAdjust = CGFloat(9500)
-    var lat: CLLocationDegrees
+    var tweet: TweetData?
+    var scaleAdjust = CGFloat(12500)  // was at 9500
+    var lat: CLLocationDegrees  // prob dont need. keep in user/tweet....
     var lon: CLLocationDegrees
     var origPos: CGPoint
-//    var position: CGPoint {
-//        let origin = Model.shared.myOrigin
-//        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
-//        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
-//        let scaledX = originLat * scaleAdjust
-//        let scaledY = originLon * scaleAdjust
-//        //        print("\(scaledX)..\(scaledY).......InitialPosition******")
-//        return CGPoint(x: scaledX, y: scaledY)
-//        
-//    }
+    var profileImage: UIImage
+    var sceneStatus: OnView = .offScreen
+    var sprite: TargetSpriteVar {
+        return TargetSpriteVar(target: self, image: profileImage)
+    }
+
     init(user: User, location: CLLocation) {
         self.user = user
         self.lat = (location.coordinate.latitude)
@@ -343,10 +460,28 @@ class Target {
         let scaledX = originLat * scaleAdjust
         let scaledY = originLon * scaleAdjust
         self.origPos = CGPoint(x: scaledX, y: scaledY)
+        profileImage = (UIImage(named: "plus")?.circle!)!
+        self.tweet = nil
+    }
+    
+    init(tweet: TweetData, location: CLLocation) {
+        self.tweet = tweet
+        self.lat = (location.coordinate.latitude)
+        self.lon = (location.coordinate.longitude)
+        let origin = Model.shared.myLocation
+        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
+        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
+        let scaledX = originLat * scaleAdjust
+        let scaledY = originLon * scaleAdjust
+        self.origPos = CGPoint(x: scaledX, y: scaledY)
+        self.profileImage = tweet.profileImage
+        self.user = nil
+        
+        
     }
     
     
-    
+}
     
 //        let origin = Model.shared.myOrigin
 //        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
@@ -359,7 +494,7 @@ class Target {
 //        
 //    }
     
-}
+
 
 
 
@@ -376,7 +511,15 @@ protocol AddTargetProtocol: class {
 
 
 
-class FieldScene: SKScene, AddTargetProtocol {
+protocol AddTweetProtocol: class {
+    
+    //    func addTarget(target: Target)
+    func addTweet(tweetData: TweetData)
+}
+
+
+
+class FieldScene: SKScene, AddTargetProtocol, AddTweetProtocol {
     
     weak var delegateMainVC: GoToDetail?
     let center = CGPoint(x: 0, y: 0)
@@ -399,6 +542,8 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         
         Model.shared.addTargetDelegate = self
+        Modelv2.shared.addTweetDelegate = self
+        Modelv2.shared.addTargetDelegate = self
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
@@ -444,6 +589,9 @@ class FieldScene: SKScene, AddTargetProtocol {
 //    }
     
     
+
+    
+    
     
     func handlePanFrom(recognizer: UIPanGestureRecognizer) {
         if recognizer.state == .began {
@@ -485,28 +633,132 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     
+//    func sizeSprites() {
+//        
+//        for sprite in Model.shared.queryTargets {
+//            sprite.applySize()
+//           
+//            if sprite.size.width > 60 && sprite.status == .offScreen {
+//                
+//                let gravMask = Model.shared.assignBitMask()
+//                if let validMask = gravMask {
+//                    sprite.anchorGrav.categoryBitMask = validMask
+//                    sprite.mask = validMask
+//                }
+//                
+//                sprite.changePhysicsBody()
+//                
+//                self.addChild(sprite)
+//                self.addChild(sprite.anchorGrav)
+//                sprite.status = .onScreen
+//            }
+//            
+////            if sprite.size.width < 60 && sprite.status == .onScreen {
+////                sprite.removeFromParent()
+////                sprite.anchorGrav.removeFromParent()
+////                Model.shared.makeBitMaskAvailable(maskNum: sprite.mask!)
+////                
+////
+////            }
+//            
+//
+//
+//        }
+//        
+//
+//    }
+    
+    
+    
+    
+    func sizeSpritesSingle(sprite: TargetSprite) {
+        
+     
+            sprite.applySize()
 
+//            if sprite.distance > 75 && sprite.target?.sceneStatus == .onScreen {
+////                (print("\n removing \n \n"))
+//                sprite.removeFromParent()
+//                sprite.anchorGrav.removeFromParent()
+//                if let validMask = sprite.mask {
+//                         Model.shared.makeBitMaskAvailable(maskNum: validMask)
+//                }
+//           
+//            }
+        
+            sprite.changePhysicsBody()
+            
+    
+    }
     
     
-    func addTargetSprites(target: Target) {
+    
+    
+    func addTweet(tweetData: TweetData) {
         
-        let profileImageURL = target.user!.avatar
-        
+    
+        let profileImageURL = tweetData.idImageURL
+
         Model.shared.fetchImage(stringURL: profileImageURL) { image in
             
             guard let returnedImage = image else  {
                 return
             }
             
-            let sprite = TargetSprite(target: target, image: returnedImage)
-//            sprite.applySize()
-//            sprite.changePhysicsBody()
+            tweetData.profileImage = returnedImage
+            
+            let target = Target(tweet: tweetData, location: CLLocation(latitude: tweetData.lat, longitude: tweetData.lon))
+            
+            Model.shared.sceneTargets.append(target)
+            
+            Model.shared.sceneTweets.append(tweetData)
+            
+//            
+//            let sprite = TargetSprite(tweetData: tweetData, textureImage: returnedImage)
+//            Model.shared.queryTargets.append(sprite)
+////            self.addChild(sprite)
+////            self.addChild(sprite.anchorGrav!)
+////            sprite.applySize()
+////            sprite.changePhysicsBody()
+//            self.sizeSpritesSingle(sprite: sprite)
+            
+            
+        }
+
+        
+        
+    }
+    
+    
+    func addTargetSprites(target: Target) {
+        
+        let profileImageURL = target.user == nil ? target.tweet?.idImageURL : target.user?.avatar
+        
+        Model.shared.fetchImage(stringURL: profileImageURL!) { image in
+            
+            guard let returnedImage = image else  {
+                return
+            }
+            
+            target.profileImage = returnedImage
+            Model.shared.sceneTargets.append(target)
+            
+//           let sprite = TargetSprite(target: target, image: returnedImage)
+            
+            let sprite = target.sprite
             Model.shared.queryTargets.append(sprite)
-            self.addChild(sprite)
-            self.addChild(sprite.anchorGrav!)
+            
+            
             sprite.applySize()
             sprite.changePhysicsBody()
-       
+
+//            self.addChild(sprite)
+//            self.addChild(sprite.anchorGrav!)
+//            sprite.applySize()
+//            sprite.changePhysicsBody()
+//            self.sizeSpritesSingle(sprite: sprite)
+            
+            
         }
         
         
@@ -687,12 +939,28 @@ class FieldScene: SKScene, AddTargetProtocol {
                     delegateMainVC?.goToProfile()
                     
                 }
+                    
+                    
+                
+                    
+                
                 else {
                     
-                    let target = nodeAtPoint as! TargetSprite
-                    print("\(target.target?.user?.name)...\(target.mask)....")
+                    let targetSprite = nodeAtPoint as! TargetSprite
+//                    print("\(targetSprite.target?.user?.name)...\(target.mask)....")
                     
-                    delegateMainVC?.goToDetail(targetSprite: target)
+                    if let _ = targetSprite.target?.tweet {
+                        delegateMainVC?.goToTweet(targetSprite: targetSprite)
+                        
+                    }
+                    else {
+                       delegateMainVC?.goToDetail(targetSprite: targetSprite)
+                    }
+                    
+                    
+                    
+                    
+                    
                     
                 }
 
@@ -725,17 +993,116 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     func updateSpotSizes() {
         
-        
-        
         for targetSprite in Model.shared.queryTargets {
     
+//            if targetSprite.parent == nil {
+//                self.addChild(targetSprite)
+//            }
             targetSprite.applySize()
             targetSprite.changePhysicsBody()
-            targetSprite.physicsBody!.fieldBitMask = targetSprite.mask! | gravityCategory
+            
+//            sizeSpritesSingle(sprite: targetSprite)
+//            targetSprite.physicsBody!.fieldBitMask = targetSprite.mask! | gravityCategory
+//            if  let validMask = targetSprite.mask {
+//                targetSprite.physicsBody?.fieldBitMask = validMask
+//            }
+            
+
 
         }
         
     }
+    
+    
+    func sorterForDisAsc(this:TargetSpriteVar, that:TargetSpriteVar) -> Bool {
+        return this.distance > that.distance
+    }
+//    
+//    func addSpritesTwo() {
+//        
+//        // go through sorted Array of targets, give them a mask...
+//        let sortedSprites = Model.shared.queryTargets.sort{$0.distance < $1.distance}
+//        
+//        
+//        for i in 0...16  {
+//            
+//            if sortedSprites[i].sceneStatus == .offScreen {
+//                // add
+//                let sprite = TargetSprite(target: target, image: target.profileImage)
+//                let gravMask = Model.shared.assignBitMask()
+//                if let validMask = gravMask {
+//                    sprite.anchorGrav.categoryBitMask = validMask
+//                    sprite.mask = validMask
+//                    sprite.physicsBody?.fieldBitMask = validMask
+//                }
+//                
+//                self.addChild(sprite)
+//                self.addChild(sprite.anchorGrav)
+//                sizeSpritesSingle(sprite: sprite)
+//                target.sceneStatus = .onScreen
+//                
+//            }
+//            
+//            
+//        }
+//        
+//    }
+    
+    
+    
+    
+    
+    func addSprites() {
+        
+        for target in Model.shared.sceneTargets {
+            
+            var distance: CGFloat {
+                
+                let newX = target.origPos.x - (Model.shared.myScreenOrigin.x)
+                let newY = target.origPos.y - (Model.shared.myScreenOrigin.y)
+                
+                return sqrt((newX * newX) + (newY * newY))
+                
+            }
+            
+            if distance < 75 && target.sceneStatus == .offScreen {
+                // add
+                self.addChild(target.sprite)
+                target.sceneStatus = .onScreen
+                
+                let gravMask = Model.shared.assignBitMask()
+                if let validMask = gravMask {
+                    target.sprite.anchorGrav.categoryBitMask = validMask
+                    target.sprite.mask = validMask
+                    target.sprite.physicsBody?.fieldBitMask = validMask
+                }
+                
+            }
+            
+            
+            if distance > 75 && target.sceneStatus == .onScreen {
+                // add
+                target.sprite.removeFromParent()
+                target.sceneStatus = .offScreen
+                
+//                let gravMask = Model.shared.assignBitMask()
+
+                
+            }
+            
+
+
+
+            
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
     
     
     override func update(_ currentTime: TimeInterval) {
@@ -744,7 +1111,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         cam.position = Model.shared.myScreenOrigin
         gravField.position = Model.shared.myScreenOrigin
  
-        
+        addSprites()
        
     }
 }

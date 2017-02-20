@@ -28,6 +28,7 @@
                     <connections>
                         <segue destination="J4p-sw-vhf" kind="show" identifier="toDetail" id="5GU-gP-ytC"/>
                         <segue destination="yMX-Dg-8BO" kind="show" identifier="toProfile" id="nFx-MN-CRp"/>
+                        <segue destination="DvG-II-JoK" kind="show" identifier="toTweet" id="ND3-gd-fKr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -202,7 +203,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4o9-Xx-lHc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="540" y="-442.12893553223392"/>
+            <point key="canvasLocation" x="902" y="-1206"/>
         </scene>
         <!--Success View Controller-->
         <scene sceneID="wB8-mQ-gZi">
@@ -231,7 +232,81 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ett-o0-ybg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1606" y="-442"/>
+            <point key="canvasLocation" x="1910" y="-1164"/>
+        </scene>
+        <!--Tweet Detail View Controller-->
+        <scene sceneID="UR3-EJ-K71">
+            <objects>
+                <viewController id="DvG-II-JoK" customClass="TweetDetailViewController" customModule="SpyNetProto" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="I5w-ry-yG4"/>
+                        <viewControllerLayoutGuide type="bottom" id="a7t-IE-xHY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xj0-NK-KRm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AJT-Ub-xwk">
+                                <rect key="frame" x="127" y="28" width="120" height="120"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="AJT-Ub-xwk" secondAttribute="height" multiplier="1:1" id="mBN-gf-8u7"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yoN-1p-sBJ">
+                                <rect key="frame" x="137" y="38" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EeO-Nu-de2">
+                                <rect key="frame" x="80" y="156" width="215" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwx-a4-RbS">
+                                <rect key="frame" x="16" y="249" width="343" height="78"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kua-kg-kG3">
+                                <rect key="frame" x="16" y="602" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="EXIT"/>
+                                <connections>
+                                    <action selector="exit:" destination="DvG-II-JoK" eventType="touchUpInside" id="PFM-2n-V1o"/>
+                                </connections>
+                            </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="YSP-Wi-iTu">
+                                <rect key="frame" x="16" y="335" width="343" height="256"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="AJT-Ub-xwk" firstAttribute="top" secondItem="I5w-ry-yG4" secondAttribute="bottom" constant="8" id="rsS-4l-nPe"/>
+                            <constraint firstItem="AJT-Ub-xwk" firstAttribute="width" secondItem="Xj0-NK-KRm" secondAttribute="width" multiplier="0.33" id="vbK-bT-0uk"/>
+                            <constraint firstItem="AJT-Ub-xwk" firstAttribute="centerX" secondItem="Xj0-NK-KRm" secondAttribute="centerX" id="zGv-Tm-SN9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="YSP-Wi-iTu" id="GlU-44-hUU"/>
+                        <outlet property="nameLabel" destination="EeO-Nu-de2" id="Uue-Um-96p"/>
+                        <outlet property="profileImage" destination="AJT-Ub-xwk" id="Znh-Ha-TKQ"/>
+                        <outlet property="tweetLabel" destination="nwx-a4-RbS" id="BD5-UW-9qY"/>
+                        <segue destination="Wth-wF-Cz5" kind="unwind" unwindAction="unwindToMainWithSegue:" id="EMX-VW-dcC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qul-O4-VyI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Wth-wF-Cz5" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="901.60000000000002" y="-143.47826086956522"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="RHn-T5-ebg">

@@ -10,5 +10,7 @@ target 'SpyNetProto' do
    pod 'INTULocationManager', '~> 4.2'
    pod 'Firebase/Storage'
    pod 'ProjectOxfordFace'
-
+	pod 'Fabric'
+  	pod 'TwitterKit'
+  	
 end
