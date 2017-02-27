@@ -12,41 +12,6 @@ import CoreLocation
 import UIKit
 
 
-class TweetData {
-    //        static var all = [Message]()
-    
-    var message: String
-    var senderID: String
-    var idImageURL: String
-    var dist: Double
-    var time: Double
-    var scaleAdjust = CGFloat(15500)
-    var lat: CLLocationDegrees
-    var lon: CLLocationDegrees
-    var origPos: CGPoint
-    var profileImage: UIImage
-    
-    init (message: String, senderName: String, idImageURL: String, dist: Double, time: Double) {
-        self.message = message
-        self.senderID = senderName
-        self.idImageURL = idImageURL
-        self.dist = dist
-        self.time = time
-        self.lat = (Model.shared.coordinates[senderName]?.coordinate.latitude)!
-        self.lon = (Model.shared.coordinates[senderName]?.coordinate.longitude)!
-        let origin = Model.shared.myLocation
-        let originLat = CGFloat(lat - (origin!.coordinate.latitude))
-        let originLon = CGFloat(lon - (origin!.coordinate.longitude))
-        let scaledX = originLat * scaleAdjust
-        let scaledY = originLon * scaleAdjust
-        self.origPos = CGPoint(x: scaledX, y: scaledY)
-        self.profileImage = UIImage(named: "twitter")!
-        
-    }
-    
-}
-
-
 
 
 
@@ -57,7 +22,7 @@ class Modelv2{
     
     var dateFormatter = DateFormatter()
     
-    weak var addTweetDelegate: AddTweetProtocol?
+//    weak var addTweetDelegate: AddTweetProtocol?
     
     weak var addTargetDelegate: AddTargetProtocol?
     
@@ -96,7 +61,7 @@ class Modelv2{
         
         let sortedDistMap = distMap.sorted(by: {$0.dist < $1.dist})
         //        print(sortedDistMap)
-        let senders = sortedDistMap[0..<10]
+        let senders = sortedDistMap[0..<20]
         
         dateFormatter.dateFormat = "EEE MM dd HH:mm:ss Z yyyy"
         let now  = Date()
@@ -254,4 +219,73 @@ class Modelv2{
 //}
 
 }
-    
+
+
+
+
+
+
+
+
+
+//
+//    func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
+////    func getTargets2(myLocation: CLLocation) {
+//        //Query GeoFire for nearby users
+//        //Set up query parameters
+//        //        var keys = [String]()
+//        //        var locations = [CLLocation]()
+////        keys.append(stringBack)
+////        locations.append(locationBack)
+////        print(stringBack)
+//
+//
+//        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+////        var targets = [Target]()
+//        let fakeLocation = makeFakeLocation()
+//        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 0.25)
+//
+//        let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
+//            if let validUID = string, let locationBack = location {
+//
+//
+//                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
+////                    let value = snapshot.value as? [String: Any]
+////                    print(value?["name"] as? String ?? "(ERROR)")
+//                    let user = User(snapshot: snapshot)
+//                    let target = Target(user: user, location: locationBack)
+//
+//                    self.queryUsers.append(user)
+////                    targets.append(target)
+////                    self.queryTargets.append(target)
+//
+////                    print(target.user?.name ?? "no name")
+////                    print(self.queryTargets.count)
+////                    self.addTargetDelegate?.addTarget(target: target)
+//
+////                    circleQuery?.observeReady({
+////                        completion(self.queryTarget)
+////                    })
+//
+//
+//                })
+//
+//
+//            }})
+//
+////        circleQuery?.observeReady({
+////
+//////            completion(self.queryTargets)
+////
+////        })
+//
+//
+//
+//
+//    }
+
+
+
+// return the spot class....
+
+

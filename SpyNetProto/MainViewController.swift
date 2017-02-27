@@ -89,12 +89,13 @@ class MainViewController: UIViewController, GoToDetail {
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
  //
         
- // get heading....
-//        locMgr.subscribeToHeadingUpdates { (heading, status) in
-//            if status == .success {
-//                print(heading?.trueHeading ?? "no heading")
-//            }
-//        }
+
+        locMgr.subscribeToHeadingUpdates { (heading, status) in
+            if status == .success {
+                print(heading?.trueHeading ?? "no heading")
+                Model.shared.myHeading = heading?.trueHeading
+            }
+        }
         
         locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
                                timeout: 5,
@@ -104,19 +105,20 @@ class MainViewController: UIViewController, GoToDetail {
                                     print("got location");
                                     
 //                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
-                                    let dummyLocation = Model.shared.makeFakeLocation()
+//                                    let dummyLocation = Model.shared.makeFakeLocation()
+                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
 //                                    Model.shared.myOrigin = currentLocation
 //                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
 //                                    Model.shared.getTargets3(myLocation: currentLocation!)
-                                    Model.shared.myLocation = dummyLocation
+                                    Model.shared.myLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
                                     
                                     print("\(currentLocation).....CL.")
                                     
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
                                     
 //                                    Model.shared.getTargets3(myLocation: dummyLocation)
-                                    
-                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
+                                    Model.shared.getTweeterByDist(myLocation: dummyLocation)
+//                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
                                     
                                     
                                     //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)

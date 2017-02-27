@@ -13,6 +13,7 @@ import CoreLocation
 import GeoFire
 import AVFoundation
 import ProjectOxfordFace
+import TwitterKit
 
 
 class Attempt {
@@ -82,11 +83,7 @@ struct PermisisionManager {
             }
         }
     }
-    
-    
 
-    
-    
 }
 
 
@@ -104,17 +101,24 @@ class Model {
     var loggedInUser: User?
     var queryUsers: [User] = []
 //    var queryTargets: [TargetSprite] = []
-    var queryTargets: [TargetSpriteVar] = []
+//    var sceneTargetSprites: [TargetSpriteVar] = []
+    var targetSprites: [TargetSprite] = []
     var sceneTweets: [TweetData] = []
     var sceneTargets: [Target] = []
     var myLat: CGFloat?
     var myLong: CGFloat?
     var myLocation: CLLocation?
+    var myHeading: CLLocationDirection?
     var myScreenOrigin = CGPoint(x: 0, y: 0)
-    
+    var dateFormatter = DateFormatter()
 
     
-    
+    var targetSprByDistance: [TargetSprite] {
+        
+        return targetSprites.sorted(by: {$0.distance < $1.distance})
+        
+        
+    }
     weak var addTargetDelegate: AddTargetProtocol?
     
     let ref = FIRDatabase.database().reference()
@@ -160,6 +164,83 @@ class Model {
     
 
     
+    func getTweeterByDist(myLocation: CLLocation) {
+        
+        var distMap: [(sender: String, dist: Double)] = []
+        
+        for (key, value) in Model.shared.coordinates {
+            let location = key
+            let dist = myLocation.distance(from: value)
+            let roundedDist = Double(round(dist)/1000)
+            let newDistMapTuple = (location, roundedDist)
+            distMap.append(newDistMapTuple)
+        }
+        
+        let sortedDistMap = distMap.sorted(by: {$0.dist < $1.dist})
+        //        print(sortedDistMap)
+        let senders = sortedDistMap[0..<20]
+        
+        dateFormatter.dateFormat = "EEE MM dd HH:mm:ss Z yyyy"
+        let now  = Date()
+        
+        
+        //        var tweetList = [TweetData]()
+        
+        for sender in senders {
+            let client = TWTRAPIClient()
+            let statusesShowEndpoint = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+            let params: [AnyHashable : Any] = [
+                "screen_name": sender.0,
+                "count": "1"
+            ]
+            
+            var clientError : NSError?
+            let request = client.urlRequest(withMethod: "GET", url: statusesShowEndpoint, parameters: params, error: &clientError)
+            
+            client.sendTwitterRequest(request) { (response, data, connectionError) in
+                if connectionError != nil {
+                    print("Error: \(connectionError)")
+                }
+                guard let goodData = data else {
+                    print("no data TWEETS \n \n \n NO DATA TWEETS")
+                    return}
+                do {
+                    let json = try JSONSerialization.jsonObject(with: goodData, options: .mutableContainers) as! [Any]
+                    
+                    let tweetDict = json[0] as! [String: Any]
+                    
+                    let timeString = tweetDict["created_at"] as! String
+                    let timeData = self.dateFormatter.date(from: timeString)
+                    
+                    let timeElapsed = now.timeIntervalSince(timeData!)
+                    let roundedTime = Double(round(timeElapsed*100)/100)
+                    
+                    
+                    let userDict = tweetDict["user"] as! [String: Any]
+                    
+                    //                    let photoID = userDict["profile_image_url"] as! String
+                    
+                    let photoID = userDict["profile_image_url_https"] as! String
+                    
+                    let messageText = tweetDict["text"] as! String
+                    
+                    let fetchedData = TweetData(message: messageText, senderName: sender.0, idImageURL: photoID, dist: sender.1, time: roundedTime)
+                    
+                    let target = Target(tweet: fetchedData, location: CLLocation(latitude: fetchedData.lat, longitude: fetchedData.lon))
+                    
+                    self.addTargetDelegate?.addTargetSprites(target: target)
+                    
+                    //                    self.addTweetDelegate?.addTweet(tweetData: fetchedData)
+                    
+                    
+                } catch let jsonError as NSError {print("json error: \(jsonError.localizedDescription)")}
+                
+            }
+            
+        }
+        
+    }
+    
     
     
     func getTargets3(myLocation: CLLocation) {
@@ -184,7 +265,7 @@ class Model {
 
                     
                     print(target.user?.name ?? "no name")
-                    print(self?.queryTargets.count ?? "no count")
+//                    print(self?.sceneTargets.count ?? "no count")
 //                    self.addTargetDelegate?.addTarget(target: target)
                    
                     self?.addTargetDelegate?.addTargetSprites(target: target)
@@ -220,7 +301,7 @@ class Model {
              
 
                     print(target.user?.name ?? "no name")
-                    print(self?.queryTargets.count ?? "no count")
+//                    print(self?.sceneTargets.count ?? "no count")
                     //                    self.addTargetDelegate?.addTarget(target: target)
                     
                     self?.addTargetDelegate?.addTargetSprites(target: target)
@@ -274,66 +355,6 @@ class Model {
     
     }
     
-//    
-//    func getTargets2(myLocation: CLLocation, completion: @escaping ([Target]) -> ()) {
-////    func getTargets2(myLocation: CLLocation) {
-//        //Query GeoFire for nearby users
-//        //Set up query parameters
-//        //        var keys = [String]()
-//        //        var locations = [CLLocation]()
-////        keys.append(stringBack)
-////        locations.append(locationBack)
-////        print(stringBack)
-//        
-//        
-//        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
-////        var targets = [Target]()
-//        let fakeLocation = makeFakeLocation()
-//        let circleQuery = geoFire?.query(at: fakeLocation, withRadius: 0.25)
-//        
-//        let _ = circleQuery?.observe(.keyEntered, with: {(string, location) in
-//            if let validUID = string, let locationBack = location {
-//
-//                
-//                self.ref.child("users/\(validUID)").observe(.value, with: { snapshot in
-////                    let value = snapshot.value as? [String: Any]
-////                    print(value?["name"] as? String ?? "(ERROR)")
-//                    let user = User(snapshot: snapshot)
-//                    let target = Target(user: user, location: locationBack)
-//                    
-//                    self.queryUsers.append(user)
-////                    targets.append(target)
-////                    self.queryTargets.append(target)
-//                    
-////                    print(target.user?.name ?? "no name")
-////                    print(self.queryTargets.count)
-////                    self.addTargetDelegate?.addTarget(target: target)
-//                    
-////                    circleQuery?.observeReady({
-////                        completion(self.queryTarget)
-////                    })
-//                    
-//                
-//                })
-//
-//            
-//            }})
-//        
-////        circleQuery?.observeReady({
-////            
-//////            completion(self.queryTargets)
-////            
-////        })
-//        
-//    
-//        
-//  
-//    }
-    
-
-            
-            // return the spot class....
-
 
    
     func fetchImage(stringURL: String, completionHandler: @escaping (UIImage?) -> ()) {
@@ -404,41 +425,13 @@ class Model {
     ]
     
     
-//    
-//    var categoryMasksDict: [UInt32 : Bool] = [
-//         0x1 << 1 : false,
-//         0x1 << 2 : false,
-//         0x1 << 3 : false,
-//         0x1 << 4 : false,
-//         0x1 << 5 : false,
-//         0x1 << 6 : false,
-//         0x1 << 7 : false,
-//         0x1 << 8 : false,
-//         0x1 << 9 : false,
-//         0x1 << 10 : false,
-//         0x1 << 11 : false,
-//         0x1 << 12 : false,
-//         0x1 << 13 : false,
-//         0x1 << 14 : false,
-//         0x1 << 15 : false,
-//         0x1 << 16 : false,
-//         0x1 << 17 : false,
-//         0x1 << 18 : false,
-//         0x1 << 19 : false,
-//         0x1 << 20 : false,
-//         0x1 << 21 : false,
-//         0x1 << 22 : false,
-//         0x1 << 23 : false,
-//         0x1 << 24 : false,
-//         0x1 << 25 : false,
-//         0x1 << 26 : false,
-//         0x1 << 27 : false,
-//         0x1 << 28 : false,
-//         0x1 << 29 : false,
-//         0x1 << 30 : false,
-//         0x1 << 31 : false,
-//    ]
-//    
+    
+    var categoryMasksVer2: [UInt32] = [0x1 << 1, 0x1 << 2, 0x1 << 3, 0x1 << 4, 0x1 << 5, 0x1 << 6, 0x1 << 7, 0x1 << 8, 0x1 << 9, 0x1 << 10, 0x1 << 11, 0x1 << 12, 0x1 << 13, 0x1 << 14, 0x1 << 15, 0x1 << 16, 0x1 << 17, 0x1 << 18, 0x1 << 19, 0x1 << 20, 0x1 << 21, 0x1 << 22, 0x1 << 23, 0x1 << 24, 0x1 << 25, 0x1 << 26, 0x1 << 27, 0x1 << 28, 0x1 << 29, 0x1 << 30]
+        
+    
+    var bitMaskOccupied = Array(repeating: false, count: 31)
+    
+ 
     
     var categoryMasksBinary: [(UInt32, Bool)] = [
         (0b1, false),
@@ -489,21 +482,36 @@ class Model {
         return nil
     }
     
-//    
-//    func assignBitMaskDict() -> UInt32? {
-//        
-//        for entry in categoryMasksDict  {
-//            if entry.value == false {
-//                entry.value = true
-//                return entry.key
-//            }
+    
+    func assignBitMask2() -> UInt32? {
+        
+        guard let openIndex = bitMaskOccupied.index(of: false) else {
+            return nil
+        }
+        
+        bitMaskOccupied[openIndex] = true
+        return categoryMasksVer2[openIndex]
+        
+//        if let openIndex = bitMaskOccupied.index(of: false) {
+//            bitMaskOccupied[openIndex] = true
+//            return categoryMasksVer2[openIndex]
 //        }
-//        return nil
-//    }
+//        
+//        else {
+//            return nil
+//        }
+        
+    }
+    
+    
+    func removeBitMask2(mask: UInt32) {
+        let index = categoryMasksVer2.index(of: mask)
+        bitMaskOccupied[index!] = false
+    }
     
     
     
-    func makeBitMaskAvailable(maskNum: UInt32) {
+    func removeBitMask(maskNum: UInt32) {
         print("MADE AVAILABLE \n\n MADE AVAILABLE \n\n")
         for i in 0...categoryMasks.count {
             if categoryMasks[i].0 == maskNum {
@@ -511,9 +519,10 @@ class Model {
                 break
             }
         }
-        
-    
     }
+    
+    
+    
     
     
     let coordinates: [String: CLLocation] = [
@@ -590,7 +599,53 @@ class Model {
         "BNUnionSquareNY"
     ]
     
-    
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//    var occupiedBitMasks: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+
+
+//    var categoryMasksDict: [UInt32 : Bool] = [
+//         0x1 << 1 : false,
+//         0x1 << 2 : false,
+//         0x1 << 3 : false,
+//         0x1 << 4 : false,
+//         0x1 << 5 : false,
+//         0x1 << 6 : false,
+//         0x1 << 7 : false,
+//         0x1 << 8 : false,
+//         0x1 << 9 : false,
+//         0x1 << 10 : false,
+//         0x1 << 11 : false,
+//         0x1 << 12 : false,
+//         0x1 << 13 : false,
+//         0x1 << 14 : false,
+//         0x1 << 15 : false,
+//         0x1 << 16 : false,
+//         0x1 << 17 : false,
+//         0x1 << 18 : false,
+//         0x1 << 19 : false,
+//         0x1 << 20 : false,
+//         0x1 << 21 : false,
+//         0x1 << 22 : false,
+//         0x1 << 23 : false,
+//         0x1 << 24 : false,
+//         0x1 << 25 : false,
+//         0x1 << 26 : false,
+//         0x1 << 27 : false,
+//         0x1 << 28 : false,
+//         0x1 << 29 : false,
+//         0x1 << 30 : false,
+//         0x1 << 31 : false,
+//    ]
+//
