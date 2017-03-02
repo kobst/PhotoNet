@@ -1234,3 +1234,52 @@
 ////            targetSprite.size = CGSize(width: size2, height: size2)
 //
 ////            print(targetSprite.target?.origPos ?? "no origPOs?")
+
+
+
+
+
+
+
+
+
+//
+//
+//func updateTargetSpritesVer2() {
+//    for targetSprite in Model.shared.targetSprites {
+//        
+//        if targetSprite.distance < 125 && targetSprite.parent == nil {
+//            self.addChild(targetSprite)
+//            
+//            if let validMask = Model.shared.assignBitMask2()  {
+//                targetSprite.anchorGrav.categoryBitMask = validMask
+//                targetSprite.physicsBody?.fieldBitMask = validMask
+//                targetSprite.mask = validMask
+//                //                            print(Model.shared.bitMaskOccupied)
+//                
+//            }
+//            
+//        }
+//        
+//        if targetSprite.distance > 150 && targetSprite.parent == self {
+//            //                targetSprite.anchorGrav.categoryBitMask =
+//            //                targetSprite.physicsBody?.fieldBitMask = nil
+//            print("\n removing \(targetSprite.name) \n ")
+//            //                if let validMask = targetSprite.mask {
+//            Model.shared.removeBitMask2(mask: targetSprite.mask!)
+//            targetSprite.removeFromParent()
+//            //                    print(Model.shared.bitMaskOccupied)
+//            //                }
+//            
+//        }
+//        
+//        if targetSprite.parent != nil {
+//            targetSprite.applySize()
+//            targetSprite.changePhysicsBody()
+//            print("\n \(targetSprite.target!.lat)..\n \(targetSprite.target!.lon)")
+//            print("\(targetSprite.target!.origPos)...\(targetSprite.name)....\n")
+//        }
+//        
+//        
+//    }
+//}

@@ -134,6 +134,12 @@ class Target {
         case onScreen
     }
     
+    enum Category: String {
+        case spyGame
+        case tweet
+        case other
+    }
+    
     var user: User? // make this a UID...
     var tweet: TweetData?
     var scaleAdjust = CGFloat(30000)  // was at 9500
@@ -142,6 +148,19 @@ class Target {
     var origPos: CGPoint
     var profileImage: UIImage
     var sceneStatus: OnView = .offScreen
+    var category: Category {
+        if let _ = user {
+            return .spyGame
+        }
+        
+        if let _ = tweet {
+            return .tweet
+        }
+        
+        else {
+            return .other
+        }
+    }
     //    var sprite: TargetSpriteVar?
     
     
@@ -187,7 +206,7 @@ class TargetSprite: SKSpriteNode {
         
         var adjSize = (distance / -2.0) + 150
         
-        //        print("\(adjSize)..adjSize \n \(distance)..dist \n"
+        //   this needs to be log scale....
         
         if adjSize < 75 {
             
@@ -310,7 +329,7 @@ class TargetSprite: SKSpriteNode {
         nameLabel = SKLabelNode()
         nameLabel = SKLabelNode(fontNamed: "Chalkduster")
         nameLabel?.text = name
-        nameLabel?.fontSize = 8
+        nameLabel?.fontSize = 12
         nameLabel?.horizontalAlignmentMode = .center
         nameLabel?.position = CGPoint(x: 0, y: 0)
         nameLabel?.isHidden = true
@@ -324,16 +343,14 @@ class TargetSprite: SKSpriteNode {
             startAngle: 0,
             endAngle: (CGFloat.pi * 2) * CGFloat((arc4random()%100) / 100),
             clockwise: true)
-        let ball = SKShapeNode(path: path)
-        ball.lineWidth = 10
-        ball.fillColor = .red
-        ball.strokeColor = .white
-        ball.glowWidth = 5.5
-        self.addChild(ball)
+        let ring = SKShapeNode(path: path)
+        ring.lineWidth = 10
+        ring.fillColor = .red
+        ring.strokeColor = .white
+        ring.glowWidth = 5.5
+        self.addChild(ring)
         
-        
-        
-        
+
     }
     
 }

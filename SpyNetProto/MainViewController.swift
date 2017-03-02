@@ -116,7 +116,7 @@ class MainViewController: UIViewController, GoToDetail {
                                     
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
                                     
-//                                    Model.shared.getTargets3(myLocation: dummyLocation)
+                                    Model.shared.getTargets3(myLocation: dummyLocation)
                                     Model.shared.getTweeterByDist(myLocation: dummyLocation)
 //                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
                                     
