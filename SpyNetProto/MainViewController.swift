@@ -15,29 +15,39 @@ import GeoFire
 
 protocol GoToDetail: class {
     
-    func goToDetail(targetSprite: TargetSprite)
+//    func goToDetail(targetSprite: TargetSprite)
+//
+//    func goToTweet(targetSprite: TargetSprite)
+    
     func goToProfile()
-    func goToTweet(targetSprite: TargetSprite)
+    func goToTweetTarget(target: TargetSpriteNew)
+    func goToUserTarget(target: TargetSpriteNew)
+    
     
 }
 
 class MainViewController: UIViewController, GoToDetail {
     
-    var selectedSprite: TargetSprite?
+//    var selectedSprite: TargetSprite?
+    
+    var selectedTarget: TargetSpriteNew?
+    
+    
+    @IBOutlet weak var sceneView: SKView!
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
             
             let detailVC = segue.destination as! DetailViewController
-            detailVC.targetSprite = selectedSprite
+            detailVC.target = selectedTarget
             
         }
         
         
         if segue.identifier == "toTweet" {
             
-            let detailVC = segue.destination as! TweetDetailViewController
-            detailVC.targetSprite = selectedSprite
+            let tweetVC = segue.destination as! TweetDetailViewController
+            tweetVC.target = selectedTarget
         }
     }
     
@@ -48,27 +58,37 @@ class MainViewController: UIViewController, GoToDetail {
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
     
-    func goToDetail(targetSprite: TargetSprite) {
-        
-        selectedSprite = targetSprite
-        performSegue(withIdentifier: "toDetail", sender: nil)
-        
-        
+//    func goToDetail(targetSprite: TargetSprite) {
+//        
+//        selectedSprite = targetSprite
+//        performSegue(withIdentifier: "toDetail", sender: nil)
+//        
+//        
+//    }
+//    
+//    
+//    func goToTweet(targetSprite: TargetSprite) {
+//        selectedSprite = targetSprite
+//         performSegue(withIdentifier: "toTweet", sender: nil)
+//        
+//    }
+    
+    
+    func goToTweetTarget(target: TargetSpriteNew) {
+        selectedTarget = target
+         performSegue(withIdentifier: "toTweet", sender: nil)
     }
     
     
-    func goToTweet(targetSprite: TargetSprite) {
-        selectedSprite = targetSprite
-         performSegue(withIdentifier: "toTweet", sender: nil)
-        
+    func goToUserTarget(target: TargetSpriteNew) {
+        selectedTarget = target
+         performSegue(withIdentifier: "toDetail", sender: nil)
     }
     
      @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
     
     
-    override func loadView() {
-        self.view = SKView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,14 +96,14 @@ class MainViewController: UIViewController, GoToDetail {
         var scene: FieldScene!
         
         
-        let skView = view as! SKView
-        skView.isMultipleTouchEnabled = false
+
+        sceneView.isMultipleTouchEnabled = false
         
         // Create and configure the scene.
-        scene = FieldScene(size: skView.bounds.size)
+        scene = FieldScene(size: sceneView.bounds.size)
         scene.delegateMainVC = self
         scene.scaleMode = .aspectFill
-        skView.presentScene(scene)
+        sceneView.presentScene(scene)
     
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
@@ -116,7 +136,10 @@ class MainViewController: UIViewController, GoToDetail {
                                     
                                     Model.shared.updateMyLocation(myLocation: dummyLocation)
                                     
-                                    Model.shared.getTargets3(myLocation: dummyLocation)
+//                                    Model.shared.getTargets3(myLocation: dummyLocation)
+                                    
+                                    
+//                                    Model.shared.getTargetNew(myLocation: dummyLocation)
                                     Model.shared.getTweeterByDist(myLocation: dummyLocation)
 //                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
                                     

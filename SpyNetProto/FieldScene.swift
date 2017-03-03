@@ -28,12 +28,12 @@ import Firebase
 import CoreLocation
 
 
-
-
 protocol AddTargetProtocol: class {
     
     //    func addTarget(target: Target)
     func addTargetSprites(target: Target)
+    func addTargetSpritesNew(target: TargetNew)
+    
 }
 
 
@@ -69,6 +69,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         background.size.width = size.width * 10
         background.size.height = size.height * 10
+        background.name = "background"
         addChild(background)
         
         //        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
@@ -81,6 +82,38 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
 
+    func addTargetSpritesNew(target: TargetNew) {
+        
+            let sprite = TargetSpriteNew(target: target)
+            
+            Model.shared.targetSpriteNew.append(sprite)
+        
+        
+            Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
+                guard let validImage = returnedImage else {
+                    return
+                }
+                let roundedImage = validImage.circle
+                let myTexture = SKTexture(image: roundedImage!)
+                sprite.texture = myTexture
+    
+                if sprite.distance < 75 {
+
+                self.background.addChild(sprite)
+                print(sprite.nameLabel.text ?? "mmmmmmmmm")
+                if let validMask = Model.shared.assignBitMask2()  {
+                    sprite.anchorGrav.categoryBitMask = validMask
+                    sprite.physicsBody?.fieldBitMask = validMask
+                    sprite.mask = validMask
+                    sprite.applySize()
+                    sprite.changePhysicsBody()
+                }
+                
+                }
+            
+            }
+    }
+    
     
     func addTargetSprites(target: Target) {
         
@@ -183,36 +216,37 @@ class FieldScene: SKScene, AddTargetProtocol {
         if let positionInScene = touch?.location(in: self) {
 
             let nodeAtPoint = atPoint(positionInScene)
-            print(nodeAtPoint.name ?? "no name")
+            print(nodeAtPoint.name ?? "no name X")
 
-            if nodeAtPoint.name != nil {
-                if nodeAtPoint.name == "profileButtonXOXO" {
+            if nodeAtPoint.name == "profileButtonXOXO" {
                     print("profiel seleceted \n \n profile selected \n ")
                     delegateMainVC?.goToProfile()
                     
-                }
-    
-                else {
-                    
-                    let targetSprite = nodeAtPoint as! TargetSprite
-                    //                    print("\(targetSprite.target?.user?.name)...\(target.mask)....")
-                    print("\(targetSprite.position)...")
-                    print("\(targetSprite.target?.lat)...\(targetSprite.target?.lon)")
-                    
-                    if let _ = targetSprite.target?.tweet {
-                        delegateMainVC?.goToTweet(targetSprite: targetSprite)
-                        
-                    }
-                    else {
-//                        delegateMainVC?.goToDetail(targetSprite: targetSprite)
-                        for targetSprite in Model.shared.targetSprites {
-                            if targetSprite.target?.tweet == nil {
-                                targetSprite.removeFromParent()
-                            }
-                        }
-                    }
-                }
             }
+                
+            if nodeAtPoint.name == "background" {
+                return
+            }
+    
+            else {
+                    
+                    let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
+                    
+                    switch targetSpriteNew.target {
+                        
+                    case is TweetTarget:
+//                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
+                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
+                        
+                    case is UserTarget:
+//                        let userTarget = targetSpriteNew as! UserTarget
+                        delegateMainVC?.goToUserTarget(target: targetSpriteNew)
+                        
+                    default:
+                        fatalError()
+                    }
+                
+                }
         }
     }
     
@@ -281,6 +315,52 @@ class FieldScene: SKScene, AddTargetProtocol {
     
 
     
+    func updateTargetSprNew() {
+        
+        let maxSpritesViewable = Model.shared.targetSprNewByDistance.count > 7 ? 7 : Model.shared.targetSprNewByDistance.count
+        var count = 0
+        
+        for targetSprite in Model.shared.targetSprNewByDistance {
+            if count < maxSpritesViewable {
+                if targetSprite.parent == nil {
+                    //                        self.addChild(targetSprite)
+                    self.background.addChild(targetSprite)
+                    if let validMask = Model.shared.assignBitMask2()  {
+                        targetSprite.anchorGrav.categoryBitMask = validMask
+                        targetSprite.physicsBody?.fieldBitMask = validMask
+                        targetSprite.mask = validMask
+                        //                            print(Model.shared.bitMaskOccupied)
+                        print(targetSprite.name ?? "nIII vafafadfdafadf")
+                    }
+                }
+                
+                targetSprite.applySize()
+                targetSprite.changePhysicsBody()
+                
+            }
+            else {
+                if targetSprite.parent != nil {
+                    targetSprite.removeFromParent()
+                    Model.shared.removeBitMask2(mask: targetSprite.mask!)
+                    print(targetSprite.name ?? "nadfadfadfdafadfadfdafa")
+                    
+                }
+                
+            }
+            
+            count += 1
+        }
+        
+        var i = 0
+        for targetSprite in Model.shared.targetSprNewByDistance {
+            if targetSprite.parent == self {
+                print(i)
+            }
+            i += 1
+        }
+        
+    }
+    
 
     func handlePanFrom(recognizer: UIPanGestureRecognizer) {
         if recognizer.state == .began {
@@ -308,18 +388,32 @@ class FieldScene: SKScene, AddTargetProtocol {
             //            updateSpotSizes()
             //            updateTargetSizes()
 //            updateTargetSpritesVer2()
-            updateTargetSprByDistance()
+//            updateTargetSprByDistance()
             
+            updateTargetSprNew()
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
             
             //            self.panForTranslation(translation)
             //            recognizer.setTranslation(CGPointZero, in: recognizer.view)
             
+
         }
 
     }
     
     
+    
+    
+//    func fade() {
+//        let action = SKAction
+//        for targetSprite in Model.shared.targetSprByDistance {
+//            targetSprite.alpha = 0
+//            targetSprite.run(<#T##action: SKAction##SKAction#>)
+//        }
+// 
+//        
+//        
+//    }
     
     
     
@@ -331,7 +425,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         if let heading = Model.shared.myHeading {
            background.zRotation = CGFloat(M_PI * 2) * CGFloat(heading/360)
-            for targetSprite in Model.shared.targetSprites {
+            for targetSprite in Model.shared.targetSpriteNew {
                 targetSprite.zRotation = -1 * background.zRotation
             }
         }

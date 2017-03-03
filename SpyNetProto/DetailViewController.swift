@@ -42,7 +42,12 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    var targetSprite: TargetSprite?
+//    var targetSprite: TargetSprite?
+    
+    var userTarget: UserTarget {
+        return target?.target as! UserTarget
+    }
+    var target: TargetSpriteNew?
     
     var targetFaceID: String?
     var attemptedFaceID: String?
@@ -65,7 +70,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
                                 if status == INTULocationStatus.success {
                                     print("got location");
                                     
-                                    let newAttempt = Attempt(target: (self.targetSprite?.target?.user?.uid)!, taker: (Model.shared.loggedInUser?.uid)!, location: currentLocation!, photo: self.profileImageView.image!, success: result)
+                                    let newAttempt = Attempt(target: self.userTarget.uid, taker: (Model.shared.loggedInUser?.uid)!, location: currentLocation!, photo: self.profileImageView.image!, success: result)
                                     
                                     Model.shared.setNewAttempt(attempt: newAttempt)
                                     
@@ -268,10 +273,15 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         resultLabel.isHidden = true
         
+        let userTarget = target as! UserTarget
         
-        name.text = targetSprite?.name!
-        let cgVersion = targetSprite?.texture!.cgImage()
+        name.text = userTarget.userName
+        let cgVersion = target?.texture!.cgImage()
         profileImageView.image = UIImage(cgImage: cgVersion!)
+        
+//        name.text = targetSprite?.name!
+//        let cgVersion = targetSprite?.texture!.cgImage()
+//        profileImageView.image = UIImage(cgImage: cgVersion!)
         
   
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
@@ -282,7 +292,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         
 
         
-        let _ = faceClient?.detect(withUrl: targetSprite?.target?.user?.avatar, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
+        let _ = faceClient?.detect(withUrl: userTarget.avatar, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
             
             if (faces?.count)! > 0 {
                 self.targetFaceID = faces?[0].faceId

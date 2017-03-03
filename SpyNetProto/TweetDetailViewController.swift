@@ -21,10 +21,16 @@ class TweetDetailViewController: UIViewController {
     @IBOutlet weak var tweetLabel: UILabel!
     
     
-    var tweet: TweetData {
-        return (targetSprite?.target?.tweet)!
+//    var tweet: TweetData {
+//        return (targetSprite?.target?.tweet)!
+//    }
+    
+    var tweet: TweetTarget {
+        return target?.target as! TweetTarget
     }
-    var targetSprite: TargetSprite?
+//    var targetSprite: TargetSprite?
+    
+    var target: TargetSpriteNew?
 
     @IBAction func exit(_ sender: Any) {
         
@@ -66,7 +72,7 @@ class TweetDetailViewController: UIViewController {
   
         nameLabel.text = tweet.senderID
 //        nameLabel.text = "\(targetSprite?.position)..\(tweet.origPos).."
-        let cgVersion = targetSprite?.texture!.cgImage()
+        let cgVersion = target?.texture!.cgImage()
         profileImage.image = UIImage(cgImage: cgVersion!)
         tweetLabel.text = tweet.message
 //        tweetLabel.text = "\(targetSprite?.target?.lat)..\(targetSprite?.target?.lon)"

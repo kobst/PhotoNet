@@ -12,52 +12,52 @@ import QuartzCore
 import Firebase
 import CoreLocation
 
-
-extension UIImage {
-    var rounded: UIImage? {
-        let imageView = UIImageView(image: self)
-        imageView.layer.cornerRadius = min(size.height/4, size.width/4)
-        imageView.layer.masksToBounds = true
-        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, scale)
-        guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        imageView.layer.render(in: context)
-        let result = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return result
-    }
-    var circle: UIImage? {
-        let square = CGSize(width: min(size.width, size.height), height: min(size.width, size.height))
-        let imageView = UIImageView(frame: CGRect(origin: .zero, size: square))
-        imageView.contentMode = .scaleAspectFill
-        imageView.image = self
-        imageView.layer.cornerRadius = square.width/2
-        imageView.layer.masksToBounds = true
-        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, scale)
-        guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        imageView.layer.render(in: context)
-        let result = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return result
-    }
-}
-
-
-
-func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
-    let imageView: UIImageView = UIImageView(image: image)
-    var layer: CALayer = CALayer()
-    layer = imageView.layer
-    
-    layer.masksToBounds = true
-    layer.cornerRadius = CGFloat(radius)
-    
-    UIGraphicsBeginImageContext(imageView.bounds.size)
-    layer.render(in: UIGraphicsGetCurrentContext()!)
-    let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    
-    return roundedImage!
-}
+//
+//extension UIImage {
+//    var rounded: UIImage? {
+//        let imageView = UIImageView(image: self)
+//        imageView.layer.cornerRadius = min(size.height/4, size.width/4)
+//        imageView.layer.masksToBounds = true
+//        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, scale)
+//        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+//        imageView.layer.render(in: context)
+//        let result = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return result
+//    }
+//    var circle: UIImage? {
+//        let square = CGSize(width: min(size.width, size.height), height: min(size.width, size.height))
+//        let imageView = UIImageView(frame: CGRect(origin: .zero, size: square))
+//        imageView.contentMode = .scaleAspectFill
+//        imageView.image = self
+//        imageView.layer.cornerRadius = square.width/2
+//        imageView.layer.masksToBounds = true
+//        UIGraphicsBeginImageContextWithOptions(imageView.bounds.size, false, scale)
+//        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+//        imageView.layer.render(in: context)
+//        let result = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return result
+//    }
+//}
+//
+//
+//
+//func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
+//    let imageView: UIImageView = UIImageView(image: image)
+//    var layer: CALayer = CALayer()
+//    layer = imageView.layer
+//    
+//    layer.masksToBounds = true
+//    layer.cornerRadius = CGFloat(radius)
+//    
+//    UIGraphicsBeginImageContext(imageView.bounds.size)
+//    layer.render(in: UIGraphicsGetCurrentContext()!)
+//    let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
+//    UIGraphicsEndImageContext()
+//    
+//    return roundedImage!
+//}
 
 
 
@@ -142,7 +142,7 @@ class Target {
     
     var user: User? // make this a UID...
     var tweet: TweetData?
-    var scaleAdjust = CGFloat(30000)  // was at 9500
+    var scaleAdjust = CGFloat(9500)  // was at 9500
     var lat: CLLocationDegrees  // prob dont need. keep in user/tweet....
     var lon: CLLocationDegrees
     var origPos: CGPoint
@@ -333,7 +333,7 @@ class TargetSprite: SKSpriteNode {
         nameLabel?.horizontalAlignmentMode = .center
         nameLabel?.position = CGPoint(x: 0, y: 0)
         nameLabel?.isHidden = true
-        self.addChild(nameLabel!)
+//        self.addChild(nameLabel!)
         
         
         
@@ -350,7 +350,6 @@ class TargetSprite: SKSpriteNode {
         ring.glowWidth = 5.5
         self.addChild(ring)
         
-
     }
     
 }

@@ -98,6 +98,8 @@ class Model {
 
     private init(){}
     
+    let scaleAdjust = CGFloat(10000)
+    
     var loggedInUser: User?
     var queryUsers: [User] = []
 //    var queryTargets: [TargetSprite] = []
@@ -105,6 +107,10 @@ class Model {
     var targetSprites: [TargetSprite] = []
     var sceneTweets: [TweetData] = []
     var sceneTargets: [Target] = []
+    
+    var targetSpriteNew: [TargetSpriteNew] = []
+    
+    
     var myLat: CGFloat?
     var myLong: CGFloat?
     var myLocation: CLLocation?
@@ -117,8 +123,15 @@ class Model {
         
         return targetSprites.sorted(by: {$0.distance < $1.distance})
         
+    }
+    
+    var targetSprNewByDistance: [TargetSpriteNew] {
+        
+        return targetSpriteNew.sorted(by: {$0.distance < $1.distance})
         
     }
+    
+    
     weak var addTargetDelegate: AddTargetProtocol?
     
     let ref = FIRDatabase.database().reference()
@@ -226,9 +239,14 @@ class Model {
                     
                     let fetchedData = TweetData(message: messageText, senderName: sender.0, idImageURL: photoID, dist: sender.1, time: roundedTime)
                     
-                    let target = Target(tweet: fetchedData, location: CLLocation(latitude: fetchedData.lat, longitude: fetchedData.lon))
+//                    let target = Target(tweet: fetchedData, location: CLLocation(latitude: fetchedData.lat, longitude: fetchedData.lon))
                     
-                    self.addTargetDelegate?.addTargetSprites(target: target)
+                    
+                    let tweetTarget = TweetTarget(message: messageText, senderName: sender.0, idImageURL: photoID, time: roundedTime)
+                    
+//                    self.addTargetDelegate?.addTargetSprites(target: target)
+                    
+                    self.addTargetDelegate?.addTargetSpritesNew(target: tweetTarget)
                     
                     //                    self.addTweetDelegate?.addTweet(tweetData: fetchedData)
                     
@@ -282,7 +300,7 @@ class Model {
     
     
     
-    func getTargets4(myLocation: CLLocation) {
+    func getTargetNew(myLocation: CLLocation) {
         
         
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
@@ -297,14 +315,17 @@ class Model {
                     //                    let value = snapshot.value as? [String: Any]
                     //                    print(value?["name"] as? String ?? "(ERROR)")
                     let user = User(snapshot: snapshot)
-                    let target = Target(user: user, location: locationBack)
+//                    let target = Target(user: user, location: locationBack)
              
+                    let userTarget = UserTarget(snapshot: snapshot, location: locationBack)
 
-                    print(target.user?.name ?? "no name")
+//                    print(target.user?.name ?? "no name")
 //                    print(self?.sceneTargets.count ?? "no count")
                     //                    self.addTargetDelegate?.addTarget(target: target)
-                    
-                    self?.addTargetDelegate?.addTargetSprites(target: target)
+//                    
+//                    self?.addTargetDelegate?.addTargetSprites(target: target)
+                    self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+                
                     
                 })
                 
