@@ -98,15 +98,15 @@ class Model {
 
     private init(){}
     
-    let scaleAdjust = CGFloat(10000)
+    let scaleAdjust = CGFloat(15000)
     
     var loggedInUser: User?
-    var queryUsers: [User] = []
+//    var queryUsers: [User] = []
 //    var queryTargets: [TargetSprite] = []
 //    var sceneTargetSprites: [TargetSpriteVar] = []
-    var targetSprites: [TargetSprite] = []
-    var sceneTweets: [TweetData] = []
-    var sceneTargets: [Target] = []
+//    var targetSprites: [TargetSprite] = []
+//    var sceneTweets: [TweetData] = []
+//    var sceneTargets: [Target] = []
     
     var targetSpriteNew: [TargetSpriteNew] = []
     
@@ -119,11 +119,11 @@ class Model {
     var dateFormatter = DateFormatter()
 
     
-    var targetSprByDistance: [TargetSprite] {
-        
-        return targetSprites.sorted(by: {$0.distance < $1.distance})
-        
-    }
+//    var targetSprByDistance: [TargetSprite] {
+//        
+//        return targetSprites.sorted(by: {$0.distance < $1.distance})
+//        
+//    }
     
     var targetSprNewByDistance: [TargetSpriteNew] {
         
@@ -237,7 +237,7 @@ class Model {
                     
                     let messageText = tweetDict["text"] as! String
                     
-                    let fetchedData = TweetData(message: messageText, senderName: sender.0, idImageURL: photoID, dist: sender.1, time: roundedTime)
+//                    let fetchedData = TweetData(message: messageText, senderName: sender.0, idImageURL: photoID, dist: sender.1, time: roundedTime)
                     
 //                    let target = Target(tweet: fetchedData, location: CLLocation(latitude: fetchedData.lat, longitude: fetchedData.lon))
                     
@@ -259,46 +259,46 @@ class Model {
         
     }
     
-    
-    
-    func getTargets3(myLocation: CLLocation) {
 
+    
+    
+    
+    func getEater(myLocation: CLLocation) {
         
-        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
-        //        var targets = [Target]()
-//        let fakeLocation = makeFakeLocation()
-        let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5)
+        let geoFire = GeoFire(firebaseRef: ref.child("Eater38_locations"))
+        
+        let circleQuery = geoFire?.query(at: myLocation, withRadius: 3.0)
+        
+        
         
         circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
             if let validUID = string, let locationBack = location {
                 
-                self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
+                self?.ref.child("Eater38/\(validUID)").observe(.value, with: { [weak self] snapshot in
                     //                    let value = snapshot.value as? [String: Any]
                     //                    print(value?["name"] as? String ?? "(ERROR)")
-                    let user = User(snapshot: snapshot)
-                    let target = Target(user: user, location: locationBack)
+//                    let user = User(snapshot: snapshot)
+                    //                    let target = Target(user: user, location: locationBack)
                     
-//                    self.queryTargets.append(user)
-                    //                    targets.append(target)
-
+                    let eaterRestaurant = Eater38(snapshot: snapshot, location: locationBack)
                     
-                    print(target.user?.name ?? "no name")
-//                    print(self?.sceneTargets.count ?? "no count")
-//                    self.addTargetDelegate?.addTarget(target: target)
-                   
-                    self?.addTargetDelegate?.addTargetSprites(target: target)
+                    //                    print(target.user?.name ?? "no name")
+                    //                    print(self?.sceneTargets.count ?? "no count")
+                    //                    self.addTargetDelegate?.addTarget(target: target)
+                    //
+                    //                    self?.addTargetDelegate?.addTargetSprites(target: target)
+                   print("eater \n eater \n eater \n")
+                    self?.addTargetDelegate?.addTargetSpritesNew(target: eaterRestaurant)
+                    
                     
                 })
-
+                
                 
             }})
         
         
+        
     }
-    
-    
-    
-    
     
     func getTargetNew(myLocation: CLLocation) {
         
@@ -314,7 +314,7 @@ class Model {
                 self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
                     //                    let value = snapshot.value as? [String: Any]
                     //                    print(value?["name"] as? String ?? "(ERROR)")
-                    let user = User(snapshot: snapshot)
+//                    let user = User(snapshot: snapshot)
 //                    let target = Target(user: user, location: locationBack)
              
                     let userTarget = UserTarget(snapshot: snapshot, location: locationBack)

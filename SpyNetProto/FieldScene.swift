@@ -31,7 +31,7 @@ import CoreLocation
 protocol AddTargetProtocol: class {
     
     //    func addTarget(target: Target)
-    func addTargetSprites(target: Target)
+//    func addTargetSprites(target: Target)
     func addTargetSpritesNew(target: TargetNew)
     
 }
@@ -48,21 +48,81 @@ class FieldScene: SKScene, AddTargetProtocol {
     var cam: SKCameraNode!
     let gravField = SKFieldNode.springField()
     let background = SKSpriteNode(imageNamed: "horizonSpace")
-    var profileNode: SKSpriteNode!
+    var profileNode = ProfileNode()   // should profileNode be a struct
+    var catsOpen: Bool = false // switch this to a class method for profileNode class...
+    
+//    var categoryNodes = [ButtonCategoryNode]()
+    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38]
+   
+    var allCategoryNodes: [ButtonCategoryNode] {
+        let radius = CGFloat(50)
+        var i = 0
+        var categoryNodes = [ButtonCategoryNode]()
+        for cat in allCategories {
+            let buttonNode = ButtonCategoryNode(categoryInit: cat)
+            
+            let angle = 2 * M_PI / Double(categories.count) * Double(i)
+            let coinX = radius * cos(CGFloat(angle))
+            let coinY = radius * sin(CGFloat(angle))
+            buttonNode.position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
+            categoryNodes.append(buttonNode)
+            i += 1
+        }
+        return categoryNodes
+        
+    }
     
     
-
+    
+    
+    
+    
+    var categories: [TargetSpriteNew.Category]
+    
+    var targetSpritesByDistance: [TargetSpriteNew] {
+        return Model.shared.targetSpriteNew.sorted(by: {$0.distance < $1.distance})
+        
+    }
+    
+    var filteredTargetSprites: [TargetSpriteNew] {
+        
+        var filteredOut = [TargetSpriteNew]()
+//        for category in categories {
+//                    let validCatSprites = targetSpritesByDistance.filter({ $0.category == category })
+//                    filteredOut = filteredOut + validCatSprites
+//                }
+        
+        let sortedTargets = targetSpritesByDistance
+        for sprite in sortedTargets {
+            
+            if categories.contains(sprite.category!) {
+                filteredOut.append(sprite)
+            }
+        }
+        
+    
+        return filteredOut
+    }
+    
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
     
     override init(size: CGSize) {
+        
+        self.categories = [.tweet, .spyGame, .eater38]
+        
+
+        
+        
         super.init(size: size)
         
         
         Model.shared.addTargetDelegate = self
 //        Modelv2.shared.addTweetDelegate = self
-        Modelv2.shared.addTargetDelegate = self
+//        Modelv2.shared.addTargetDelegate = self
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
@@ -70,7 +130,11 @@ class FieldScene: SKScene, AddTargetProtocol {
         background.size.width = size.width * 10
         background.size.height = size.height * 10
         background.name = "background"
+        background.position = CGPoint(x: 0, y: 100)
         addChild(background)
+        
+        
+        
         
         //        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
         //        self.addGestureRecognizer(swipe)
@@ -89,6 +153,15 @@ class FieldScene: SKScene, AddTargetProtocol {
             Model.shared.targetSpriteNew.append(sprite)
         
         
+//        if sprite.category == .spyGame {
+//            
+//            let roundedImage = UIImage(named: "spyIcon")
+//            let myTexture = SKTexture(image: roundedImage!)
+//            sprite.texture = myTexture
+//        }
+        
+        
+        if sprite.category == .tweet {
             Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
                 guard let validImage = returnedImage else {
                     return
@@ -96,63 +169,39 @@ class FieldScene: SKScene, AddTargetProtocol {
                 let roundedImage = validImage.circle
                 let myTexture = SKTexture(image: roundedImage!)
                 sprite.texture = myTexture
-    
-                if sprite.distance < 75 {
-
-                self.background.addChild(sprite)
-                print(sprite.nameLabel.text ?? "mmmmmmmmm")
-                if let validMask = Model.shared.assignBitMask2()  {
-                    sprite.anchorGrav.categoryBitMask = validMask
-                    sprite.physicsBody?.fieldBitMask = validMask
-                    sprite.mask = validMask
-                    sprite.applySize()
-                    sprite.changePhysicsBody()
-                }
-                
-                }
-            
-            }
-    }
-    
-    
-    func addTargetSprites(target: Target) {
-        
-        let profileImageURL = target.user == nil ? target.tweet?.idImageURL : target.user?.avatar
-        
-        Model.shared.fetchImage(stringURL: profileImageURL!) { image in
-            
-            guard let returnedImage = image else  {
-                return
-            }
-            
-            target.profileImage = returnedImage
-//            Model.shared.sceneTargets.append(target)
-
-            let sprite = TargetSprite(target: target, image: returnedImage)
-            print("\(sprite.target?.origPos)..-..\(sprite.position)")
-            Model.shared.targetSprites.append(sprite)
-            
-            if sprite.distance < 75 {
-//                self.addChild(sprite)
-                
-                self.background.addChild(sprite)
-                
-                if let validMask = Model.shared.assignBitMask2()  {
-                    sprite.anchorGrav.categoryBitMask = validMask
-                    sprite.physicsBody?.fieldBitMask = validMask
-                    sprite.mask = validMask
-                    sprite.applySize()
-                    sprite.changePhysicsBody()
-                }
-                
-            }
             
         }
-        
+//                if sprite.distance < 75 {
+//
+//                self.background.addChild(sprite)
+//                print(sprite.nameLabel.text ?? "mmmmmmmmm")
+//                if let validMask = Model.shared.assignBitMask2()  {
+//                    sprite.anchorGrav.categoryBitMask = validMask
+//                    sprite.physicsBody?.fieldBitMask = validMask
+//                    sprite.mask = validMask
+//                    sprite.applySize()
+//                    sprite.changePhysicsBody()
+//                }
+//                
+//                }
+            
+            }
     }
     
+
     
-    
+    class ProfileNode: SKSpriteNode {
+        init() {
+            let profileImage = UIImage(named: "plus")?.circle
+            let profileTexture = SKTexture(image: profileImage!)
+            let size = CGSize(width: 50, height: 50)
+            super.init(texture: profileTexture, color: UIColor(), size: size)
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
 
     func makeProfileNode() -> SKSpriteNode {
         
@@ -165,6 +214,43 @@ class FieldScene: SKScene, AddTargetProtocol {
         return profileNode
         
     }
+    
+    
+//    func makeCategoryNodes() {
+//        
+//        let radius = CGFloat(50)
+//       
+//        
+//        var i = 0
+//            for cat in allCategories {
+//                let buttonNode = ButtonCategoryNode(categoryInit: cat)
+//                
+//                let angle = 2 * M_PI / Double(categories.count) * Double(i)
+//                let coinX = radius * cos(CGFloat(angle))
+//                let coinY = radius * sin(CGFloat(angle))
+//                buttonNode.position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
+//                allCategoryNodes.append(buttonNode)
+//                i += 1
+//            }
+//            
+////            self.addChild(buttonNode)
+//        }
+    
+
+    
+    func adjustCatNodes() {
+        let count = allCategoryNodes.count - 1
+        let radius = CGFloat(50)
+        for i in 0...count {
+        
+            let angle = 2 * M_PI / Double(categories.count) * Double(i)
+            let coinX = radius * cos(CGFloat(angle))
+            let coinY = radius * sin(CGFloat(angle))
+            allCategoryNodes[i].position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
+            
+        }
+    }
+    
     
     
     override func didMove(to view: SKView) {
@@ -180,9 +266,13 @@ class FieldScene: SKScene, AddTargetProtocol {
         cam.position = CGPoint(x: 0, y: 0)
         Model.shared.myScreenOrigin = CGPoint(x: 0, y: 0)
         
-        profileNode = makeProfileNode()
+        
         profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
         self.addChild(profileNode)
+        
+        categories = [.tweet, .eater38, .spyGame]
+        
+//        makeCategoryNodes()
         
         
         //        gravField.position = Model.shared.myScreenOrigin
@@ -217,44 +307,103 @@ class FieldScene: SKScene, AddTargetProtocol {
 
             let nodeAtPoint = atPoint(positionInScene)
             print(nodeAtPoint.name ?? "no name X")
-
-            if nodeAtPoint.name == "profileButtonXOXO" {
-                    print("profiel seleceted \n \n profile selected \n ")
-                    delegateMainVC?.goToProfile()
-                    
-            }
+            
+            
+            switch nodeAtPoint {
                 
-            if nodeAtPoint.name == "background" {
+            case is ButtonCategoryNode:
+                let button = nodeAtPoint as! ButtonCategoryNode
+                modifyCategories(category: button.category)
+            
+            case is ProfileNode:
+                if catsOpen {
+                    for node in allCategoryNodes {
+                        node.removeFromParent()
+                    }
+                    catsOpen = false
+                }
+                else {
+                    for node in allCategoryNodes {
+                        self.addChild(node)
+                    }
+                    
+                    catsOpen = true
+                }
+            case is TargetSpriteNew:
+                let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
+            
+                switch targetSpriteNew.target {
+                
+                    case is TweetTarget:
+                //                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
+                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
+                
+                    case is UserTarget:
+                //                        let userTarget = targetSpriteNew as! UserTarget
+                            delegateMainVC?.goToUserTarget(target: targetSpriteNew)
+                    default:
+                        return
+                }
+        
+            default:
                 return
             }
+
+            
+//            if nodeAtPoint.name == "profileButtonXOXO" {
+//                    print("profiel seleceted \n \n profile selected \n ")
+////                    delegateMainVC?.goToProfile()
+//                
+//                    if catsOpen {
+//                          for node in categoryNodes {
+//                                node.removeFromParent()
+//                        }
+//                        catsOpen = false
+//                    }
+//                    
+//                    else {
+//                        for node in categoryNodes {
+//                            self.addChild(node)
+//                        }
+//                        
+//                        catsOpen = true
+//                }
+//                
+//                return
+//                }
+//                
+            
+//                
+//            if nodeAtPoint.name == "background" {
+//                return
+//            }
     
-            else {
-                    
-                    let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
-                    
-                    switch targetSpriteNew.target {
-                        
-                    case is TweetTarget:
-//                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
-                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
-                        
-                    case is UserTarget:
-//                        let userTarget = targetSpriteNew as! UserTarget
-                        delegateMainVC?.goToUserTarget(target: targetSpriteNew)
-                        
-                    default:
-                        fatalError()
-                    }
-                
-                }
+//            else {
+//                    
+//                    let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
+//                    
+//                    switch targetSpriteNew.target {
+//                        
+//                    case is TweetTarget:
+////                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
+//                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
+//                        
+//                    case is UserTarget:
+////                        let userTarget = targetSpriteNew as! UserTarget
+//                        delegateMainVC?.goToUserTarget(target: targetSpriteNew)
+//                        
+//                    default:
+//                        return
+//                    }
+//                
+//                }
         }
     }
     
     
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
+    
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -266,100 +415,94 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     
-    
-    func updateTargetSprByDistance() {
 
-            let maxSpritesViewable = Model.shared.targetSprByDistance.count > 7 ? 7 : Model.shared.targetSprByDistance.count
-            var count = 0
+    func modifyCategories(category: TargetSpriteNew.Category) {
         
-            for targetSprite in Model.shared.targetSprByDistance {
+//        filteredTargetSprites = targetSpritesByDistance
+        
+//        if categories.contains(category) {
+//            categories = categories.filter({$0 != category})
+//            
+//            
+//        }
+           
+        if let index = categories.index(of: category) {
+            categories.remove(at: index)
+        }
+        
+            
+        else {
+            categories.append(category)
+        }
+        
+        updateTargetSpriteNewVersion()
+        
+//        for category in categories {
+//            
+//            validTargetSprites = validTargetSprites.filter({ $0.category == category })
+//        }
+        
+    
+    }
+    
+    
+    func updateTargetSpriteNewVersion() {
+        
+        let array = filteredTargetSprites
+        let array2 = targetSpritesByDistance
+        let maxSpritesViewable = array.count > 7 ? 7 : array.count
+        
+        var count = 0
+        
+        for targetSprite in array2 {
+            
+            if categories.contains(targetSprite.category!) {
                 if count < maxSpritesViewable {
+                    
                     if targetSprite.parent == nil {
-//                        self.addChild(targetSprite)
                         self.background.addChild(targetSprite)
                         if let validMask = Model.shared.assignBitMask2()  {
                             targetSprite.anchorGrav.categoryBitMask = validMask
                             targetSprite.physicsBody?.fieldBitMask = validMask
                             targetSprite.mask = validMask
                             //                            print(Model.shared.bitMaskOccupied)
-                            print(targetSprite.name ?? "no name add")
                         }
                     }
                     
                     targetSprite.applySize()
                     targetSprite.changePhysicsBody()
-                    
+    
+                    count += 1
                 }
                 else {
                     if targetSprite.parent != nil {
                         targetSprite.removeFromParent()
                         Model.shared.removeBitMask2(mask: targetSprite.mask!)
-                        print(targetSprite.name ?? "no name")
-                        
                     }
                     
                 }
-                
-                count += 1
-        }
-    
-        var i = 0
-        for targetSprite in Model.shared.targetSprByDistance {
-            if targetSprite.parent == self {
-                print(i)
             }
-            i += 1
-        }
-        
-    }
-    
 
-    
-    func updateTargetSprNew() {
-        
-        let maxSpritesViewable = Model.shared.targetSprNewByDistance.count > 7 ? 7 : Model.shared.targetSprNewByDistance.count
-        var count = 0
-        
-        for targetSprite in Model.shared.targetSprNewByDistance {
-            if count < maxSpritesViewable {
-                if targetSprite.parent == nil {
-                    //                        self.addChild(targetSprite)
-                    self.background.addChild(targetSprite)
-                    if let validMask = Model.shared.assignBitMask2()  {
-                        targetSprite.anchorGrav.categoryBitMask = validMask
-                        targetSprite.physicsBody?.fieldBitMask = validMask
-                        targetSprite.mask = validMask
-                        //                            print(Model.shared.bitMaskOccupied)
-                        print(targetSprite.name ?? "nIII vafafadfdafadf")
-                    }
-                }
-                
-                targetSprite.applySize()
-                targetSprite.changePhysicsBody()
-                
-            }
+            
             else {
                 if targetSprite.parent != nil {
                     targetSprite.removeFromParent()
                     Model.shared.removeBitMask2(mask: targetSprite.mask!)
-                    print(targetSprite.name ?? "nadfadfadfdafadfadfdafa")
-                    
                 }
                 
             }
             
-            count += 1
+ 
+
         }
         
-        var i = 0
-        for targetSprite in Model.shared.targetSprNewByDistance {
-            if targetSprite.parent == self {
-                print(i)
-            }
-            i += 1
-        }
         
     }
+    
+    
+    
+    
+
     
 
     func handlePanFrom(recognizer: UIPanGestureRecognizer) {
@@ -381,16 +524,19 @@ class FieldScene: SKScene, AddTargetProtocol {
             gravField.position = Model.shared.myScreenOrigin
             
             profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+
+            adjustCatNodes()
             
-//            print("\(Model.shared.myScreenOrigin)....ORIGIN")
             
-            
+
             //            updateSpotSizes()
             //            updateTargetSizes()
 //            updateTargetSpritesVer2()
 //            updateTargetSprByDistance()
             
-            updateTargetSprNew()
+//            updateTargetSprNew()
+            updateTargetSpriteNewVersion()
+            fade()
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
             
             //            self.panForTranslation(translation)
@@ -404,16 +550,20 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     
-//    func fade() {
-//        let action = SKAction
-//        for targetSprite in Model.shared.targetSprByDistance {
-//            targetSprite.alpha = 0
-//            targetSprite.run(<#T##action: SKAction##SKAction#>)
-//        }
-// 
-//        
-//        
-//    }
+    func fade() {
+    
+        let fade = SKAction.fadeIn(withDuration: 1.5)
+        
+        for targetSprite in Model.shared.targetSprNewByDistance {
+            targetSprite.alpha = 0
+            targetSprite.run(fade)
+        }
+ 
+    }
+    
+    
+    
+    
     
     
     

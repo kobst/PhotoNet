@@ -138,10 +138,10 @@ class MainViewController: UIViewController, GoToDetail {
                                     
 //                                    Model.shared.getTargets3(myLocation: dummyLocation)
                                     
-                                    
-//                                    Model.shared.getTargetNew(myLocation: dummyLocation)
+                                    Model.shared.getEater(myLocation: dummyLocation)
+                                    Model.shared.getTargetNew(myLocation: dummyLocation)
                                     Model.shared.getTweeterByDist(myLocation: dummyLocation)
-//                                    Modelv2.shared.getTweeterByDist(myLocation: dummyLocation)
+
                                     
                                     
                                     //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)

@@ -68,6 +68,38 @@ func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
 
 
 
+
+
+class User {
+    
+    var uid: String
+    var name: String
+    var avatar: String
+    var blurb: String
+    var timeStamp: Double
+    
+    init(uid: String) {
+        self.uid = uid
+        name = ""
+        avatar = ""
+        blurb = ""
+        timeStamp = 0.0
+    }
+    
+    init(snapshot: FIRDataSnapshot) {
+        let value = snapshot.value as! [String: Any]!
+        uid = snapshot.key
+        avatar = value?["avatar"] as? String ?? ""
+        blurb = value?["blurb"] as? String ?? ""
+        name = value?["name"] as? String ?? ""
+        timeStamp = value?["timeStamp"] as? Double ?? 0.0
+        
+    }
+    
+}
+
+
+
 class TweetTarget: TargetNew {
     //        static var all = [Message]()
     var message: String
@@ -131,11 +163,52 @@ class UserTarget: TargetNew {
         let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
         let point = CGPoint(x: deltaLon, y: deltaLat)
         
-        super.init(position: point, image: UIImage(), name: userName)
+        super.init(position: point, image: UIImage(named: "spyIcon")!, name: userName)
         
     }
     
 }
+
+
+
+
+
+
+
+class Eater38: TargetNew {
+    var uid: String
+    var restName: String
+    var blurb: String
+    var address: String
+    var website: String
+    var phone: String
+    var lat: CLLocationDegrees
+    var lon: CLLocationDegrees
+    
+    
+    init(snapshot: FIRDataSnapshot, location: CLLocation) {
+        let value = snapshot.value as! [String: Any]!
+        uid = snapshot.key
+        restName = value?["name"] as? String ?? ""
+        blurb = value?["blurb"] as? String ?? ""
+        address = value?["address"] as? String ?? ""
+        phone = value?["phone"] as? String ?? ""
+        website = value?["website"] as? String ?? ""
+        lat = location.coordinate.latitude
+        lon = location.coordinate.longitude
+        
+        let origin = Model.shared.myLocation
+        let deltaLat = CGFloat(lat - (origin!.coordinate.latitude))
+        let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
+        let point = CGPoint(x: deltaLon, y: deltaLat)
+        
+        super.init(position: point, image: UIImage(named: "eater38")!, name: restName)
+        
+    }
+    
+    
+}
+
 
 
 class TargetNew {
@@ -149,6 +222,7 @@ class TargetNew {
     enum Category: String {
         case spyGame
         case tweet
+        case eater38
         case other
     }
     
@@ -162,7 +236,7 @@ class TargetNew {
         let scaledX = position.x
         let scaledY = position.y
         origPos = CGPoint(x: scaledX, y: scaledY)
-        profileImage = image
+        profileImage = image.circle!
         self.name = name
         
     }
@@ -230,9 +304,10 @@ class TargetSpriteNew: SKSpriteNode {
     }
     
     enum Category: String {
-        case spyGame
-        case tweet
-        case other
+        case spyGame = "spyGame"
+        case tweet = "twitter"
+        case eater38 = "eater38"
+        case other = "other"
     }
     
     var target: TargetNew
@@ -245,7 +320,7 @@ class TargetSpriteNew: SKSpriteNode {
     var mask: UInt32?
     var nameLabel = SKLabelNode()
     var status: OnView = .offScreen
-    var category: Category = .other
+    var category: Category?
     var distance: CGFloat {
         
         let newX = position.x - (Model.shared.myScreenOrigin.x)
@@ -295,6 +370,12 @@ class TargetSpriteNew: SKSpriteNode {
             profileImageURL = userTarget.avatar
             nameLabel.text = userTarget.userName
             category = .spyGame
+        
+        case is Eater38:
+            let eaterRest = target as! Eater38
+            profileImageURL = ""
+            nameLabel.text = eaterRest.restName
+            category = .eater38
             
         default:
             fatalError()
@@ -325,3 +406,59 @@ class TargetSpriteNew: SKSpriteNode {
 
 
 
+
+
+
+
+
+class ButtonCategoryNode: SKSpriteNode {
+    
+    
+    var category: TargetSpriteNew.Category
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    init(categoryInit: TargetSpriteNew.Category) {
+        
+        var texture = SKTexture()
+        
+        let size = CGSize(width: 50, height: 50)
+        
+        switch categoryInit {
+            
+        case .tweet:
+            let icon = UIImage(named: "twitter")?.circle
+            texture = SKTexture(image: icon!)
+            category = .tweet
+            
+        case .spyGame:
+            let icon = UIImage(named: "spyIcon")?.circle
+            texture = SKTexture(image: icon!)
+            category = .spyGame
+            
+        case .eater38:
+            let icon = UIImage(named: "eater38")?.circle
+            texture = SKTexture(image: icon!)
+            category = .eater38
+            
+        default:
+            category = .other
+            
+        }
+        
+        super.init(texture: texture, color: UIColor(), size: size)
+        
+        name = category.rawValue
+        
+        
+}
+
+
+
+
+
+}

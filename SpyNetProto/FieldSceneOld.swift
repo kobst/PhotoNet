@@ -1283,3 +1283,143 @@
 //        
 //    }
 //}
+
+
+
+
+
+
+
+
+
+//
+//func addTargetSprites(target: Target) {
+//    
+//    let profileImageURL = target.user == nil ? target.tweet?.idImageURL : target.user?.avatar
+//    
+//    Model.shared.fetchImage(stringURL: profileImageURL!) { image in
+//        
+//        guard let returnedImage = image else  {
+//            return
+//        }
+//        
+//        target.profileImage = returnedImage
+//        //            Model.shared.sceneTargets.append(target)
+//        
+//        let sprite = TargetSprite(target: target, image: returnedImage)
+//        print("\(sprite.target?.origPos)..-..\(sprite.position)")
+//        Model.shared.targetSprites.append(sprite)
+//        
+//        if sprite.distance < 75 {
+//            //                self.addChild(sprite)
+//            
+//            self.background.addChild(sprite)
+//            
+//            if let validMask = Model.shared.assignBitMask2()  {
+//                sprite.anchorGrav.categoryBitMask = validMask
+//                sprite.physicsBody?.fieldBitMask = validMask
+//                sprite.mask = validMask
+//                sprite.applySize()
+//                sprite.changePhysicsBody()
+//            }
+//            
+//        }
+//        
+//    }
+//    
+//}
+
+
+
+
+
+//func updateTargetSprByDistance() {
+//    
+//    let maxSpritesViewable = Model.shared.targetSprByDistance.count > 7 ? 7 : Model.shared.targetSprByDistance.count
+//    var count = 0
+//    
+//    for targetSprite in Model.shared.targetSprByDistance {
+//        if count < maxSpritesViewable {
+//            if targetSprite.parent == nil {
+//                //                        self.addChild(targetSprite)
+//                self.background.addChild(targetSprite)
+//                if let validMask = Model.shared.assignBitMask2()  {
+//                    targetSprite.anchorGrav.categoryBitMask = validMask
+//                    targetSprite.physicsBody?.fieldBitMask = validMask
+//                    targetSprite.mask = validMask
+//                    //                            print(Model.shared.bitMaskOccupied)
+//                    print(targetSprite.name ?? "no name add")
+//                }
+//            }
+//            
+//            targetSprite.applySize()
+//            targetSprite.changePhysicsBody()
+//            
+//        }
+//        else {
+//            if targetSprite.parent != nil {
+//                targetSprite.removeFromParent()
+//                Model.shared.removeBitMask2(mask: targetSprite.mask!)
+//                print(targetSprite.name ?? "no name")
+//                
+//            }
+//            
+//        }
+//        
+//        count += 1
+//    }
+//    
+//    var i = 0
+//    for targetSprite in Model.shared.targetSprByDistance {
+//        if targetSprite.parent == self {
+//            print(i)
+//        }
+//        i += 1
+//    }
+//    
+//}
+
+
+
+
+//
+//func updateTargetSprNew() {
+//    
+//    let maxSpritesViewable = Model.shared.targetSprNewByDistance.count > 7 ? 7 : Model.shared.targetSprNewByDistance.count
+//    var count = 0
+//    
+//    for targetSprite in Model.shared.targetSprNewByDistance {
+//        
+//        if count < maxSpritesViewable {
+//            if targetSprite.parent == nil {
+//                self.background.addChild(targetSprite)
+//                if let validMask = Model.shared.assignBitMask2()  {
+//                    targetSprite.anchorGrav.categoryBitMask = validMask
+//                    targetSprite.physicsBody?.fieldBitMask = validMask
+//                    targetSprite.mask = validMask
+//                    //                            print(Model.shared.bitMaskOccupied)
+//                }
+//            }
+//            
+//            targetSprite.applySize()
+//            targetSprite.changePhysicsBody()
+//            
+//        }
+//            
+//            
+//        else {
+//            if targetSprite.parent != nil {
+//                targetSprite.removeFromParent()
+//                Model.shared.removeBitMask2(mask: targetSprite.mask!)
+//            }
+//            
+//        }
+//        
+//        count += 1
+//        if count > maxSpritesViewable {
+//            break
+//        }
+//    }
+//    
+//    
+//}

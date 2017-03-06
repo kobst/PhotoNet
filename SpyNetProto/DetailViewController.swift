@@ -273,7 +273,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         resultLabel.isHidden = true
         
-        let userTarget = target as! UserTarget
+        let userTarget = target?.target as! UserTarget
         
         name.text = userTarget.userName
         let cgVersion = target?.texture!.cgImage()
