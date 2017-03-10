@@ -55,7 +55,7 @@ class FieldScene: SKScene, AddTargetProtocol {
 //    let allCategories: [TargetSpriteNew.Category]
    
     var allCategoryNodes: [ButtonCategoryNode] = []
-    
+//    
 //    {
 //        let radius = CGFloat(50)
 //        var i = 0
@@ -138,7 +138,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         background.name = "background"
         background.position = CGPoint(x: 0, y: 100)
         addChild(background)
-        
+        background.alpha = 0
         
         
         
@@ -177,19 +177,19 @@ class FieldScene: SKScene, AddTargetProtocol {
                 sprite.texture = myTexture
             
         }
-//                if sprite.distance < 75 {
-//
-//                self.background.addChild(sprite)
-//                print(sprite.nameLabel.text ?? "mmmmmmmmm")
-//                if let validMask = Model.shared.assignBitMask2()  {
-//                    sprite.anchorGrav.categoryBitMask = validMask
-//                    sprite.physicsBody?.fieldBitMask = validMask
-//                    sprite.mask = validMask
-//                    sprite.applySize()
-//                    sprite.changePhysicsBody()
-//                }
-//                
-//                }
+                if sprite.distance < 75 {
+
+                self.background.addChild(sprite)
+                print(sprite.nameLabel.text ?? "mmmmmmmmm")
+                if let validMask = Model.shared.assignBitMask2()  {
+                    sprite.anchorGrav.categoryBitMask = validMask
+                    sprite.physicsBody?.fieldBitMask = validMask
+                    sprite.mask = validMask
+                    sprite.applySize()
+                    sprite.changePhysicsBody()
+                }
+                
+                }
             
             }
     }
