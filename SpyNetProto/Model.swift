@@ -92,7 +92,7 @@ class Model {
     let msApiKey = "c978b7500d5b4a2e97bd20fdfb9bf03f"
     let msApiKey2 = "8a26a031b4454ec0802ec99ddc7a3f7d"
    
-    
+    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38, .timeOutEvent]
     
     static var shared = Model()
 
@@ -118,6 +118,7 @@ class Model {
     var myScreenOrigin = CGPoint(x: 0, y: 0)
     var dateFormatter = DateFormatter()
 
+    
     
 //    var targetSprByDistance: [TargetSprite] {
 //        
@@ -260,7 +261,36 @@ class Model {
     }
     
 
-    
+    func getTimeOutEvents(myLocation: CLLocation) {
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("TimeOutEvents_locations"))
+        
+        let circleQuery = geoFire?.query(at: myLocation, withRadius: 3.0)
+        
+        
+        circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
+            if let validUID = string, let locationBack = location {
+                
+                self?.ref.child("TimeOutEvents/\(validUID)").observe(.value, with: { [weak self] snapshot in
+                    //                    let value = snapshot.value as? [String: Any]
+                    //                    print(value?["name"] as? String ?? "(ERROR)")
+                    //                    let user = User(snapshot: snapshot)
+                    //                    let target = Target(user: user, location: locationBack)
+                    
+                    let event = TimeOutTarget(snapshot: snapshot, location: locationBack)
+                
+                    self?.addTargetDelegate?.addTargetSpritesNew(target: event)
+                    
+                    
+                })
+                
+                
+            }})
+        
+        
+        
+        
+    }
     
     
     func getEater(myLocation: CLLocation) {

@@ -11,6 +11,7 @@ import SpriteKit
 import CoreLocation
 import INTULocationManager
 import GeoFire
+import SceneKit
 
 
 protocol GoToDetail: class {
@@ -32,8 +33,13 @@ class MainViewController: UIViewController, GoToDetail {
     
     var selectedTarget: TargetSpriteNew?
     
+//    var sceneView: SCNView?
+    
+    var sceneKitScene = GameScene(create: true)
     
     @IBOutlet weak var sceneView: SKView!
+    
+    
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
@@ -104,6 +110,7 @@ class MainViewController: UIViewController, GoToDetail {
         scene.delegateMainVC = self
         scene.scaleMode = .aspectFill
         sceneView.presentScene(scene)
+//        sceneView.overlaySKScene = sceneKitScene
     
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
@@ -142,7 +149,7 @@ class MainViewController: UIViewController, GoToDetail {
                                     Model.shared.getTargetNew(myLocation: dummyLocation)
                                     Model.shared.getTweeterByDist(myLocation: dummyLocation)
 
-                                    
+                                    Model.shared.getTimeOutEvents(myLocation: dummyLocation)
                                     
                                     //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)
                                     //

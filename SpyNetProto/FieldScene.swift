@@ -49,28 +49,30 @@ class FieldScene: SKScene, AddTargetProtocol {
     let gravField = SKFieldNode.springField()
     let background = SKSpriteNode(imageNamed: "horizonSpace")
     var profileNode = ProfileNode()   // should profileNode be a struct
-    var catsOpen: Bool = false // switch this to a class method for profileNode class...
+    var catsOpen: Bool  // switch this to a class method for profileNode class...
     
 //    var categoryNodes = [ButtonCategoryNode]()
-    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38]
+//    let allCategories: [TargetSpriteNew.Category]
    
-    var allCategoryNodes: [ButtonCategoryNode] {
-        let radius = CGFloat(50)
-        var i = 0
-        var categoryNodes = [ButtonCategoryNode]()
-        for cat in allCategories {
-            let buttonNode = ButtonCategoryNode(categoryInit: cat)
-            
-            let angle = 2 * M_PI / Double(categories.count) * Double(i)
-            let coinX = radius * cos(CGFloat(angle))
-            let coinY = radius * sin(CGFloat(angle))
-            buttonNode.position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
-            categoryNodes.append(buttonNode)
-            i += 1
-        }
-        return categoryNodes
-        
-    }
+    var allCategoryNodes: [ButtonCategoryNode] = []
+    
+//    {
+//        let radius = CGFloat(50)
+//        var i = 0
+//        var categoryNodes = [ButtonCategoryNode]()
+//        for cat in allCategories {
+//            let buttonNode = ButtonCategoryNode(categoryInit: cat)
+//            
+//            let angle = 2 * M_PI / Double(categories.count) * Double(i)
+//            let coinX = radius * cos(CGFloat(angle))
+//            let coinY = radius * sin(CGFloat(angle))
+//            buttonNode.position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
+//            categoryNodes.append(buttonNode)
+//            i += 1
+//        }
+//        return categoryNodes
+//        
+//    }
     
     
     
@@ -112,10 +114,14 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     override init(size: CGSize) {
         
-        self.categories = [.tweet, .spyGame, .eater38]
+        self.categories = Model.shared.allCategories
         
-
+        for cat in Model.shared.allCategories {
+            let buttonNode = ButtonCategoryNode(categoryInit: cat)
+            allCategoryNodes.append(buttonNode)
+        }
         
+        catsOpen = true
         
         super.init(size: size)
         
@@ -238,7 +244,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
 
     
-    func adjustCatNodes() {
+    func adjustCatNodes(point: CGPoint) {
         let count = allCategoryNodes.count - 1
         let radius = CGFloat(50)
         for i in 0...count {
@@ -246,7 +252,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             let angle = 2 * M_PI / Double(categories.count) * Double(i)
             let coinX = radius * cos(CGFloat(angle))
             let coinY = radius * sin(CGFloat(angle))
-            allCategoryNodes[i].position = CGPoint(x:coinX + profileNode.position.x, y:coinY + profileNode.position.y)
+            allCategoryNodes[i].position = CGPoint(x:coinX + point.x, y:coinY + point.y)
             
         }
     }
@@ -270,16 +276,21 @@ class FieldScene: SKScene, AddTargetProtocol {
         profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
         self.addChild(profileNode)
         
-        categories = [.tweet, .eater38, .spyGame]
+        adjustCatNodes(point: profileNode.position)
+        for node in allCategoryNodes {
+            self.addChild(node)
+        }
+//        categories = [.tweet, .eater38, .spyGame]
         
 //        makeCategoryNodes()
         
+        gravField.position = Model.shared.myScreenOrigin
+        //                gravField.isEnabled = true
+        gravField.categoryBitMask = gravityCategory
+        gravField.strength = 1.0
+        self.background.addChild(gravField)
         
-        //        gravField.position = Model.shared.myScreenOrigin
-        //        gravField.isEnabled = true
-        //        gravField.categoryBitMask = gravityCategory
-        //        gravField.strength = 1.0
-        //        self.addChild(gravField)
+
         
         
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanFrom))
@@ -349,54 +360,7 @@ class FieldScene: SKScene, AddTargetProtocol {
                 return
             }
 
-            
-//            if nodeAtPoint.name == "profileButtonXOXO" {
-//                    print("profiel seleceted \n \n profile selected \n ")
-////                    delegateMainVC?.goToProfile()
-//                
-//                    if catsOpen {
-//                          for node in categoryNodes {
-//                                node.removeFromParent()
-//                        }
-//                        catsOpen = false
-//                    }
-//                    
-//                    else {
-//                        for node in categoryNodes {
-//                            self.addChild(node)
-//                        }
-//                        
-//                        catsOpen = true
-//                }
-//                
-//                return
-//                }
-//                
-            
-//                
-//            if nodeAtPoint.name == "background" {
-//                return
-//            }
-    
-//            else {
-//                    
-//                    let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
-//                    
-//                    switch targetSpriteNew.target {
-//                        
-//                    case is TweetTarget:
-////                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
-//                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
-//                        
-//                    case is UserTarget:
-////                        let userTarget = targetSpriteNew as! UserTarget
-//                        delegateMainVC?.goToUserTarget(target: targetSpriteNew)
-//                        
-//                    default:
-//                        return
-//                    }
-//                
-//                }
+ 
         }
     }
     
@@ -417,14 +381,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
 
     func modifyCategories(category: TargetSpriteNew.Category) {
-        
-//        filteredTargetSprites = targetSpritesByDistance
-        
-//        if categories.contains(category) {
-//            categories = categories.filter({$0 != category})
-//            
-//            
-//        }
+    
            
         if let index = categories.index(of: category) {
             categories.remove(at: index)
@@ -437,10 +394,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         updateTargetSpriteNewVersion()
         
-//        for category in categories {
-//            
-//            validTargetSprites = validTargetSprites.filter({ $0.category == category })
-//        }
+
         
     
     }
@@ -462,11 +416,17 @@ class FieldScene: SKScene, AddTargetProtocol {
                     if targetSprite.parent == nil {
                         self.background.addChild(targetSprite)
                         if let validMask = Model.shared.assignBitMask2()  {
+                            targetSprite.anchorGrav.isEnabled = false
+                            targetSprite.anchorGrav.strength = 1.0
                             targetSprite.anchorGrav.categoryBitMask = validMask
-                            targetSprite.physicsBody?.fieldBitMask = validMask
+                            targetSprite.physicsBody?.fieldBitMask = validMask | gravityCategory
                             targetSprite.mask = validMask
                             //                            print(Model.shared.bitMaskOccupied)
                         }
+                    }
+                    
+                    if let iconNode = targetSprite.iconNode {
+                        targetSprite.addChild(iconNode)
                     }
                     
                     targetSprite.applySize()
@@ -476,7 +436,9 @@ class FieldScene: SKScene, AddTargetProtocol {
                 }
                 else {
                     if targetSprite.parent != nil {
+                        
                         targetSprite.removeFromParent()
+                        targetSprite.anchorGrav.isEnabled = false
                         Model.shared.removeBitMask2(mask: targetSprite.mask!)
                     }
                     
@@ -525,7 +487,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             
             profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
 
-            adjustCatNodes()
+            adjustCatNodes(point: CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200))
             
             
 
@@ -536,7 +498,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             
 //            updateTargetSprNew()
             updateTargetSpriteNewVersion()
-            fade()
+//            fade()
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
             
             //            self.panForTranslation(translation)
@@ -548,19 +510,21 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     
+
     
-    
-    func fade() {
-    
-        let fade = SKAction.fadeIn(withDuration: 1.5)
-        
-        for targetSprite in Model.shared.targetSprNewByDistance {
-            targetSprite.alpha = 0
-            targetSprite.run(fade)
-        }
- 
-    }
-    
+//    func fade() {
+//    
+//        let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+//        let fadeIn = SKAction.fadeIn(withDuration: 1.5)
+//        let fadeSequence: [SKAction] = [fadeOut, fadeIn]
+//        
+//        for targetSprite in Model.shared.targetSprNewByDistance {
+//            targetSprite.alpha = 0
+//      
+//        }
+// 
+//    }
+//    
     
     
     

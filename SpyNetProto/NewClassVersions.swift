@@ -137,6 +137,63 @@ class TweetTarget: TargetNew {
 
 
 
+
+
+class TimeOutTarget: TargetNew {
+    //        static var all = [Message]()
+    
+    
+    var uid: String
+    var eventTitle: String
+    var blurb: String
+    var address: String
+    var website: String
+    var phone: String
+    var lat: CLLocationDegrees
+    var lon: CLLocationDegrees
+//    var dates: String
+    
+    //    var origPos: CGPoint
+    //    var profileImage: UIImage
+    
+//    init (message: String, senderName: String, idImageURL: String, time: Double) {
+//        self.message = message
+//        self.senderID = senderName
+//        self.idImageURL = idImageURL
+//        //        self.dist = dist
+//        self.time = time
+//        self.lat = (Model.shared.coordinates[senderName]?.coordinate.latitude)!
+//        self.lon = (Model.shared.coordinates[senderName]?.coordinate.longitude)!
+//        
+//        let origin = Model.shared.myLocation
+//        let deltaLat = CGFloat(lat - (origin!.coordinate.latitude))
+//        let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
+//        let point = CGPoint(x: deltaLon, y: deltaLat)
+    
+    init(snapshot: FIRDataSnapshot, location: CLLocation) {
+        let value = snapshot.value as! [String: Any]!
+        uid = snapshot.key
+        eventTitle = value?["name"] as? String ?? ""
+        blurb = value?["blurb"] as? String ?? ""
+        address = value?["address"] as? String ?? ""
+        phone = value?["phone"] as? String ?? ""
+        website = value?["website"] as? String ?? ""
+        lat = location.coordinate.latitude
+        lon = location.coordinate.longitude
+        
+        let origin = Model.shared.myLocation
+        let deltaLat = CGFloat(lat - (origin!.coordinate.latitude))
+        let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
+        let point = CGPoint(x: deltaLon, y: deltaLat)
+        
+        super.init(position: point, image: UIImage(named: "timeOut")!, name: eventTitle)
+        
+        
+    }
+    
+}
+
+
 class UserTarget: TargetNew {
     
     var uid: String
@@ -163,7 +220,7 @@ class UserTarget: TargetNew {
         let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
         let point = CGPoint(x: deltaLon, y: deltaLat)
         
-        super.init(position: point, image: UIImage(named: "spyIcon")!, name: userName)
+        super.init(position: point, image: UIImage(named: "spyGame")!, name: userName)
         
     }
     
@@ -219,12 +276,13 @@ class TargetNew {
         case onScreen
     }
     
-    enum Category: String {
-        case spyGame
-        case tweet
-        case eater38
-        case other
-    }
+//    enum Category {
+//        case spyGame
+//        case tweet
+//        case eater38
+//        case timeOutEvent
+//        case other
+//    }
     
 //    var scaleAdjust = CGFloat(30000)  // was at 9500
     var origPos: CGPoint
@@ -254,14 +312,14 @@ class TargetSpriteNew: SKSpriteNode {
         
         //   this needs to be log scale....
         
-        if adjSize < 50 {
+        if adjSize < 30 {
             
             self.alpha = 0
             
         }
         
         
-        if adjSize > 75 {
+        if adjSize > 30 {
             
             self.alpha = ((adjSize - 75) / 50.0) + 0.5
         }
@@ -307,6 +365,7 @@ class TargetSpriteNew: SKSpriteNode {
         case spyGame = "spyGame"
         case tweet = "twitter"
         case eater38 = "eater38"
+        case timeOutEvent = "timeOut"
         case other = "other"
     }
     
@@ -318,6 +377,7 @@ class TargetSpriteNew: SKSpriteNode {
     var anchorGrav = SKFieldNode()
     var timeRing = SKShapeNode()
     var mask: UInt32?
+    var iconNode: SKSpriteNode?
     var nameLabel = SKLabelNode()
     var status: OnView = .offScreen
     var category: Category?
@@ -365,6 +425,12 @@ class TargetSpriteNew: SKSpriteNode {
             nameLabel.text = tweetTarget.senderID
             category = .tweet
             
+            let twitterIcon = UIImage(named: "twitter")
+            let texture = SKTexture(image: twitterIcon!)
+            let twitterNode = SKSpriteNode(texture: texture, color: UIColor(), size: CGSize(width: 25, height: 25))
+            twitterNode.position = CGPoint(x: 5, y: 5)
+            
+            
         case is UserTarget:
             let userTarget = target as! UserTarget
             profileImageURL = userTarget.avatar
@@ -376,6 +442,14 @@ class TargetSpriteNew: SKSpriteNode {
             profileImageURL = ""
             nameLabel.text = eaterRest.restName
             category = .eater38
+        
+            
+        case is TimeOutTarget:
+            let event = target as! TimeOutTarget
+            profileImageURL = ""
+            nameLabel.text = event.name
+            category = .timeOutEvent
+            
             
         default:
             fatalError()
@@ -399,6 +473,7 @@ class TargetSpriteNew: SKSpriteNode {
         
         self.addChild(timeRing)
         self.addChild(nameLabel)
+        
     }
     
     
@@ -424,33 +499,39 @@ class ButtonCategoryNode: SKSpriteNode {
     
     init(categoryInit: TargetSpriteNew.Category) {
         
-        var texture = SKTexture()
-        
         let size = CGSize(width: 50, height: 50)
+        let icon = UIImage(named: categoryInit.rawValue)?.circle
+        let textureIcon = SKTexture(image: icon!)
+        category = categoryInit
         
-        switch categoryInit {
-            
-        case .tweet:
-            let icon = UIImage(named: "twitter")?.circle
-            texture = SKTexture(image: icon!)
-            category = .tweet
-            
-        case .spyGame:
-            let icon = UIImage(named: "spyIcon")?.circle
-            texture = SKTexture(image: icon!)
-            category = .spyGame
-            
-        case .eater38:
-            let icon = UIImage(named: "eater38")?.circle
-            texture = SKTexture(image: icon!)
-            category = .eater38
-            
-        default:
-            category = .other
-            
-        }
+//        switch categoryInit {
+//            
+//        case .tweet:
+//            let icon = UIImage(named: "twitter")?.circle
+//            texture = SKTexture(image: icon!)
+//            category = .tweet
+//            
+//        case .spyGame:
+//            let icon = UIImage(named: "spyIcon")?.circle
+//            texture = SKTexture(image: icon!)
+//            category = .spyGame
+//            
+//        case .eater38:
+//            let icon = UIImage(named: "eater38")?.circle
+//            texture = SKTexture(image: icon!)
+//            category = .eater38
+//        
+//        case .timeOutEvent:
+//            let icon = UIImage(named: "timeOut")?.circle
+//            texture = SKTexture(image: icon!)
+//            category = .timeOutEvent
+//            
+//        default:
+//            category = .other
+//            
+//        }
         
-        super.init(texture: texture, color: UIColor(), size: size)
+        super.init(texture: textureIcon, color: UIColor(), size: size)
         
         name = category.rawValue
         
