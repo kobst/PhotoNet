@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SpyNetProto/FieldScene.swift"
-            timestampString = "510802378.543538"
+            timestampString = "510803288.749174"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "471"
-            endingLineNumber = "471"
+            startingLineNumber = "470"
+            endingLineNumber = "470"
             landmarkName = "handlePanFrom(recognizer:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -47,7 +47,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     let gravityCategory: UInt32 = 1 << 30
     var cam: SKCameraNode!
     let gravField = SKFieldNode.springField()
-    let background = SKSpriteNode(imageNamed: "horizonSpace")
+    let background = SKSpriteNode()
     var profileNode = ProfileNode()   // should profileNode be a struct
     var catsOpen: Bool  // switch this to a class method for profileNode class...
     
@@ -138,7 +138,6 @@ class FieldScene: SKScene, AddTargetProtocol {
         background.name = "background"
         background.position = CGPoint(x: 0, y: 100)
         addChild(background)
-        background.alpha = 0
         
         
         
@@ -177,19 +176,19 @@ class FieldScene: SKScene, AddTargetProtocol {
                 sprite.texture = myTexture
             
         }
-                if sprite.distance < 75 {
-
-                self.background.addChild(sprite)
-                print(sprite.nameLabel.text ?? "mmmmmmmmm")
-                if let validMask = Model.shared.assignBitMask2()  {
-                    sprite.anchorGrav.categoryBitMask = validMask
-                    sprite.physicsBody?.fieldBitMask = validMask
-                    sprite.mask = validMask
-                    sprite.applySize()
-                    sprite.changePhysicsBody()
-                }
-                
-                }
+//                if sprite.distance < 75 {
+//
+//                self.background.addChild(sprite)
+//                print(sprite.nameLabel.text ?? "mmmmmmmmm")
+//                if let validMask = Model.shared.assignBitMask2()  {
+//                    sprite.anchorGrav.categoryBitMask = validMask
+//                    sprite.physicsBody?.fieldBitMask = validMask
+//                    sprite.mask = validMask
+//                    sprite.applySize()
+//                    sprite.changePhysicsBody()
+//                }
+//                
+//                }
             
             }
     }
