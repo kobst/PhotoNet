@@ -177,6 +177,11 @@ class FieldScene: SKScene, AddTargetProtocol {
                 sprite.texture = myTexture
             
         }
+            
+            
+            
+            
+            
 //                if sprite.distance < 75 {
 //
 //                self.background.addChild(sprite)
@@ -477,6 +482,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         }
         
         else if recognizer.state == .changed {
+            
             var translation = recognizer.translation(in: recognizer.view!)
             translation = CGPoint(x: translation.x, y: -translation.y)
 //            print("in handle pan changed.....\(translation)")
