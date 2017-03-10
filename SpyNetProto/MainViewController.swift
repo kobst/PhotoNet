@@ -37,9 +37,9 @@ class MainViewController: UIViewController, GoToDetail {
     
     var sceneKitScene = GameScene(create: true)
     
-    @IBOutlet weak var sceneView: SKView!
+    @IBOutlet weak var sceneView: SCNView!
     
-    
+    var spriteKitScene: SKScene?
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
@@ -99,17 +99,31 @@ class MainViewController: UIViewController, GoToDetail {
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        var scene: FieldScene!
+        var fieldScene: FieldScene!
         
+        sceneView.allowsCameraControl = true
+        sceneView.autoenablesDefaultLighting = true // 5
+        sceneView.showsStatistics = true // 6
+        sceneView.backgroundColor = .black
         
-
-        sceneView.isMultipleTouchEnabled = false
+        let scene = SCNScene()
+        sceneView.scene = scene
+        
+        let sphereGeometry = SCNSphere(radius: 2) // 1
+        let sphereNode = SCNNode(geometry: sphereGeometry) // 2
+        sphereNode.position = SCNVector3Zero // 3
+        scene.rootNode.addChildNode(sphereNode) // 4
+        
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        cameraNode.position = SCNVector3Make(0, 0, 8)
+        scene.rootNode.addChildNode(cameraNode)
         
         // Create and configure the scene.
-        scene = FieldScene(size: sceneView.bounds.size)
-        scene.delegateMainVC = self
-        scene.scaleMode = .aspectFill
-        sceneView.presentScene(scene)
+        fieldScene = FieldScene(size: sceneView.bounds.size)
+        fieldScene.delegateMainVC = self
+        fieldScene.scaleMode = .aspectFill
+        sceneView.overlaySKScene = fieldScene
 //        sceneView.overlaySKScene = sceneKitScene
     
         

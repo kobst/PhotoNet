@@ -47,7 +47,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     let gravityCategory: UInt32 = 1 << 30
     var cam: SKCameraNode!
     let gravField = SKFieldNode.springField()
-    let background = SKSpriteNode(imageNamed: "horizonSpace")
+    let background = SKSpriteNode()
     var profileNode = ProfileNode()   // should profileNode be a struct
     var catsOpen: Bool  // switch this to a class method for profileNode class...
     
@@ -55,7 +55,7 @@ class FieldScene: SKScene, AddTargetProtocol {
 //    let allCategories: [TargetSpriteNew.Category]
    
     var allCategoryNodes: [ButtonCategoryNode] = []
-    
+//    
 //    {
 //        let radius = CGFloat(50)
 //        var i = 0
@@ -138,7 +138,6 @@ class FieldScene: SKScene, AddTargetProtocol {
         background.name = "background"
         background.position = CGPoint(x: 0, y: 100)
         addChild(background)
-        
         
         
         
