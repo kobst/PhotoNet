@@ -276,8 +276,20 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         let userTarget = target?.target as! UserTarget
         
         name.text = userTarget.userName
+        
+        
+        
         let cgVersion = target?.texture!.cgImage()
+        
         profileImageView.image = UIImage(cgImage: cgVersion!)
+        
+        
+        Model.shared.fetchImage(stringURL: userTarget.avatar) { image in
+            if let validImage = image {
+                
+                self.profileImageView.image = validImage.circle
+            }
+        }
         
 //        name.text = targetSprite?.name!
 //        let cgVersion = targetSprite?.texture!.cgImage()

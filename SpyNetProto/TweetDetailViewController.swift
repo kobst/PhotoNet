@@ -52,9 +52,9 @@ class TweetDetailViewController: UIViewController {
         
         let longitude = userLocation?.coordinate.longitude
         
-        let lanDelta: CLLocationDegrees = 0.00005
+        let lanDelta: CLLocationDegrees = 0.005
         
-        let lonDelta: CLLocationDegrees = 0.00005
+        let lonDelta: CLLocationDegrees = 0.005
         
         let span = MKCoordinateSpan(latitudeDelta: lanDelta, longitudeDelta: lonDelta)
         
@@ -77,6 +77,7 @@ class TweetDetailViewController: UIViewController {
         tweetLabel.text = tweet.message
 //        tweetLabel.text = "\(targetSprite?.target?.lat)..\(targetSprite?.target?.lon)"
         
+        fillMap()
         
 
         

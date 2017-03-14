@@ -249,7 +249,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         let radius = CGFloat(50)
         for i in 0...count {
         
-            let angle = 2 * M_PI / Double(categories.count) * Double(i)
+            let angle = 2 * M_PI / Double(allCategoryNodes.count) * Double(i)
             let coinX = radius * cos(CGFloat(angle))
             let coinY = radius * sin(CGFloat(angle))
             allCategoryNodes[i].position = CGPoint(x:coinX + point.x, y:coinY + point.y)
