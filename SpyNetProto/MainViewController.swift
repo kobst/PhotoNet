@@ -27,18 +27,29 @@ protocol GoToDetail: class {
     
 }
 
+
+
+protocol AddMap {
+    
+    
+    func addMap()
+}
+
 class MainViewController: UIViewController, GoToDetail {
     
 //    var selectedSprite: TargetSprite?
     
     var selectedTarget: TargetSpriteNew?
     
-//    var sceneView: SCNView?
+    var sceneView: SCNView?
     
-    var sceneKitScene = GameScene(create: true)
+//    var sceneKitScene = GameScene(create: true)
     
-    @IBOutlet weak var sceneView: SKView!
+//    @IBOutlet weak var sceneView: SKView!
     
+    
+    @IBOutlet weak var sceneKitView: SCNView!
+    var gameScene = GameScene(create: true)
     
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -94,22 +105,81 @@ class MainViewController: UIViewController, GoToDetail {
      @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
     
     
+    func handlePan(_ gesture: UIPanGestureRecognizer) {
+        
+        let translationx = gesture.translation(in: sceneView!).x
+        
+        let xTranslation = Float(translationx / view.frame.width)
+        
+        let translationy = gesture.translation(in: sceneView!).y
+        
+        let yTranslation = Float(translationy / view.frame.width)
+        
+        
+        if gesture.state == UIGestureRecognizerState.began {
+            //            || gesture.state == UIGestureRecognizerState.changed  {
+            
+            //            scene.shift(translationX: xTranslation, translationY: yTranslation)
+            
+            //                        var touchLocation = gesture.location(in: sceneView)
+            //                        touchLocation = self.convertPoint(fromView: touchLocation)
+            
+            //            scene.geometryNodes.slide( xTranslation)
+        } else if gesture.state == UIGestureRecognizerState.changed {
+            
+            gameScene.shift(translationX: xTranslation, translationY: yTranslation)
+            
+            
+            //            if translation > 100 {
+            //                scene.geometryNodes.realign("RIGHT")
+            //
+            //            } else if translation < -100 {
+            //                scene.geometryNodes.realign("LEFT")
+            //            } else {
+            //                scene.geometryNodes.realign("STAY")
+            //            }
+            
+        }
+        
+    }
+    
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
   
-        var scene: FieldScene!
+//        var scene: FieldScene!
         
+        sceneView = self.sceneKitView as? SCNView
         
+        if let view = sceneView {
+            
+            view.scene = gameScene
+            //            view.overlaySKScene = spriteScene
+            
+            view.showsStatistics = true
+            view.backgroundColor = UIColor.black
+            view.antialiasingMode = SCNAntialiasingMode.multisampling4X
 
-        sceneView.isMultipleTouchEnabled = false
+            
+            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(MainViewController.handlePan(_:)))
+            //            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(GameViewController.handleTap(_:)))
+            view.addGestureRecognizer(panGesture)
+    
+            //            view.addGestureRecognizer(tapGesture)
+            
+        }
+
+//        sceneView.isMultipleTouchEnabled = false
+//        
+//        // Create and configure the scene.
+//        scene = FieldScene(size: sceneView.bounds.size)
+//        scene.delegateMainVC = self
+//        scene.scaleMode = .aspectFill
+//        sceneView.presentScene(scene)
         
-        // Create and configure the scene.
-        scene = FieldScene(size: sceneView.bounds.size)
-        scene.delegateMainVC = self
-        scene.scaleMode = .aspectFill
-        sceneView.presentScene(scene)
+        
+        
 //        sceneView.overlaySKScene = sceneKitScene
     
         

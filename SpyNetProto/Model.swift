@@ -135,6 +135,11 @@ class Model {
     
     weak var addTargetDelegate: AddTargetProtocol?
     
+    weak var addTargetSceneNode: AddSceneNode?
+    
+    
+    weak var fillMapDelegate: FillMap?
+    
     let ref = FIRDatabase.database().reference()
 //    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
     
@@ -171,8 +176,20 @@ class Model {
                 debugPrint("An error occured: \(error)")
             } else {
                 print("Saved location successfully!")
+                
+                
+                Model.shared.fillMapDelegate?.fillMap()
+                
             }
         }
+        
+        
+    
+        
+        
+        
+        
+        
     }
     
     
@@ -211,7 +228,7 @@ class Model {
             var clientError : NSError?
             let request = client.urlRequest(withMethod: "GET", url: statusesShowEndpoint, parameters: params, error: &clientError)
             
-            client.sendTwitterRequest(request) { (response, data, connectionError) in
+            client.sendTwitterRequest(request) { [weak self] (response, data, connectionError) in
                 if connectionError != nil {
                     print("Error: \(connectionError)")
                 }
@@ -224,7 +241,7 @@ class Model {
                     let tweetDict = json[0] as! [String: Any]
                     
                     let timeString = tweetDict["created_at"] as! String
-                    let timeData = self.dateFormatter.date(from: timeString)
+                    let timeData = self?.dateFormatter.date(from: timeString)
                     
                     let timeElapsed = now.timeIntervalSince(timeData!)
                     let roundedTime = Double(round(timeElapsed*100)/100)
@@ -247,7 +264,9 @@ class Model {
                     
 //                    self.addTargetDelegate?.addTargetSprites(target: target)
                     
-                    self.addTargetDelegate?.addTargetSpritesNew(target: tweetTarget)
+                    self?.addTargetDelegate?.addTargetSpritesNew(target: tweetTarget)
+                    
+                    self?.addTargetSceneNode?.addTargetNode(target: tweetTarget)
                     
                     //                    self.addTweetDelegate?.addTweet(tweetData: fetchedData)
                     
@@ -280,6 +299,7 @@ class Model {
                     let event = TimeOutTarget(snapshot: snapshot, location: locationBack)
                 
                     self?.addTargetDelegate?.addTargetSpritesNew(target: event)
+                    self?.addTargetSceneNode?.addTargetNode(target: event)
                     
                     
                 })
@@ -318,7 +338,8 @@ class Model {
                     //
                     //                    self?.addTargetDelegate?.addTargetSprites(target: target)
                    print("eater \n eater \n eater \n")
-                    self?.addTargetDelegate?.addTargetSpritesNew(target: eaterRestaurant)
+//                    self?.addTargetDelegate?.addTargetSpritesNew(target: eaterRestaurant)
+                    self?.addTargetSceneNode?.addTargetNode(target: eaterRestaurant)
                     
                     
                 })
@@ -354,7 +375,9 @@ class Model {
                     //                    self.addTargetDelegate?.addTarget(target: target)
 //                    
 //                    self?.addTargetDelegate?.addTargetSprites(target: target)
-                    self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+//                    self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+                    
+                    self?.addTargetSceneNode?.addTargetNode(target: userTarget)
                 
                     
                 })

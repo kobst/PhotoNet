@@ -18,7 +18,7 @@ import GameplayKit
 import QuartzCore
 import Firebase
 import CoreLocation
-
+import SceneKit
 
 extension UIImage {
     var rounded: UIImage? {
@@ -301,6 +301,58 @@ class TargetNew {
     
 }
         
+//
+//class TargetSceneNode: SCNNode {
+//    
+//    
+//    var target: TargetNew
+//    
+//
+//    required init(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
+//    
+//    init(target: TargetNew) {
+//        
+//        self.target = target
+//        
+//
+//        let targetNode = SCNPlane(width: 1.5, height: 1.5)
+//        targetNode.cornerRadius = targetNode.width / 2
+//        
+//        targetNode.firstMaterial?.diffuse.contents = target.profileImage.circle
+//        
+//        super.init(geometry: targetNode)
+//        
+//        
+//        
+//        let x = target.origPos.x / 100
+//        let y = target.origPos.y / 100
+//        
+////        let targetNodeGeo = SCNNode(geometry: targetNode)
+//        position = SCNVector3(x, y, 0)
+//        
+////        super.init(geometry: targetNode)
+//    }
+//    
+//    
+//}
+
+
+
+
+//let target = SCNPlane(width: 1.5, height: 1.5)
+//target.cornerRadius = target.width / 2
+//
+//target.firstMaterial?.diffuse.contents = UIImage(named: "trippy2")
+//
+//let targetNode = SCNNode(geometry: target)
+//targetNode.position = SCNVector3(0, 2, -2)
+//rootNode.addChildNode(targetNode)
+
+
+
 
 
 

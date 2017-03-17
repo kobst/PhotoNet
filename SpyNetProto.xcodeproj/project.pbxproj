@@ -30,6 +30,7 @@
 		84D2BC2D1E393894001EABC2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84D2BC2C1E393894001EABC2 /* Assets.xcassets */; };
 		84D2BC301E393894001EABC2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84D2BC2E1E393894001EABC2 /* LaunchScreen.storyboard */; };
 		84EDF5841E39905F0002D4EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84EDF5831E39905F0002D4EE /* GoogleService-Info.plist */; };
+		84FDE2F31E78B43100CACA5E /* sceneKitScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FDE2F21E78B43100CACA5E /* sceneKitScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		84D2BC2F1E393894001EABC2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84D2BC311E393894001EABC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84EDF5831E39905F0002D4EE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84FDE2F21E78B43100CACA5E /* sceneKitScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sceneKitScene.swift; sourceTree = "<group>"; };
 		E6D70F6B4362147E1A5B0172 /* Pods-SpyNetProto.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				8439C9601E3A930C00E72B7A /* FieldSceneOld.swift */,
+				84FDE2F21E78B43100CACA5E /* sceneKitScene.swift */,
 				84CDF4211E71EF4500875CAF /* MapScene.swift */,
 				8493B5521E5D32BA000DF58C /* FieldScene.swift */,
 			);
@@ -325,6 +328,7 @@
 				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */,
+				84FDE2F31E78B43100CACA5E /* sceneKitScene.swift in Sources */,
 				84CDF4221E71EF4500875CAF /* MapScene.swift in Sources */,
 				8421C8F31E5110E200B0B39B /* SuccessViewController.swift in Sources */,
 				84D2BC2B1E393894001EABC2 /* SpyNetProto.xcdatamodeld in Sources */,
