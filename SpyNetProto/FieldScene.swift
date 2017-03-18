@@ -79,32 +79,32 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     
-    var categories: [TargetSpriteNew.Category]
+//    var categories: [TargetSpriteNew.Category]
     
     var targetSpritesByDistance: [TargetSpriteNew] {
         return Model.shared.targetSpriteNew.sorted(by: {$0.distance < $1.distance})
         
     }
     
-    var filteredTargetSprites: [TargetSpriteNew] {
-        
-        var filteredOut = [TargetSpriteNew]()
-//        for category in categories {
-//                    let validCatSprites = targetSpritesByDistance.filter({ $0.category == category })
-//                    filteredOut = filteredOut + validCatSprites
-//                }
-        
-        let sortedTargets = targetSpritesByDistance
-        for sprite in sortedTargets {
-            
-            if categories.contains(sprite.category!) {
-                filteredOut.append(sprite)
-            }
-        }
-        
-    
-        return filteredOut
-    }
+//    var filteredTargetSprites: [TargetSpriteNew] {
+//        
+//        var filteredOut = [TargetSpriteNew]()
+////        for category in categories {
+////                    let validCatSprites = targetSpritesByDistance.filter({ $0.category == category })
+////                    filteredOut = filteredOut + validCatSprites
+////                }
+//        
+//        let sortedTargets = targetSpritesByDistance
+//        for sprite in sortedTargets {
+//            
+//            if categories.contains(sprite.category!) {
+//                filteredOut.append(sprite)
+//            }
+//        }
+//        
+//    
+//        return filteredOut
+//    }
     
     
     
@@ -114,12 +114,12 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     override init(size: CGSize) {
         
-        self.categories = Model.shared.allCategories
+//        self.categories = Model.shared.allCategories
         
-        for cat in Model.shared.allCategories {
-            let buttonNode = ButtonCategoryNode(categoryInit: cat)
-            allCategoryNodes.append(buttonNode)
-        }
+//        for cat in Model.shared.allCategories {
+//            let buttonNode = ButtonCategoryNode(categoryInit: cat)
+//            allCategoryNodes.append(buttonNode)
+//        }
         
         catsOpen = true
         
@@ -159,6 +159,16 @@ class FieldScene: SKScene, AddTargetProtocol {
             Model.shared.targetSpriteNew.append(sprite)
         
         
+        Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
+            guard let validImage = returnedImage else {
+                return
+            }
+            let roundedImage = validImage.circle
+            let myTexture = SKTexture(image: roundedImage!)
+            sprite.texture = myTexture
+        }
+    }
+    
 //        if sprite.category == .spyGame {
 //            
 //            let roundedImage = UIImage(named: "spyIcon")
@@ -166,17 +176,17 @@ class FieldScene: SKScene, AddTargetProtocol {
 //            sprite.texture = myTexture
 //        }
         
+//        
+//        if sprite.category == .tweet {
+//            Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
+//                guard let validImage = returnedImage else {
+//                    return
+//                }
+//                let roundedImage = validImage.circle
+//                let myTexture = SKTexture(image: roundedImage!)
+//                sprite.texture = myTexture
         
-        if sprite.category == .tweet {
-            Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
-                guard let validImage = returnedImage else {
-                    return
-                }
-                let roundedImage = validImage.circle
-                let myTexture = SKTexture(image: roundedImage!)
-                sprite.texture = myTexture
-            
-        }
+//        }
 //                if sprite.distance < 75 {
 //
 //                self.background.addChild(sprite)
@@ -191,8 +201,8 @@ class FieldScene: SKScene, AddTargetProtocol {
 //                
 //                }
             
-            }
-    }
+//            }
+//    }
     
 
     
@@ -243,20 +253,20 @@ class FieldScene: SKScene, AddTargetProtocol {
 //        }
     
 
-    
-    func adjustCatNodes(point: CGPoint) {
-        let count = allCategoryNodes.count - 1
-        let radius = CGFloat(50)
-        for i in 0...count {
-        
-            let angle = 2 * M_PI / Double(categories.count) * Double(i)
-            let coinX = radius * cos(CGFloat(angle))
-            let coinY = radius * sin(CGFloat(angle))
-            allCategoryNodes[i].position = CGPoint(x:coinX + point.x, y:coinY + point.y)
-            
-        }
-    }
-    
+//    
+//    func adjustCatNodes(point: CGPoint) {
+//        let count = allCategoryNodes.count - 1
+//        let radius = CGFloat(50)
+//        for i in 0...count {
+//        
+//            let angle = 2 * M_PI / Double(categories.count) * Double(i)
+//            let coinX = radius * cos(CGFloat(angle))
+//            let coinY = radius * sin(CGFloat(angle))
+//            allCategoryNodes[i].position = CGPoint(x:coinX + point.x, y:coinY + point.y)
+//            
+//        }
+//    }
+//    
     
     
     override func didMove(to view: SKView) {
@@ -276,7 +286,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
         self.addChild(profileNode)
         
-        adjustCatNodes(point: profileNode.position)
+//        adjustCatNodes(point: profileNode.position)
         for node in allCategoryNodes {
             self.addChild(node)
         }
@@ -322,9 +332,9 @@ class FieldScene: SKScene, AddTargetProtocol {
             
             switch nodeAtPoint {
                 
-            case is ButtonCategoryNode:
-                let button = nodeAtPoint as! ButtonCategoryNode
-                modifyCategories(category: button.category)
+//            case is ButtonCategoryNode:
+//                let button = nodeAtPoint as! ButtonCategoryNode
+//                modifyCategories(category: button.category)
             
             case is ProfileNode:
                 if catsOpen {
@@ -342,19 +352,21 @@ class FieldScene: SKScene, AddTargetProtocol {
                 }
             case is TargetSpriteNew:
                 let targetSpriteNew = nodeAtPoint as! TargetSpriteNew
-            
-                switch targetSpriteNew.target {
+                delegateMainVC?.goToUserTarget(target: targetSpriteNew)
                 
-                    case is TweetTarget:
-                //                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
-                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
-                
-                    case is UserTarget:
-                //                        let userTarget = targetSpriteNew as! UserTarget
-                            delegateMainVC?.goToUserTarget(target: targetSpriteNew)
-                    default:
-                        return
-                }
+//                switch targetSpriteNew.target {
+//                
+//                    
+//                    case is TweetTarget:
+//                //                        let tweetTargetSprite = targetSpriteNew as! TweetTarget
+//                        delegateMainVC?.goToTweetTarget(target: targetSpriteNew)
+//                
+//                    case is UserTarget:
+//                //                        let userTarget = targetSpriteNew as! UserTarget
+//                            delegateMainVC?.goToUserTarget(target: targetSpriteNew)
+//                    default:
+//                        return
+//                }
         
             default:
                 return
@@ -379,38 +391,35 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     
-
-    func modifyCategories(category: TargetSpriteNew.Category) {
-    
-           
-        if let index = categories.index(of: category) {
-            categories.remove(at: index)
-        }
-        
-            
-        else {
-            categories.append(category)
-        }
-        
-        updateTargetSpriteNewVersion()
-        
-
-        
-    
-    }
-    
+//
+//    func modifyCategories(category: TargetSpriteNew.Category) {
+//    
+//           
+//        if let index = categories.index(of: category) {
+//            categories.remove(at: index)
+//        }
+//        
+//            
+//        else {
+//            categories.append(category)
+//        }
+//        
+//        updateTargetSpriteNewVersion()
+//    
+//    }
+//    
     
     func updateTargetSpriteNewVersion() {
         
-        let array = filteredTargetSprites
+//        let array = filteredTargetSprites
         let array2 = targetSpritesByDistance
-        let maxSpritesViewable = array.count > 7 ? 7 : array.count
+        let maxSpritesViewable = array2.count > 7 ? 7 : array2.count
         
         var count = 0
         
         for targetSprite in array2 {
             
-            if categories.contains(targetSprite.category!) {
+//            if categories.contains(targetSprite.category!) {
                 if count < maxSpritesViewable {
                     
                     if targetSprite.parent == nil {
@@ -434,6 +443,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
                     count += 1
                 }
+//                }
                 else {
                     if targetSprite.parent != nil {
                         
@@ -441,25 +451,25 @@ class FieldScene: SKScene, AddTargetProtocol {
                         targetSprite.anchorGrav.isEnabled = false
                         Model.shared.removeBitMask2(mask: targetSprite.mask!)
                     }
-                    
                 }
-            }
+//            }
 
-            
-            else {
-                if targetSprite.parent != nil {
-                    targetSprite.removeFromParent()
-                    Model.shared.removeBitMask2(mask: targetSprite.mask!)
-                }
-                
             }
-            
+        }
+//            else {
+//                if targetSprite.parent != nil {
+//                    targetSprite.removeFromParent()
+//                    Model.shared.removeBitMask2(mask: targetSprite.mask!)
+//                }
+//                
+//            }
+        
  
 
-        }
-        
-        
-    }
+//        }
+//        
+//        
+//    }
     
     
     
@@ -487,7 +497,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             
             profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
 
-            adjustCatNodes(point: CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200))
+//            adjustCatNodes(point: CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200))
             
             
 

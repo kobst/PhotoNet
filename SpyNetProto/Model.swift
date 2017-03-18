@@ -92,7 +92,7 @@ class Model {
     let msApiKey = "c978b7500d5b4a2e97bd20fdfb9bf03f"
     let msApiKey2 = "8a26a031b4454ec0802ec99ddc7a3f7d"
    
-    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38, .timeOutEvent]
+//    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38, .timeOutEvent]
     
     static var shared = Model()
 

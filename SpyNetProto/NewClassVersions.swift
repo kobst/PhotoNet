@@ -360,14 +360,14 @@ class TargetSpriteNew: SKSpriteNode {
         case offScreen
         case onScreen
     }
-    
-    enum Category: String {
-        case spyGame = "spyGame"
-        case tweet = "twitter"
-        case eater38 = "eater38"
-        case timeOutEvent = "timeOut"
-        case other = "other"
-    }
+//    
+//    enum Category: String {
+//        case spyGame = "spyGame"
+//        case tweet = "twitter"
+//        case eater38 = "eater38"
+//        case timeOutEvent = "timeOut"
+//        case other = "other"
+//    }
     
     var target: TargetNew
     var profileImageURL: String
@@ -417,43 +417,48 @@ class TargetSpriteNew: SKSpriteNode {
         self.anchorGrav.isEnabled = true
         self.anchorGrav.strength = 1.0
         
-        switch target {
-            
-        case is TweetTarget:
-            let tweetTarget = target as! TweetTarget
-            profileImageURL = tweetTarget.idImageURL
-            nameLabel.text = tweetTarget.senderID
-            category = .tweet
-            
-            let twitterIcon = UIImage(named: "twitter")
-            let texture = SKTexture(image: twitterIcon!)
-            let twitterNode = SKSpriteNode(texture: texture, color: UIColor(), size: CGSize(width: 25, height: 25))
-            twitterNode.position = CGPoint(x: 5, y: 5)
-            
-            
-        case is UserTarget:
-            let userTarget = target as! UserTarget
-            profileImageURL = userTarget.avatar
-            nameLabel.text = userTarget.userName
-            category = .spyGame
+        let userTarget = target as! UserTarget
+        profileImageURL = userTarget.avatar
+        nameLabel.text = userTarget.userName
         
-        case is Eater38:
-            let eaterRest = target as! Eater38
-            profileImageURL = ""
-            nameLabel.text = eaterRest.restName
-            category = .eater38
-        
-            
-        case is TimeOutTarget:
-            let event = target as! TimeOutTarget
-            profileImageURL = ""
-            nameLabel.text = event.name
-            category = .timeOutEvent
-            
-            
-        default:
-            fatalError()
-        }
+//        
+//        switch target {
+//            
+//        case is TweetTarget:
+//            let tweetTarget = target as! TweetTarget
+//            profileImageURL = tweetTarget.idImageURL
+//            nameLabel.text = tweetTarget.senderID
+//            category = .tweet
+//            
+//            let twitterIcon = UIImage(named: "twitter")
+//            let texture = SKTexture(image: twitterIcon!)
+//            let twitterNode = SKSpriteNode(texture: texture, color: UIColor(), size: CGSize(width: 25, height: 25))
+//            twitterNode.position = CGPoint(x: 5, y: 5)
+//            
+//            
+//        case is UserTarget:
+//            let userTarget = target as! UserTarget
+//            profileImageURL = userTarget.avatar
+//            nameLabel.text = userTarget.userName
+//            category = .spyGame
+//        
+//        case is Eater38:
+//            let eaterRest = target as! Eater38
+//            profileImageURL = ""
+//            nameLabel.text = eaterRest.restName
+//            category = .eater38
+//        
+//            
+//        case is TimeOutTarget:
+//            let event = target as! TimeOutTarget
+//            profileImageURL = ""
+//            nameLabel.text = event.name
+//            category = .timeOutEvent
+//            
+//            
+//        default:
+//            fatalError()
+//        }
         
         super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
         
@@ -489,7 +494,7 @@ class TargetSpriteNew: SKSpriteNode {
 class ButtonCategoryNode: SKSpriteNode {
     
     
-    var category: TargetSpriteNew.Category
+//    var category: TargetSpriteNew.Category
     
     
     required init(coder aDecoder: NSCoder) {
@@ -497,12 +502,14 @@ class ButtonCategoryNode: SKSpriteNode {
     }
     
     
-    init(categoryInit: TargetSpriteNew.Category) {
-        
+//    init(categoryInit: TargetSpriteNew.Category) 
+    
+        init() {
+    
         let size = CGSize(width: 50, height: 50)
-        let icon = UIImage(named: categoryInit.rawValue)?.circle
+        let icon = UIImage(named: "spyIcon")?.circle
         let textureIcon = SKTexture(image: icon!)
-        category = categoryInit
+ 
         
 //        switch categoryInit {
 //            
@@ -533,8 +540,8 @@ class ButtonCategoryNode: SKSpriteNode {
         
         super.init(texture: textureIcon, color: UIColor(), size: size)
         
-        name = category.rawValue
-        
+//        name = category.rawValue
+//        
         
 }
 

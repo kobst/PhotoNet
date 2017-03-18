@@ -71,7 +71,7 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
         let _ = faceClient?.detect(with: data, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
             
             if (faces?.count)! != 1  {
-                self.alert(message: "please enter a photo with one actual face dummy")
+                self.alert(message: "please enter a photo with only one face")
 
             }
             

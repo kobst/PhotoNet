@@ -21,7 +21,7 @@ protocol GoToDetail: class {
 //    func goToTweet(targetSprite: TargetSprite)
     
     func goToProfile()
-    func goToTweetTarget(target: TargetSpriteNew)
+//    func goToTweetTarget(target: TargetSpriteNew)
     func goToUserTarget(target: TargetSpriteNew)
     
     
@@ -50,11 +50,11 @@ class MainViewController: UIViewController, GoToDetail {
         }
         
         
-        if segue.identifier == "toTweet" {
-            
-            let tweetVC = segue.destination as! TweetDetailViewController
-            tweetVC.target = selectedTarget
-        }
+//        if segue.identifier == "toTweet" {
+//            
+//            let tweetVC = segue.destination as! TweetDetailViewController
+//            tweetVC.target = selectedTarget
+//        }
     }
     
     
@@ -80,10 +80,10 @@ class MainViewController: UIViewController, GoToDetail {
 //    }
     
     
-    func goToTweetTarget(target: TargetSpriteNew) {
-        selectedTarget = target
-         performSegue(withIdentifier: "toTweet", sender: nil)
-    }
+//    func goToTweetTarget(target: TargetSpriteNew) {
+//        selectedTarget = target
+//         performSegue(withIdentifier: "toTweet", sender: nil)
+//    }
     
     
     func goToUserTarget(target: TargetSpriteNew) {
@@ -141,15 +141,15 @@ class MainViewController: UIViewController, GoToDetail {
                                     
                                     print("\(currentLocation).....CL.")
                                     
-                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
-                                    
-//                                    Model.shared.getTargets3(myLocation: dummyLocation)
-                                    
-                                    Model.shared.getEater(myLocation: dummyLocation)
+//                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
+//                                    
+////                                    Model.shared.getTargets3(myLocation: dummyLocation)
+//                                    
+//                                    Model.shared.getEater(myLocation: dummyLocation)
                                     Model.shared.getTargetNew(myLocation: dummyLocation)
-                                    Model.shared.getTweeterByDist(myLocation: dummyLocation)
-
-                                    Model.shared.getTimeOutEvents(myLocation: dummyLocation)
+//                                    Model.shared.getTweeterByDist(myLocation: dummyLocation)
+//
+//                                    Model.shared.getTimeOutEvents(myLocation: dummyLocation)
                                     
                                     //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)
                                     //

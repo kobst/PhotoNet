@@ -12,31 +12,31 @@ class SplashViewController: UIViewController {
   
     var userUID: String?
     
-    @IBAction func goNext(_ sender: Any) {
-        
-//        Model.shared.loggedInUser = nil  // comment out 
-        
-        if let _ = Model.shared.loggedInUser {
-            print("validUID")
-            
-            self.performSegue(withIdentifier: "toMain", sender: self)
-           
-//            Model.shared.fetchUser(UID: validUID , completionHandler: { (user) in
-//                Model.shared.loggedInUser = user
-//                print("in fetch user \n \n \n fetch user")
-//                self.performSegue(withIdentifier: "toMain", sender: self)
-//            })
-        }
-        
-        else {
-            print("not valid")
-            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
-            
-        }
-        
-        
-        
-    }
+//    @IBAction func goNext(_ sender: Any) {
+//        
+////        Model.shared.loggedInUser = nil  // comment out 
+//        
+//        if let _ = Model.shared.loggedInUser {
+//            print("validUID")
+//            
+//            self.performSegue(withIdentifier: "toMain", sender: self)
+//           
+////            Model.shared.fetchUser(UID: validUID , completionHandler: { (user) in
+////                Model.shared.loggedInUser = user
+////                print("in fetch user \n \n \n fetch user")
+////                self.performSegue(withIdentifier: "toMain", sender: self)
+////            })
+//        }
+//        
+//        else {
+//            print("not valid")
+//            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
+//            
+//        }
+//        
+//        
+//        
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
