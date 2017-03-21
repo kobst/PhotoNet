@@ -17,6 +17,7 @@
 		846DCA8D1E3BBF7900CAE31E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */; };
 		846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */; };
 		846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA911E3BCD5C00CAE31E /* Model.swift */; };
+		8484B1631E8089320086709C /* CamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8484B1621E8089310086709C /* CamViewController.swift */; };
 		848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A01791E53EFB2002FBBAF /* TwitterModel.swift */; };
 		848A017D1E552C82002FBBAF /* TweetDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */; };
 		8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8493B5521E5D32BA000DF58C /* FieldScene.swift */; };
@@ -44,6 +45,7 @@
 		846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardViewController.swift; sourceTree = "<group>"; };
 		846DCA911E3BCD5C00CAE31E /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		8484B1621E8089310086709C /* CamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CamViewController.swift; sourceTree = "<group>"; };
 		848A01791E53EFB2002FBBAF /* TwitterModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterModel.swift; sourceTree = "<group>"; };
 		848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetDetailViewController.swift; sourceTree = "<group>"; };
 		8493B5521E5D32BA000DF58C /* FieldScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldScene.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */,
 				844F990E1E47A7EC005EDABB /* SplashViewController.swift */,
 				846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */,
+				8484B1621E8089310086709C /* CamViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */,
+				8484B1631E8089320086709C /* CamViewController.swift in Sources */,
 				84CDF4221E71EF4500875CAF /* MapScene.swift in Sources */,
 				8421C8F31E5110E200B0B39B /* SuccessViewController.swift in Sources */,
 				84D2BC2B1E393894001EABC2 /* SpyNetProto.xcdatamodeld in Sources */,

@@ -2,28 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    
-    <key>Fabric</key>
-    <dict>
-        <key>APIKey</key>
-        <string>7ce1ea32354a89edc326daf15ef65b18d6aadccf</string>
-        <key>Kits</key>
-        <array>
-            <dict>
-                <key>KitInfo</key>
-                <dict>
-                    <key>consumerKey</key>
-                    <string>njncquZyjXE4DoSRuvsV5R3AU</string>
-                    <key>consumerSecret</key>
-                    <string>eF3hrvBHxx2xWxCx01XpIbrSPxnoIsQ6xVWHH4zr6njSBed7l3</string>
-                </dict>
-                <key>KitName</key>
-                <string>Twitter</string>
-            </dict>
-        </array>
-    </dict>
-    
-    
+	<key>NSMicrophoneUsageDescription</key>
+	<string>needs microphone for the cocoapod to work</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>7ce1ea32354a89edc326daf15ef65b18d6aadccf</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>consumerKey</key>
+					<string>njncquZyjXE4DoSRuvsV5R3AU</string>
+					<key>consumerSecret</key>
+					<string>eF3hrvBHxx2xWxCx01XpIbrSPxnoIsQ6xVWHH4zr6njSBed7l3</string>
+				</dict>
+				<key>KitName</key>
+				<string>Twitter</string>
+			</dict>
+		</array>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>need to access camera for app to function</string>
 	<key>NSPhotoLibraryUsageDescription</key>

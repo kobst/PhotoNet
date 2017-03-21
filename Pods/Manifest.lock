@@ -61,6 +61,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.8)
   - INTULocationManager (4.2.0)
   - ProjectOxfordFace (1.2.0)
+  - SwiftyCam (2.1.0)
   - TwitterCore (2.8.0):
     - Fabric
   - TwitterKit (2.8.0):
@@ -76,6 +77,7 @@ DEPENDENCIES:
   - GeoFire (from `https://github.com/firebase/geofire-objc`)
   - INTULocationManager (~> 4.2)
   - ProjectOxfordFace
+  - SwiftyCam
   - TwitterKit
 
 EXTERNAL SOURCES:
@@ -104,9 +106,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   INTULocationManager: 73f8254b3d05c897c56bb13c190e5b7c648c0998
   ProjectOxfordFace: eeb628b3d91ffe4f8fcec151abf26941975479d3
+  SwiftyCam: 2f13473f67afa4658bff79453d7db6890e2fa84d
   TwitterCore: e959987be23c767004d29eb7fab8d85d8585a2e5
   TwitterKit: f7b0a1adcb800f6446ff0ef70164797376522ff3
 
-PODFILE CHECKSUM: cbc29e2e7b4e3fe79cf8588a04dd83cc8fbcb86a
+PODFILE CHECKSUM: 185c76e79b0f368853b09bed8fab2560937f5837
 
 COCOAPODS: 1.2.0.rc.1

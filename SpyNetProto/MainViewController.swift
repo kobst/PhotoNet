@@ -49,6 +49,13 @@ class MainViewController: UIViewController, GoToDetail {
             
         }
         
+        if segue.identifier == "toCamView" {
+            
+            let detailVC = segue.destination as! CamViewController
+            detailVC.target = selectedTarget
+            
+        }
+        
         
 //        if segue.identifier == "toTweet" {
 //            
@@ -64,31 +71,12 @@ class MainViewController: UIViewController, GoToDetail {
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
     
-//    func goToDetail(targetSprite: TargetSprite) {
-//        
-//        selectedSprite = targetSprite
-//        performSegue(withIdentifier: "toDetail", sender: nil)
-//        
-//        
-//    }
-//    
-//    
-//    func goToTweet(targetSprite: TargetSprite) {
-//        selectedSprite = targetSprite
-//         performSegue(withIdentifier: "toTweet", sender: nil)
-//        
-//    }
-    
-    
-//    func goToTweetTarget(target: TargetSpriteNew) {
-//        selectedTarget = target
-//         performSegue(withIdentifier: "toTweet", sender: nil)
-//    }
     
     
     func goToUserTarget(target: TargetSpriteNew) {
         selectedTarget = target
-         performSegue(withIdentifier: "toDetail", sender: nil)
+//         performSegue(withIdentifier: "toDetail", sender: nil)
+        performSegue(withIdentifier: "toCamView", sender: nil)
     }
     
      @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
@@ -101,8 +89,6 @@ class MainViewController: UIViewController, GoToDetail {
   
         var scene: FieldScene!
         
-        
-
         sceneView.isMultipleTouchEnabled = false
         
         // Create and configure the scene.
@@ -141,8 +127,8 @@ class MainViewController: UIViewController, GoToDetail {
                                     
                                     print("\(currentLocation).....CL.")
                                     
-//                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
-//                                    
+                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
+//
 ////                                    Model.shared.getTargets3(myLocation: dummyLocation)
 //                                    
 //                                    Model.shared.getEater(myLocation: dummyLocation)
@@ -168,7 +154,7 @@ class MainViewController: UIViewController, GoToDetail {
 //                                            
 //                                        }
 //                                    }
-//                                    
+                                   
                                     
                                 }
                                     
@@ -196,4 +182,11 @@ class MainViewController: UIViewController, GoToDetail {
 
 
 }
+
+
+
+
+
+
+
 
