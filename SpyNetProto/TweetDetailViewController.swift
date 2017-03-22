@@ -78,8 +78,6 @@ class TweetDetailViewController: UIViewController {
 //        tweetLabel.text = "\(targetSprite?.target?.lat)..\(targetSprite?.target?.lon)"
         
         
-
-        
     }
 
     override func didReceiveMemoryWarning() {
