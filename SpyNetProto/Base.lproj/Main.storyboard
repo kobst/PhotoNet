@@ -47,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2060" y="-194"/>
+            <point key="canvasLocation" x="-2060" y="-319"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="54h-1C-lOy">
@@ -335,7 +335,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fyh-wn-acA">
-                                <rect key="frame" x="-0.5" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I2e-Aa-9zP">
                                         <rect key="frame" x="138" y="449" width="98" height="93"/>
@@ -360,13 +360,14 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="buttonOverlayView" destination="Fyh-wn-acA" id="5eX-EA-f2O"/>
                         <outlet property="name" destination="trU-VP-CzV" id="KQu-BH-YcJ"/>
                         <outlet property="profileImage" destination="I2e-Aa-9zP" id="jDQ-1P-doX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9wo-RK-Ffq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-642" y="-1155"/>
+            <point key="canvasLocation" x="-807" y="-766"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="RHn-T5-ebg">
@@ -392,12 +393,48 @@
                     </view>
                     <connections>
                         <segue destination="Dem-4r-Kq1" kind="show" identifier="toLoginFromSplash" id="x5Q-6F-CPj"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="ZIS-BD-rHt"/>
+                        <segue destination="1Re-zk-VIG" kind="show" identifier="toRadar" id="S2o-dq-ElQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IA1-VA-BNv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-6326" y="-318"/>
+        </scene>
+        <!--Radar View Controller-->
+        <scene sceneID="mV4-G3-6Q2">
+            <objects>
+                <viewController id="1Re-zk-VIG" customClass="RadarViewController" customModule="SpyNetProto" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MDs-NL-E9b"/>
+                        <viewControllerLayoutGuide type="bottom" id="hSk-Cf-U1G"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mGe-HC-LSW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bl1-eh-w5F" userLabel="overlay">
+                                <rect key="frame" x="20" y="118" width="335" height="431"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="abt-gZ-RaG" userLabel="radarMap" customClass="MGLMapView">
+                                <rect key="frame" x="16" y="53" width="343" height="447"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="styleURL__" value="mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="overlay" destination="bl1-eh-w5F" id="pWW-EQ-VFC"/>
+                        <outlet property="radarMap" destination="abt-gZ-RaG" id="lsA-WH-UiG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pi1-6c-PlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4543.1999999999998" y="-819.04047976011998"/>
         </scene>
         <!--LoginVC-->
         <scene sceneID="LCB-N5-a0R">

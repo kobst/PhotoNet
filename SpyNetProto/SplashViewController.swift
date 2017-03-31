@@ -7,44 +7,57 @@
 //
 
 import UIKit
+import INTULocationManager
 
 class SplashViewController: UIViewController {
   
     var userUID: String?
+
     
-//    @IBAction func goNext(_ sender: Any) {
-//        
-////        Model.shared.loggedInUser = nil  // comment out 
-//        
-//        if let _ = Model.shared.loggedInUser {
-//            print("validUID")
-//            
-//            self.performSegue(withIdentifier: "toMain", sender: self)
-//           
-////            Model.shared.fetchUser(UID: validUID , completionHandler: { (user) in
-////                Model.shared.loggedInUser = user
-////                print("in fetch user \n \n \n fetch user")
-////                self.performSegue(withIdentifier: "toMain", sender: self)
-////            })
-//        }
-//        
-//        else {
-//            print("not valid")
-//            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
-//            
-//        }
-//        
-//        
-//        
-//    }
+    func getLocation() {
+        
+        
+        let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
+        
+        locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
+                               timeout: 5,
+                               delayUntilAuthorized: true,
+                               block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
+                                if status == INTULocationStatus.success {
+                                    print("got location");
+                                    
+                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+                                    
+                                    
+                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
+                                    
+                                    Model.shared.myLocation = dummyLocation
+                                    
+                                    print("\(currentLocation).....CL.")
+                                    
+                                    
+                                     self.performSegue(withIdentifier: "toRadar", sender: self)
+                                    
+
+//                                    
+                                }
+                                    
+                                else {
+                                    print("no location")
+                                }
+                                
+        })
+
+        
+        
+        
+    }
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
-        print("viewdidload \n \n \n \n \n \n viewdidload")
-        
-        
         
 //        let userUID = UserDefaults.standard.value(forKey: "uid")
         let userUID = UserDefaults.standard.value(forKey: "uid") as! String?
@@ -54,7 +67,16 @@ class SplashViewController: UIViewController {
             Model.shared.fetchUser(UID: validUID, completionHandler: { (user) in
                 Model.shared.loggedInUser = user
                 print("in fetch user \n \n \n fetch user")
-                self.performSegue(withIdentifier: "toMain", sender: self)
+//                self.performSegue(withIdentifier: "toMain", sender: self)
+//                self.performSegue(withIdentifier: "toRadar", sender: self)
+                
+                self.getLocation()
+                
+                
+                
+                
+
+                
             })
         }
 //
@@ -72,14 +94,10 @@ class SplashViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
+
+
+
+

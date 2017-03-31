@@ -11,6 +11,9 @@
 		8421C8EF1E4FF18300B0B39B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */; };
 		8421C8F31E5110E200B0B39B /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421C8F21E5110E200B0B39B /* SuccessViewController.swift */; };
 		8439C9611E3A930C00E72B7A /* FieldSceneOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8439C9601E3A930C00E72B7A /* FieldSceneOld.swift */; };
+		844C1E041E83123600C47F26 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 844C1E031E83123600C47F26 /* Mapbox.framework */; };
+		844C1E051E83123600C47F26 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 844C1E031E83123600C47F26 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		844C1E091E83140500C47F26 /* RadarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844C1E081E83140500C47F26 /* RadarViewController.swift */; };
 		844F990F1E47A7EC005EDABB /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844F990E1E47A7EC005EDABB /* SplashViewController.swift */; };
 		844F99131E47D6CB005EDABB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844F99121E47D6CB005EDABB /* DetailViewController.swift */; };
 		846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA861E3B9FF700CAE31E /* MapViewController.swift */; };
@@ -33,12 +36,28 @@
 		84EDF5841E39905F0002D4EE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84EDF5831E39905F0002D4EE /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		844C1E061E83123600C47F26 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				844C1E051E83123600C47F26 /* Mapbox.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpyNetProto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62BAD37BB5CB014EB6EDE009 /* Pods-SpyNetProto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.release.xcconfig"; sourceTree = "<group>"; };
 		8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		8421C8F21E5110E200B0B39B /* SuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		8439C9601E3A930C00E72B7A /* FieldSceneOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldSceneOld.swift; sourceTree = "<group>"; };
+		844C1E031E83123600C47F26 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		844C1E081E83140500C47F26 /* RadarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarViewController.swift; sourceTree = "<group>"; };
 		844F990E1E47A7EC005EDABB /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		844F99121E47D6CB005EDABB /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		846DCA861E3B9FF700CAE31E /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				039EC93ABD1D63436F41BBF9 /* Pods_SpyNetProto.framework in Frameworks */,
+				844C1E041E83123600C47F26 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +128,7 @@
 			children = (
 				846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */,
 				84D2BC241E393894001EABC2 /* MainViewController.swift */,
+				844C1E081E83140500C47F26 /* RadarViewController.swift */,
 				8421C8F21E5110E200B0B39B /* SuccessViewController.swift */,
 				844F99121E47D6CB005EDABB /* DetailViewController.swift */,
 				848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */,
@@ -132,6 +153,7 @@
 		84D2BC161E393894001EABC2 = {
 			isa = PBXGroup;
 			children = (
+				844C1E031E83123600C47F26 /* Mapbox.framework */,
 				84D2BC211E393894001EABC2 /* SpyNetProto */,
 				84D2BC201E393894001EABC2 /* Products */,
 				DE446996893F1C3553EB8162 /* Pods */,
@@ -188,6 +210,8 @@
 				C936415DF1596255892ED529 /* [CP] Embed Pods Frameworks */,
 				EFE2B8F3E9E8A7C8CA8769D1 /* [CP] Copy Pods Resources */,
 				848A017B1E540473002FBBAF /* ShellScript */,
+				844C1E061E83123600C47F26 /* Embed Frameworks */,
+				844C1E071E83126200C47F26 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -263,6 +287,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		844C1E071E83126200C47F26 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh\"\n";
+		};
 		848A017B1E540473002FBBAF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -326,6 +363,7 @@
 				8439C9611E3A930C00E72B7A /* FieldSceneOld.swift in Sources */,
 				844F99131E47D6CB005EDABB /* DetailViewController.swift in Sources */,
 				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
+				844C1E091E83140500C47F26 /* RadarViewController.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */,
 				8484B1631E8089320086709C /* CamViewController.swift in Sources */,
@@ -456,6 +494,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 4A67537292;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = SpyNetProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ga.SpyNetProto;
@@ -470,6 +512,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 4A67537292;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = SpyNetProto/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ga.SpyNetProto;

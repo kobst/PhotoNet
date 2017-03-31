@@ -16,6 +16,10 @@ class CamViewController: SwiftyCamViewController {
     }
     var target: TargetSpriteNew?
     
+    
+    
+    @IBOutlet weak var buttonOverlayView: UIView!
+    
     @IBOutlet weak var profileImage: UIImageView!
     
     @IBOutlet weak var name: UILabel!
@@ -35,6 +39,11 @@ class CamViewController: SwiftyCamViewController {
         let captureButton = SwiftyCamButton(frame: buttonFrame)
         captureButton.delegate = self
         // Do any additional setup after loading the view.
+        
+        
+        
+        self.view.bringSubview(toFront: buttonOverlayView)
+        
     }
 
     override func didReceiveMemoryWarning() {

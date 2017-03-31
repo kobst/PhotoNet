@@ -118,7 +118,11 @@ class Model {
     var myScreenOrigin = CGPoint(x: 0, y: 0)
     var dateFormatter = DateFormatter()
 
+    var userTargets: [UserTarget] = []
     
+    var userTargetsByDistance: [UserTarget] {
+        return userTargets.sorted(by: {$0.distance < $1.distance})
+    }
     
 //    var targetSprByDistance: [TargetSprite] {
 //        
@@ -134,6 +138,9 @@ class Model {
     
     
     weak var addTargetDelegate: AddTargetProtocol?
+    
+    weak var addBlipDelegate: AddBlips?
+    
     
     let ref = FIRDatabase.database().reference()
 //    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
@@ -160,6 +167,7 @@ class Model {
 
     }
     
+    
     func updateMyLocation(myLocation: CLLocation) {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         
@@ -176,203 +184,145 @@ class Model {
     }
     
     
-
     
-    func getTweeterByDist(myLocation: CLLocation) {
-        
-        var distMap: [(sender: String, dist: Double)] = []
-        
-        for (key, value) in Model.shared.coordinates {
-            let location = key
-            let dist = myLocation.distance(from: value)
-            let roundedDist = Double(round(dist)/1000)
-            let newDistMapTuple = (location, roundedDist)
-            distMap.append(newDistMapTuple)
-        }
-        
-        let sortedDistMap = distMap.sorted(by: {$0.dist < $1.dist})
-        //        print(sortedDistMap)
-        let senders = sortedDistMap[0..<20]
-        
-        dateFormatter.dateFormat = "EEE MM dd HH:mm:ss Z yyyy"
-        let now  = Date()
-        
-        
-        //        var tweetList = [TweetData]()
-        
-        for sender in senders {
-            let client = TWTRAPIClient()
-            let statusesShowEndpoint = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-            let params: [AnyHashable : Any] = [
-                "screen_name": sender.0,
-                "count": "1"
-            ]
-            
-            var clientError : NSError?
-            let request = client.urlRequest(withMethod: "GET", url: statusesShowEndpoint, parameters: params, error: &clientError)
-            
-            client.sendTwitterRequest(request) { (response, data, connectionError) in
-                if connectionError != nil {
-                    print("Error: \(connectionError)")
-                }
-                guard let goodData = data else {
-                    print("no data TWEETS \n \n \n NO DATA TWEETS")
-                    return}
-                do {
-                    let json = try JSONSerialization.jsonObject(with: goodData, options: .mutableContainers) as! [Any]
-                    
-                    let tweetDict = json[0] as! [String: Any]
-                    
-                    let timeString = tweetDict["created_at"] as! String
-                    let timeData = self.dateFormatter.date(from: timeString)
-                    
-                    let timeElapsed = now.timeIntervalSince(timeData!)
-                    let roundedTime = Double(round(timeElapsed*100)/100)
-                    
-                    
-                    let userDict = tweetDict["user"] as! [String: Any]
-                    
-                    //                    let photoID = userDict["profile_image_url"] as! String
-                    
-                    let photoID = userDict["profile_image_url_https"] as! String
-                    
-                    let messageText = tweetDict["text"] as! String
-                    
-//                    let fetchedData = TweetData(message: messageText, senderName: sender.0, idImageURL: photoID, dist: sender.1, time: roundedTime)
-                    
-//                    let target = Target(tweet: fetchedData, location: CLLocation(latitude: fetchedData.lat, longitude: fetchedData.lon))
-                    
-                    
-                    let tweetTarget = TweetTarget(message: messageText, senderName: sender.0, idImageURL: photoID, time: roundedTime)
-                    
-//                    self.addTargetDelegate?.addTargetSprites(target: target)
-                    
-                    self.addTargetDelegate?.addTargetSpritesNew(target: tweetTarget)
-                    
-                    //                    self.addTweetDelegate?.addTweet(tweetData: fetchedData)
-                    
-                    
-                } catch let jsonError as NSError {print("json error: \(jsonError.localizedDescription)")}
-                
-            }
-            
-        }
-        
-    }
+    
     
 
-    func getTimeOutEvents(myLocation: CLLocation) {
-        
-        let geoFire = GeoFire(firebaseRef: ref.child("TimeOutEvents_locations"))
-        
-        let circleQuery = geoFire?.query(at: myLocation, withRadius: 3.0)
-        
-        
-        circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
-            if let validUID = string, let locationBack = location {
-                
-                self?.ref.child("TimeOutEvents/\(validUID)").observe(.value, with: { [weak self] snapshot in
-                    //                    let value = snapshot.value as? [String: Any]
-                    //                    print(value?["name"] as? String ?? "(ERROR)")
-                    //                    let user = User(snapshot: snapshot)
-                    //                    let target = Target(user: user, location: locationBack)
-                    
-                    let event = TimeOutTarget(snapshot: snapshot, location: locationBack)
-                
-                    self?.addTargetDelegate?.addTargetSpritesNew(target: event)
-                    
-                    
-                })
-                
-                
-            }})
-        
-        
-        
-        
-    }
-    
-    
-    func getEater(myLocation: CLLocation) {
-        
-        let geoFire = GeoFire(firebaseRef: ref.child("Eater38_locations"))
-        
-        let circleQuery = geoFire?.query(at: myLocation, withRadius: 3.0)
-        
-        
-        
-        circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
-            if let validUID = string, let locationBack = location {
-                
-                self?.ref.child("Eater38/\(validUID)").observe(.value, with: { [weak self] snapshot in
-                    //                    let value = snapshot.value as? [String: Any]
-                    //                    print(value?["name"] as? String ?? "(ERROR)")
-//                    let user = User(snapshot: snapshot)
-                    //                    let target = Target(user: user, location: locationBack)
-                    
-                    let eaterRestaurant = Eater38(snapshot: snapshot, location: locationBack)
-                    
-                    //                    print(target.user?.name ?? "no name")
-                    //                    print(self?.sceneTargets.count ?? "no count")
-                    //                    self.addTargetDelegate?.addTarget(target: target)
-                    //
-                    //                    self?.addTargetDelegate?.addTargetSprites(target: target)
-                   print("eater \n eater \n eater \n")
-                    self?.addTargetDelegate?.addTargetSpritesNew(target: eaterRestaurant)
-                    
-                    
-                })
-                
-                
-            }})
-        
-        
-        
-    }
-    
     func getTargetNew(myLocation: CLLocation) {
         
+        var uids = [(String, CLLocation)]()
         
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         //        var targets = [Target]()
         //        let fakeLocation = makeFakeLocation()
         let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5)
         
+        
         circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
             if let validUID = string, let locationBack = location {
                 
+                let tuple = (validUID, locationBack)
+                uids.append(tuple)
+                
                 self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
-                    //                    let value = snapshot.value as? [String: Any]
-                    //                    print(value?["name"] as? String ?? "(ERROR)")
-//                    let user = User(snapshot: snapshot)
-//                    let target = Target(user: user, location: locationBack)
-             
+            
                     let userTarget = UserTarget(snapshot: snapshot, location: locationBack)
-
-//                    print(target.user?.name ?? "no name")
-//                    print(self?.sceneTargets.count ?? "no count")
-                    //                    self.addTargetDelegate?.addTarget(target: target)
-//                    
-//                    self?.addTargetDelegate?.addTargetSprites(target: target)
-                    self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
                 
-                    
+                    self?.userTargets.append(userTarget)
+                
+                    self?.addBlipDelegate?.addTargetBlips(target: userTarget)
                 })
-                
-                
-            }})
-        
+            
+            }}
+            )
         
     }
     
     
     
     
+    func getTargetsNewVerComp(myLocation: CLLocation, closure: (@escaping() -> Void)) {
+        
+        var uids = [(String, CLLocation)]()
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+        //        var targets = [Target]()
+        //        let fakeLocation = makeFakeLocation()
+        if let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5) {
+            
+            _ = circleQuery.observe(.keyEntered, with: {(string, location) in
+                if let validUID = string, let locationBack = location {
+                    let tuple = (validUID, locationBack)
+                    uids.append(tuple)
+                    }
+                }
+            )
+            circleQuery.observeReady( {
+                print(uids.count)
+                print("\n-------observeReady-------\n ")
+                for (x,y) in uids {
+                    
+                    self.ref.child("users/\(x)").observe(.value, with: { [weak self] snapshot in
+                        
+                        let userTarget = UserTarget(snapshot: snapshot, location: y)
+                        
+                        self?.userTargets.append(userTarget)
+                        
+                        self?.addBlipDelegate?.addTargetBlips(target: userTarget)
+                        
+                        print(uids.count)
+                    })
+                }
+    
+                closure()
+                
+                
+            })
+    }
+    }
     
     
     
     
     
+    func getTargetsNewVerComp2(myLocation: CLLocation, closure: (@escaping() -> Void)) {
+        
+        var uids = [(String, CLLocation)]()
+        
+        let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
+  
+        let dG = DispatchGroup()
+        
+        if let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5) {
+            
+            _ = circleQuery.observe(.keyEntered, with: {[weak self](string, location) in
+                if let validUID = string, let locationBack = location {
+                    let tuple = (validUID, locationBack)
+                    uids.append(tuple)
+                    
+                    dG.enter()
+                    
+                    self?.ref.child("users/\(validUID)").observe(.value, with: { [weak self] snapshot in
+                        
+                        let userTarget = UserTarget(snapshot: snapshot, location: locationBack)
+                        
+                        self?.userTargets.append(userTarget)
+                        
+                        self?.addBlipDelegate?.addTargetBlips(target: userTarget)
+                        
+                        print(uids.count)
+                        
+                        dG.leave()
+                    })
+                    
+                }
+            }
+            )
+            circleQuery.observeReady( {
+               
+                dG.notify(queue: .main, execute: { 
+                     print("\n-------observeReady-------\n ")
+                     print(uids.count)
+                    closure()
+                    
+                })
+//                for (x,y) in uids {
+//                    
+//                    self.ref.child("users/\(x)").observe(.value, with: { [weak self] snapshot in
+//                        
+//                        let userTarget = UserTarget(snapshot: snapshot, location: y)
+//                        
+//                        self?.userTargets.append(userTarget)
+//                        
+//                        self?.addBlipDelegate?.addTargetBlips(target: userTarget)
+//                        
+//                        print(uids.count)
+//                    })
+//                }
+                
+            })
+        }
+    }
     
     
     

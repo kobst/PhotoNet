@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1Ijoia29ic3RyIiwiYSI6ImNqMGxpOXBjMDAwMWUyd3F1NGttNzkzd3EifQ.Xxi5YVFx2tRnJgBYkSdtew</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>needs microphone for the cocoapod to work</string>
 	<key>Fabric</key>

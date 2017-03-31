@@ -18,7 +18,7 @@ import GameplayKit
 import QuartzCore
 import Firebase
 import CoreLocation
-
+import Mapbox
 
 extension UIImage {
     var rounded: UIImage? {
@@ -203,6 +203,8 @@ class UserTarget: TargetNew {
     var time: Double
     var lat: CLLocationDegrees
     var lon: CLLocationDegrees
+    var distance: Double
+    var annotation: MGLPointAnnotation
     
     
     init(snapshot: FIRDataSnapshot, location: CLLocation) {
@@ -214,6 +216,13 @@ class UserTarget: TargetNew {
         time = value?["timeStamp"] as? Double ?? 0.0
         lat = location.coordinate.latitude
         lon = location.coordinate.longitude
+        
+        distance = location.distance(from: Model.shared.myLocation!)
+        
+        annotation = MGLPointAnnotation()
+        //        let point = MyAnnotationView()
+        
+        annotation.coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         
         let origin = Model.shared.myLocation
         let deltaLat = CGFloat(lat - (origin!.coordinate.latitude))
