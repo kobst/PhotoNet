@@ -250,6 +250,9 @@ class Model {
                         
                         self?.addBlipDelegate?.addTargetBlips(target: userTarget)
                         
+                        self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+                        
+                        
                         print(uids.count)
                     })
                 }

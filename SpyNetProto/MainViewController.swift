@@ -98,6 +98,10 @@ class MainViewController: UIViewController, GoToDetail {
         sceneView.presentScene(scene)
 //        sceneView.overlaySKScene = sceneKitScene
     
+        for userTarget in Model.shared.userTargetsByDistance {
+            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+        }
+
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
  //
@@ -110,59 +114,59 @@ class MainViewController: UIViewController, GoToDetail {
             }
         }
         
-        locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
-                               timeout: 5,
-                               delayUntilAuthorized: true,
-                               block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
-                                if status == INTULocationStatus.success {
-                                    print("got location");
-                                    
-//                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
-//                                    let dummyLocation = Model.shared.makeFakeLocation()
-                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
-//                                    Model.shared.myOrigin = currentLocation
-//                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
-//                                    Model.shared.getTargets3(myLocation: currentLocation!)
-                                    Model.shared.myLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
-                                    
-                                    print("\(currentLocation).....CL.")
-                                    
-                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
-//
-////                                    Model.shared.getTargets3(myLocation: dummyLocation)
+//        locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
+//                               timeout: 5,
+//                               delayUntilAuthorized: true,
+//                               block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
+//                                if status == INTULocationStatus.success {
+//                                    print("got location");
 //                                    
-//                                    Model.shared.getEater(myLocation: dummyLocation)
-                                    Model.shared.getTargetNew(myLocation: dummyLocation)
-//                                    Model.shared.getTweeterByDist(myLocation: dummyLocation)
-//
-//                                    Model.shared.getTimeOutEvents(myLocation: dummyLocation)
-                                    
-                                    //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)
-                                    //
-                                    //                                    Modelv2.shared.getTweetData(totalMapSenders: distMap)
-
-                                    
-                                    
-//                                    Model.shared.getTargets2(myLocation: dummyLocation) { targets in
+////                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+////                                    let dummyLocation = Model.shared.makeFakeLocation()
+//                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+////                                    Model.shared.myOrigin = currentLocation
+////                                    Model.shared.updateMyLocation(myLocation: currentLocation!)
+////                                    Model.shared.getTargets3(myLocation: currentLocation!)
+//                                    Model.shared.myLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
+//                                    
+//                                    print("\(currentLocation).....CL.")
+//                                    
+//                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
 ////
-////                                        scene.addTargetArray(targets: targets)
+//////                                    Model.shared.getTargets3(myLocation: dummyLocation)
+////                                    
+////                                    Model.shared.getEater(myLocation: dummyLocation)
+//                                    Model.shared.getTargetNew(myLocation: dummyLocation)
+////                                    Model.shared.getTweeterByDist(myLocation: dummyLocation)
+////
+////                                    Model.shared.getTimeOutEvents(myLocation: dummyLocation)
+//                                    
+//                                    //                                    let distMap = Modelv2.shared.getTweeterDist(myLocation: dummyLocation)
+//                                    //
+//                                    //                                    Modelv2.shared.getTweetData(totalMapSenders: distMap)
 //
-//                                        for target in targets {
-//                                            print(target.sprite?.position ?? "no position")
-//                                            print(target.sprite?.size ?? "no size")
-//                                            scene.addTarget(target: target)
-//                                            
-//                                        }
-//                                    }
-                                   
-                                    
-                                }
-                                    
-                                else {
-                                    print("no location")
-                                }
-                               
-        })
+//                                    
+//                                    
+////                                    Model.shared.getTargets2(myLocation: dummyLocation) { targets in
+//////
+//////                                        scene.addTargetArray(targets: targets)
+////
+////                                        for target in targets {
+////                                            print(target.sprite?.position ?? "no position")
+////                                            print(target.sprite?.size ?? "no size")
+////                                            scene.addTarget(target: target)
+////                                            
+////                                        }
+////                                    }
+//                                   
+//                                    
+//                                }
+//                                    
+//                                else {
+//                                    print("no location")
+//                                }
+//                               
+//        })
         
         
         

@@ -125,6 +125,9 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     @IBOutlet weak var radarMap: MGLMapView!
   
     
+    @IBAction func goPlay(_ sender: Any) {
+        performSegue(withIdentifier: "toMain", sender: nil)
+    }
     
     func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
         
@@ -236,17 +239,21 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         
         Model.shared.getTargetsNewVerComp2(myLocation: Model.shared.myLocation!) {
             print("done in closure")
-            var farthest: Double = 0.0
+     
             print(Model.shared.userTargets.count)
-            for target in Model.shared.userTargets {
-                if target.distance > farthest {
-                    farthest = target.distance
-                }
-            }
             
-            print(farthest)
-        
             self.zoomMap()
+            
+//            var farthest: Double = 0.0           
+//            for target in Model.shared.userTargets {
+//                if target.distance > farthest {
+//                    farthest = target.distance
+//                }
+//            }
+//            
+//            print(farthest)
+        
+
 //            self.addOverlayBlips()
         }
     

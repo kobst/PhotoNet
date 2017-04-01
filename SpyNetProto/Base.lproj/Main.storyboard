@@ -47,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2060" y="-319"/>
+            <point key="canvasLocation" x="-2871" y="-691"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="54h-1C-lOy">
@@ -424,17 +424,27 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="styleURL__" value="mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPj-Nf-s8u">
+                                <rect key="frame" x="164" y="600" width="75" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.81149787299999998" green="0.1882954547" blue="0.21049893180000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="goPlay:" destination="1Re-zk-VIG" eventType="touchUpInside" id="s3q-jc-9mm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="overlay" destination="bl1-eh-w5F" id="pWW-EQ-VFC"/>
                         <outlet property="radarMap" destination="abt-gZ-RaG" id="lsA-WH-UiG"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="gbM-Kv-P3I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pi1-6c-PlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4543.1999999999998" y="-819.04047976011998"/>
+            <point key="canvasLocation" x="-4420" y="-767"/>
         </scene>
         <!--LoginVC-->
         <scene sceneID="LCB-N5-a0R">
@@ -527,7 +537,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gAO-I6-LmQ"/>
+        <segue reference="gbM-Kv-P3I"/>
         <segue reference="x5Q-6F-CPj"/>
         <segue reference="bse-Cj-gNA"/>
     </inferredMetricsTieBreakers>
