@@ -126,7 +126,17 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
   
     
     @IBAction func goPlay(_ sender: Any) {
-        performSegue(withIdentifier: "toMain", sender: nil)
+//        performSegue(withIdentifier: "toMain", sender: nil)
+        performSegue(withIdentifier: "toSceneKit", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toSceneKit" {
+            let vc = segue.destination as! SceneKitViewController
+            vc.map = radarMap
+        }
+        
+        
     }
     
     func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {

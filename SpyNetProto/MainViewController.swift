@@ -35,7 +35,7 @@ class MainViewController: UIViewController, GoToDetail {
     
 //    var sceneView: SCNView?
     
-    var sceneKitScene = GameScene(create: true)
+//    var sceneKitScene = GameScene(create: true)
     
     @IBOutlet weak var sceneView: SKView!
     

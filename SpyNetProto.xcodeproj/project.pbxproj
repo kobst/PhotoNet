@@ -16,6 +16,7 @@
 		844C1E091E83140500C47F26 /* RadarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844C1E081E83140500C47F26 /* RadarViewController.swift */; };
 		844F990F1E47A7EC005EDABB /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844F990E1E47A7EC005EDABB /* SplashViewController.swift */; };
 		844F99131E47D6CB005EDABB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844F99121E47D6CB005EDABB /* DetailViewController.swift */; };
+		845F052E1E93373B00B12D0E /* SceneKitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845F052D1E93373B00B12D0E /* SceneKitViewController.swift */; };
 		846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA861E3B9FF700CAE31E /* MapViewController.swift */; };
 		846DCA8D1E3BBF7900CAE31E /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */; };
 		846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */; };
@@ -60,6 +61,7 @@
 		844C1E081E83140500C47F26 /* RadarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarViewController.swift; sourceTree = "<group>"; };
 		844F990E1E47A7EC005EDABB /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		844F99121E47D6CB005EDABB /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		845F052D1E93373B00B12D0E /* SceneKitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneKitViewController.swift; sourceTree = "<group>"; };
 		846DCA861E3B9FF700CAE31E /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				846DCA861E3B9FF700CAE31E /* MapViewController.swift */,
 				8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */,
 				844F990E1E47A7EC005EDABB /* SplashViewController.swift */,
+				845F052D1E93373B00B12D0E /* SceneKitViewController.swift */,
 				846DCA8E1E3BC43100CAE31E /* OnBoardViewController.swift */,
 				8484B1621E8089310086709C /* CamViewController.swift */,
 			);
@@ -365,6 +368,7 @@
 				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
 				844C1E091E83140500C47F26 /* RadarViewController.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
+				845F052E1E93373B00B12D0E /* SceneKitViewController.swift in Sources */,
 				8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */,
 				8484B1631E8089320086709C /* CamViewController.swift in Sources */,
 				84CDF4221E71EF4500875CAF /* MapScene.swift in Sources */,

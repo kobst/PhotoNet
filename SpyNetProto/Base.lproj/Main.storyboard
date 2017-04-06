@@ -141,13 +141,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eyN-dY-GgL">
-                                <rect key="frame" x="71" y="51" width="233" height="233"/>
+                                <rect key="frame" x="71" y="50" width="233" height="233"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="eyN-dY-GgL" secondAttribute="height" multiplier="1:1" id="gTh-9F-HzS"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9Z-Nf-czo">
-                                <rect key="frame" x="130" y="323" width="116" height="21"/>
+                                <rect key="frame" x="129" y="323" width="117" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="O9Z-Nf-czo" secondAttribute="height" multiplier="61:11" id="Bpb-Hv-A1O"/>
                                 </constraints>
@@ -322,6 +322,34 @@
             </objects>
             <point key="canvasLocation" x="901.60000000000002" y="-143.47826086956522"/>
         </scene>
+        <!--Scene Kit View Controller-->
+        <scene sceneID="XCl-iz-Fhe">
+            <objects>
+                <viewController id="p6c-qR-sKq" customClass="SceneKitViewController" customModule="SpyNetProto" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="X3p-AR-ndu"/>
+                        <viewControllerLayoutGuide type="bottom" id="h3E-aj-lhi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QIM-m7-oIT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="63e-xH-du1" customClass="SCNView">
+                                <rect key="frame" x="16" y="20" width="343" height="627"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="SceneView" destination="63e-xH-du1" id="Qan-gW-o3g"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Eu-pp-6m3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1530.4000000000001" y="-1621.4392803598203"/>
+        </scene>
         <!--Cam View Controller-->
         <scene sceneID="OGr-H4-KQO">
             <objects>
@@ -440,6 +468,7 @@
                         <outlet property="overlay" destination="bl1-eh-w5F" id="pWW-EQ-VFC"/>
                         <outlet property="radarMap" destination="abt-gZ-RaG" id="lsA-WH-UiG"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="gbM-Kv-P3I"/>
+                        <segue destination="p6c-qR-sKq" kind="show" identifier="toSceneKit" id="f68-dJ-az9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pi1-6c-PlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
