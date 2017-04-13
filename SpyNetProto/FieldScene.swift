@@ -26,7 +26,8 @@ import GameplayKit
 import QuartzCore
 import Firebase
 import CoreLocation
-
+//import MapKit
+import Mapbox
 
 protocol AddTargetProtocol: class {
     
@@ -51,7 +52,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     let background = SKSpriteNode()
 
     
-    
+ 
     
     var profileNode = ProfileNode()   // should profileNode be a struct
     var catsOpen: Bool  // switch this to a class method for profileNode class...
@@ -117,7 +118,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         fatalError("init(coder) is not used in this app")
     }
     
-    override init(size: CGSize) {
+  override init(size: CGSize) {
         
 //        self.categories = Model.shared.allCategories
         
@@ -126,7 +127,9 @@ class FieldScene: SKScene, AddTargetProtocol {
 //            allCategoryNodes.append(buttonNode)
 //        }
         
-        catsOpen = true
+
+        
+        self.catsOpen = true
         
         super.init(size: size)
         
@@ -136,7 +139,7 @@ class FieldScene: SKScene, AddTargetProtocol {
 //        Modelv2.shared.addTargetDelegate = self
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
+    
         
         background.size.width = size.width * 10
         background.size.height = size.height * 10
@@ -145,7 +148,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         addChild(background)
         
         
-        
+//        addMapScene(map: map)
         
         //        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
         //        self.addGestureRecognizer(swipe)
@@ -157,6 +160,18 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
 
+    func addMapScene(map: MGLMapView) {
+        
+        let scn = GameScene(create: true, map: map)
+        let node = SK3DNode(viewportSize: CGSize(width: 600, height: 600) )
+        node.position = CGPoint(x: 0, y: -100)
+        node.scnScene = scn
+        self.addChild(node)
+        
+        
+    }
+    
+    
     func addTargetSpritesNew(target: TargetNew) {
         
             let sprite = TargetSpriteNew(target: target)
@@ -180,7 +195,8 @@ class FieldScene: SKScene, AddTargetProtocol {
                 sprite.anchorGrav.categoryBitMask = validMask
                 sprite.physicsBody?.fieldBitMask = validMask
                 sprite.mask = validMask
-                sprite.applySize()
+                sprite.animateSize()
+//                sprite.applySize()
                 sprite.changePhysicsBody()
             }
         }

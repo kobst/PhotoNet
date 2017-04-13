@@ -19,6 +19,7 @@ import QuartzCore
 import Firebase
 import CoreLocation
 import Mapbox
+import SceneKit
 
 extension UIImage {
     var rounded: UIImage? {
@@ -68,6 +69,9 @@ func maskRoundedImage(image: UIImage, radius: Float) -> UIImage {
 
 
 
+
+// make avatar a URL.....
+// timestamp date
 
 
 class User {
@@ -275,7 +279,7 @@ class Eater38: TargetNew {
     
 }
 
-
+// not necessary, let vc get info direct from userTarget...
 
 class TargetNew {
     //    var sprite: SKSpriteNode?
@@ -294,6 +298,10 @@ class TargetNew {
 //    }
     
 //    var scaleAdjust = CGFloat(30000)  // was at 9500
+    
+    // get rid of position....
+    
+    
     var origPos: CGPoint
     var profileImage: UIImage
     var name: String
@@ -311,9 +319,89 @@ class TargetNew {
 }
         
 
+class TargetScnNode: SCNNode {
+    var target: TargetNew
+    var profileImageURL: String
+    //    var tweetData: TweetData?
+    
+    var anchorGrav = SKFieldNode()
+    var timeRing = SKShapeNode()
+    var mask: UInt32?
+    var iconNode: SKSpriteNode?
+    var nameLabel = SKLabelNode()
+//    var status: OnView = .offScreen
+    var category: Category?
+//    var distance: CGFloat {
+//        
+//        let newX = position.x - (Model.shared.myScreenOrigin.x)
+//        let newY = position.y - (Model.shared.myScreenOrigin.y)
+//        
+//        return sqrt((newX * newX) + (newY * newY))
+//        
+//    }
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    init(target: TargetNew){
+        self.target = target
+        let userTarget = target as! UserTarget
+        profileImageURL = userTarget.avatar
+        nameLabel.text = userTarget.userName
+        super.init()
+    
+        let geoplane = SCNPlane()
+        self.geometry = geoplane
+    }
+    
+    
+}
+
+
 
 
 class TargetSpriteNew: SKSpriteNode {
+    
+    func animateSize() {
+        
+        let adjSize = (distance / -2.0) + 150
+        
+        //   this needs to be log scale....
+        
+        if adjSize < 30 {
+            
+            self.alpha = 0
+            
+        }
+        
+        
+        if adjSize > 30 {
+            
+            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+        }
+        
+        
+        let roundedImage = target.profileImage
+        let myTexture = [SKTexture(image: roundedImage)]
+        
+        var actions = [SKAction]()
+        
+        
+        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+        let imageAction = SKAction.animate(with: myTexture, timePerFrame: 2.5)
+        
+        actions.append(growAction)
+        actions.append(imageAction)
+        
+        let group = SKAction.group(actions)
+        self.run(group)
+        
+        
+        
+    }
     
     func applySize() {
         
@@ -334,6 +422,14 @@ class TargetSpriteNew: SKSpriteNode {
         }
         
         self.nameLabel.isHidden = adjSize > 100 ? false : true
+        
+        
+//        let growAction = SKAction.resize(toWidth: adjSize, duration: 2.5)
+//        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+//        
+//        self.run(growAction)
+        
+        
         self.size.height = adjSize
         self.size.width = adjSize
         
@@ -408,8 +504,12 @@ class TargetSpriteNew: SKSpriteNode {
     init(target: TargetNew) {
         
         self.target = target
-        let roundedImage = target.profileImage
-        let myTexture = SKTexture(image: roundedImage)
+//        let roundedImage = target.profileImage
+//        let myTexture = SKTexture(image: roundedImage)
+        
+        let imageHolder = UIImage(named: "backdrop")?.circle
+        let solidTexture = SKTexture(image: imageHolder!)
+        
                 
         let scaledX = target.origPos.x * Model.shared.scaleAdjust
         let scaledY = target.origPos.y * Model.shared.scaleAdjust
@@ -429,6 +529,11 @@ class TargetSpriteNew: SKSpriteNode {
         let userTarget = target as! UserTarget
         profileImageURL = userTarget.avatar
         nameLabel.text = userTarget.userName
+        
+        
+
+        
+        
         
 //        
 //        switch target {
@@ -469,7 +574,8 @@ class TargetSpriteNew: SKSpriteNode {
 //            fatalError()
 //        }
         
-        super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+//        super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+        super.init(texture: solidTexture, color: UIColor(), size: CGSize(width: 10, height: 10))
         
         position = origPosition
 
@@ -487,6 +593,13 @@ class TargetSpriteNew: SKSpriteNode {
         
         self.addChild(timeRing)
         self.addChild(nameLabel)
+        
+        
+        animateSize()
+        
+        
+//        self.size.height = 10
+//        self.size.width = 10
         
     }
     

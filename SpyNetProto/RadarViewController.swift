@@ -9,7 +9,7 @@
 import UIKit
 import Mapbox
 import INTULocationManager
-
+import SpriteKit
 
 
 //class Blip: UIView {
@@ -118,16 +118,56 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
     @IBOutlet weak var overlay: UIView!
 
+   
+    @IBOutlet weak var sceneView: SKView!
+    
+    
     var myLocation: CLLocationCoordinate2D!
     
     var annotations: [MGLAnnotation] = []
+    
+    var targets: [UserTarget] = []
     
     @IBOutlet weak var radarMap: MGLMapView!
   
     
     @IBAction func goPlay(_ sender: Any) {
 //        performSegue(withIdentifier: "toMain", sender: nil)
-        performSegue(withIdentifier: "toSceneKit", sender: nil)
+//        performSegue(withIdentifier: "toSceneKit", sender: nil)
+        
+//        if radarMap.alpha == 0 {
+//            radarMap.alpha = 1
+//        }
+//        else {
+//            radarMap.alpha = 0
+//        }
+// 
+//        addOverlayBlips()
+        radarMap.alpha = radarMap.alpha == 0 ? 1 : 0
+        sceneView.alpha = 1
+        var scene: FieldScene!
+        
+        sceneView.isMultipleTouchEnabled = false
+        
+        // Create and configure the scene.
+        scene = FieldScene(size: sceneView.bounds.size)
+        scene.addMapScene(map: radarMap)
+//        scene.delegateMainVC = self
+        scene.scaleMode = .aspectFill
+        sceneView.presentScene(scene)
+        
+        for target in targets {
+            
+            let pt = radarMap.convert(target.annotation.coordinate, toPointTo: sceneView)
+            let node = TargetSpriteNew(target: target)
+            node.position = pt
+            scene.addChild(node)
+         
+        }
+        
+        
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -136,15 +176,40 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
             vc.map = radarMap
         }
         
+        if segue.identifier == "toMain" {
+            let vc = segue.destination as! MainViewController
+            vc.mapView = radarMap
+        }
+        
         
     }
     
-    func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
-        
-        addOverlayBlips()
-        
+//    func mapView(_ mapView: MGLMapView, didFinishLoading style: MGLStyle) {
+//        
+//        addOverlayBlips()
+//        
+//        
+//    }
+    
+    
+    
+    func makeSprites() {
+        for point in annotations {
+            let overlayPoint = radarMap.convert(point.coordinate, toPointTo: self.overlay)
+            let imageView = UIView()
+            
+            imageView.backgroundColor = UIColor.cyan
+            
+            imageView.frame.size.width = 20
+            imageView.frame.size.height = 20
+            imageView.layer.cornerRadius = 10
+            imageView.center = overlayPoint
+            overlay.addSubview(imageView)
+            
+        }
         
     }
+    
     
     func addOverlayBlips() {
         
@@ -161,12 +226,14 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
             imageView.center = overlayPoint
             overlay.addSubview(imageView)
             
+            
         }
 
     }
     
     func addTargetBlips(target: UserTarget) {
-        annotations.append(target.annotation)
+//        annotations.append(target.annotation)
+        targets.append(target)
         radarMap.addAnnotation(target.annotation)
         
 //        let point = MGLPointAnnotation()
@@ -212,6 +279,9 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    
+        sceneView.alpha = 0
+        
         
         myLocation = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
         
@@ -227,7 +297,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         radarMap.camera.pitch = 180
         
         view.addSubview(radarMap)
-        view.bringSubview(toFront: overlay)
+//        view.bringSubview(toFront: overlay)
 
         let centerScreenPoint: CGPoint = radarMap.convert(radarMap.centerCoordinate, toPointTo: self.overlay)
 
@@ -242,7 +312,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         imageView.layer.cornerRadius = 10
         imageView.center = centerScreenPoint
         overlay.addSubview(imageView)
-        
+        view.bringSubview(toFront: overlay)
         
         
         Model.shared.addBlipDelegate = self

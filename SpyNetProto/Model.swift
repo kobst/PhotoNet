@@ -15,6 +15,10 @@ import AVFoundation
 import ProjectOxfordFace
 import TwitterKit
 
+// change time to date...
+// extension on attempt to convert time to date...
+// maybe lat lon as doubles.......
+
 
 class Attempt {
     var lat: CLLocationDegrees
@@ -141,11 +145,20 @@ class Model {
     
     weak var addBlipDelegate: AddBlips?
     
+    weak var moveSpriteDelegate: MoveSprites?
+    
+    weak var addScnTargetDelegate: CreateScnTargets?
+    
+    weak var moveScnTargetDelegate: MoveSceneTargets?
     
     let ref = FIRDatabase.database().reference()
 //    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
     
 
+    func moveScnTargets(translation: CGPoint) {
+        
+        moveScnTargetDelegate?.handlePan(translation: translation)
+    }
     
     func fetchUser(UID: String, completionHandler: @escaping (User) -> ()){
         
@@ -219,7 +232,11 @@ class Model {
     }
     
     
-    
+    func moveSprites(translation: CGPoint) {
+        
+        moveSpriteDelegate?.handlePanFrom(translation: translation)
+        
+    }
     
     func getTargetsNewVerComp(myLocation: CLLocation, closure: (@escaping() -> Void)) {
         
@@ -252,6 +269,7 @@ class Model {
                         
                         self?.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
                         
+//                        self?.addScnTargetDelegate?.createScnTargets(target: userTarget)
                         
                         print(uids.count)
                     })

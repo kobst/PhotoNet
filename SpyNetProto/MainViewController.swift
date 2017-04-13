@@ -12,7 +12,7 @@ import CoreLocation
 import INTULocationManager
 import GeoFire
 import SceneKit
-
+import Mapbox
 
 protocol GoToDetail: class {
     
@@ -39,7 +39,7 @@ class MainViewController: UIViewController, GoToDetail {
     
     @IBOutlet weak var sceneView: SKView!
     
-    
+    var mapView: MGLMapView!
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
@@ -93,13 +93,17 @@ class MainViewController: UIViewController, GoToDetail {
         
         // Create and configure the scene.
         scene = FieldScene(size: sceneView.bounds.size)
+        scene.addMapScene(map: mapView)
         scene.delegateMainVC = self
         scene.scaleMode = .aspectFill
         sceneView.presentScene(scene)
 //        sceneView.overlaySKScene = sceneKitScene
     
+        
+        
         for userTarget in Model.shared.userTargetsByDistance {
-            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+//            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+            scene.addTargetSpritesNew(target: userTarget)
         }
 
         

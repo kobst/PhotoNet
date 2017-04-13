@@ -11,6 +11,7 @@ import SceneKit
 import Mapbox
 
 
+
 class SceneKitViewController: UIViewController {
     
     
@@ -18,24 +19,42 @@ class SceneKitViewController: UIViewController {
     
 
     var map: MGLMapView?
+
     
     
-    
+    func createScnTargets(target: TargetNew) {
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let scene = GameScene(create: true, map: map!)
-
+//        let spriteScene = FieldSceneOverlay(size: view.bounds.size)
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanFrom))
+        view.addGestureRecognizer(gestureRecognizer)
+        
         if let view = SceneView {
             view.scene = scene
-            view.allowsCameraControl = true
+            view.allowsCameraControl = false
             view.autoenablesDefaultLighting = false
             view.showsStatistics = true
             view.backgroundColor = UIColor.green
-            
-            
+//            view.overlaySKScene = spriteScene
+//            view.addGestureRecognizer(gestureRecognizer)
         }
+        
+        for userTarget in Model.shared.userTargetsByDistance {
+//            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+            scene.createScnTargets(target: userTarget)
+        }
+        
+        
+
+//        self.view.addGestureRecognizer(gestureRecognizer)
+        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,6 +62,15 @@ class SceneKitViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+
+    func handlePanFrom(recognizer: UIPanGestureRecognizer) {
+        if recognizer.state == .changed {
+            var translation = recognizer.translation(in: recognizer.view!)
+            translation = CGPoint(x: translation.x, y: -translation.y)
+            Model.shared.moveScnTargets(translation: translation)
+        }
+        
+    }
 
     /*
     // MARK: - Navigation

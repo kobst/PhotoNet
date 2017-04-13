@@ -334,6 +334,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nt4-Rh-rT5">
+                                <rect key="frame" x="164" y="318" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="63e-xH-du1" customClass="SCNView">
                                 <rect key="frame" x="16" y="20" width="343" height="627"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -344,11 +349,12 @@
                     </view>
                     <connections>
                         <outlet property="SceneView" destination="63e-xH-du1" id="Qan-gW-o3g"/>
+                        <segue destination="1Re-zk-VIG" kind="show" identifier="toRadar" id="gbR-bt-WXw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Eu-pp-6m3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1530.4000000000001" y="-1621.4392803598203"/>
+            <point key="canvasLocation" x="-2871" y="-1487"/>
         </scene>
         <!--Cam View Controller-->
         <scene sceneID="OGr-H4-KQO">
@@ -440,40 +446,56 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bl1-eh-w5F" userLabel="overlay">
-                                <rect key="frame" x="20" y="118" width="335" height="431"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Au5-cV-gaR" userLabel="sceneView" customClass="SKView">
+                                <rect key="frame" x="16" y="20" width="343" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="abt-gZ-RaG" userLabel="radarMap" customClass="MGLMapView">
-                                <rect key="frame" x="16" y="53" width="343" height="447"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="01l-Em-Acy" userLabel="overlay">
+                                <rect key="frame" x="0.0" y="10" width="375" height="647"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPj-Nf-s8u">
+                                        <rect key="frame" x="150" y="600" width="75" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.81149787299999998" green="0.1882954547" blue="0.21049893180000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="goPlay:" destination="1Re-zk-VIG" eventType="touchUpInside" id="s3q-jc-9mm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="abt-gZ-RaG" userLabel="radarMap" customClass="MGLMapView">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="styleURL__" value="mapbox://styles/kobstr/cj0itw9ku003l2smnu8wbz94o"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPj-Nf-s8u">
-                                <rect key="frame" x="164" y="600" width="75" height="47"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.81149787299999998" green="0.1882954547" blue="0.21049893180000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="goPlay:" destination="1Re-zk-VIG" eventType="touchUpInside" id="s3q-jc-9mm"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="abt-gZ-RaG" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="8A2-YJ-rgG"/>
+                            <constraint firstAttribute="trailing" secondItem="abt-gZ-RaG" secondAttribute="trailing" id="DOA-fM-ZpU"/>
+                            <constraint firstItem="abt-gZ-RaG" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leading" id="F5E-C3-xe3"/>
+                            <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="abt-gZ-RaG" secondAttribute="bottom" id="JBW-nW-5ro"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Au5-cV-gaR" secondAttribute="trailing" id="alt-4q-b2k"/>
+                            <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="Au5-cV-gaR" secondAttribute="bottom" id="mVA-ot-lPZ"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="pPc-PP-XjB"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leadingMargin" id="qpN-Bu-7la"/>
+                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="overlay" destination="bl1-eh-w5F" id="pWW-EQ-VFC"/>
+                        <outlet property="overlay" destination="01l-Em-Acy" id="DVf-SQ-onK"/>
                         <outlet property="radarMap" destination="abt-gZ-RaG" id="lsA-WH-UiG"/>
+                        <outlet property="sceneView" destination="Au5-cV-gaR" id="RC8-9p-E0I"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="gbM-Kv-P3I"/>
                         <segue destination="p6c-qR-sKq" kind="show" identifier="toSceneKit" id="f68-dJ-az9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pi1-6c-PlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4420" y="-767"/>
+            <point key="canvasLocation" x="-5362" y="-1167"/>
         </scene>
         <!--LoginVC-->
         <scene sceneID="LCB-N5-a0R">
@@ -567,6 +589,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="gbM-Kv-P3I"/>
+        <segue reference="S2o-dq-ElQ"/>
         <segue reference="x5Q-6F-CPj"/>
         <segue reference="bse-Cj-gNA"/>
     </inferredMetricsTieBreakers>

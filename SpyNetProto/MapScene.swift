@@ -15,13 +15,34 @@ import MapKit
 import Mapbox
 
 
-class GameScene: SCNScene {
+protocol CreateScnTargets: class {
+    func createScnTargets(target: TargetNew)
+}
+
+protocol MoveSceneTargets: class {
+    func handlePan(translation: CGPoint)
+}
+
+class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
     
 //    var geometryNodes = GeometryNodes()
     let cameraNode = SCNNode()
 //    var map = MKMapView()
 //    var map = MGLMapView()
 
+    
+    var targetNodes: [TargetScnNode] = []
+    
+    func handlePan(translation: CGPoint){
+        print(translation)
+        let adjustedX = translation.x / 100
+        let adjustedY = translation.y / 100
+        for node in targetNodes {
+            node.position.x += Float(adjustedX)
+            node.position.y += Float(adjustedY)
+        }
+        
+    }
     
     func snapshot(view: UIView) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, true, 0)
@@ -49,13 +70,41 @@ class GameScene: SCNScene {
         }
     }
     
+    
+    
+    func createScnTargets(target: TargetNew) {
+        let scnNode = TargetScnNode(target: target)
+        
+        Model.shared.fetchImage(stringURL: scnNode.profileImageURL) { (imageReturned) in
+            if let image = imageReturned {
+                scnNode.geometry?.firstMaterial?.diffuse.contents = image.circle
+                let randY = Int(arc4random()%2)
+                let randX = Int(arc4random()%2)
+                scnNode.position = SCNVector3(randX, randY, 0)
+                self.rootNode.addChildNode(scnNode)
+                self.targetNodes.append(scnNode)
+                
+            }
+        }
+        
+        
+    }
+    
     convenience init(create: Bool, map: MGLMapView) {
+
+
+        
         self.init()
         
 //        geometryNodes.addNodesTo(rootNode)
         
+        
+        Model.shared.moveScnTargetDelegate = self
+        
         let floor = SCNFloor()
+        let cube = SCNBox()
         let sphere = SCNSphere()
+        let plane = SCNPlane()
 //        floor.firstMaterial!.diffuse.contents = UIColor.white
 //        fillMap(mapView: map)
         
@@ -69,22 +118,38 @@ class GameScene: SCNScene {
         
         floor.firstMaterial?.diffuse.contents = snapshot(view: map)
         sphere.firstMaterial?.diffuse.contents = snapshot(view: map)
-        
+        plane.firstMaterial?.diffuse.contents = snapshot(view: map)
 //        floor.firstMaterial!.diffuse.contents = UIImage(named: "androidjones")
 //        floor.firstMaterial!.diffuse.contents = UIColor.red
 //        floor.firstMaterial!.reflective.contents = UIColor.white
         
-        let cube = SCNBox()
+      
         
+        cube.firstMaterial?.diffuse.contents = snapshot(view: map)
+        
+        let cubeNode = SCNNode(geometry: cube)
+        cube.height = 10
+        cube.width = 10
+        cubeNode.position = SCNVector3(0,0,0)
+
         
         let floorNode = SCNNode(geometry: floor)
         floorNode.position = SCNVector3(0,-5,0)
+        
+        plane.height = 6
+        plane.width = 3
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.position = SCNVector3(0,-1,0)
+        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
+//        planeNode.rotation = SCNVector4(1, 0, 0, Float(-M_PI / 5.0))
+        
 //        let sphereNode = SCNNode(geometry: sphere)
-        rootNode.addChildNode(floorNode)
-//        rootNode.addChildNode(sphereNode)
+//        rootNode.addChildNode(floorNode)
+//        rootNode.addChildNode(cubeNode)
+        rootNode.addChildNode(planeNode)
         cameraNode.camera = SCNCamera()
         //cameraNode.camera!.usesOrthographicProjection = true
-        cameraNode.position = SCNVector3(0, 5, -3)
+        cameraNode.position = SCNVector3(0, 0, 3)
 //        cameraNode.rotation = SCNVector4(1,0,0, Float(-M_PI / 16.0))
         
         rootNode.addChildNode(cameraNode)
@@ -115,6 +180,11 @@ class GameScene: SCNScene {
         lightNodeSpot.constraints = [SCNLookAtConstraint(target: emptyTarget )]
         
     }
+    
+    
+
+    
+    
     
 }
 
