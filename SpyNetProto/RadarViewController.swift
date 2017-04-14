@@ -143,8 +143,9 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 //        }
 // 
 //        addOverlayBlips()
-        radarMap.alpha = radarMap.alpha == 0 ? 1 : 0
+//        radarMap.alpha = radarMap.alpha == 0 ? 1 : 0
         sceneView.alpha = 1
+        view.bringSubview(toFront: sceneView)
         var scene: FieldScene!
         
         sceneView.isMultipleTouchEnabled = false
@@ -159,8 +160,9 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         for target in targets {
             
             let pt = radarMap.convert(target.annotation.coordinate, toPointTo: sceneView)
+            let pt2 = sceneView.convert(pt, to: sceneView.scene!)
             let node = TargetSpriteNew(target: target)
-            node.position = pt
+            node.position = pt2
             scene.addChild(node)
          
         }

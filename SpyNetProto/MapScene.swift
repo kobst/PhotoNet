@@ -33,6 +33,8 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
     
     var targetNodes: [TargetScnNode] = []
     
+    var planeNode = SCNNode()
+    
     func handlePan(translation: CGPoint){
         print(translation)
         let adjustedX = translation.x / 100
@@ -138,8 +140,9 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
         
         plane.height = 6
         plane.width = 3
-        let planeNode = SCNNode(geometry: plane)
+        planeNode = SCNNode(geometry: plane)
         planeNode.position = SCNVector3(0,-1,0)
+//        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
         planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
 //        planeNode.rotation = SCNVector4(1, 0, 0, Float(-M_PI / 5.0))
         

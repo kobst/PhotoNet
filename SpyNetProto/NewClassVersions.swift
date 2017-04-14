@@ -233,7 +233,9 @@ class UserTarget: TargetNew {
         let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
         let point = CGPoint(x: deltaLon, y: deltaLat)
         
-        super.init(position: point, image: UIImage(named: "spyGame")!, name: userName)
+        let imageHolder = UIImage(named: "backdrop")?.circle
+        
+        super.init(position: point, image: imageHolder!, name: userName)
         
     }
     
@@ -384,20 +386,47 @@ class TargetSpriteNew: SKSpriteNode {
         }
         
         
-        let roundedImage = target.profileImage
-        let myTexture = [SKTexture(image: roundedImage)]
         
-        var actions = [SKAction]()
+        Model.shared.fetchImage(stringURL: profileImageURL) { [weak self] returnedImage in
+            guard let validImage = returnedImage else {
+                return
+            }
+            
+            let firstImage = self?.texture
+            let roundedImage = validImage.circle
+            let myTexture = SKTexture(image: roundedImage!)
+            self?.texture = myTexture
+            
+            
+            var actions = [SKAction]()
+            
+            
+            let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+            let imageAction = SKAction.animate(with: [firstImage!, myTexture], timePerFrame: 2.5)
+            
+            actions.append(growAction)
+            actions.append(imageAction)
+            
+            let group = SKAction.group(actions)
+            self?.run(group)
+            
+        }
         
         
-        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
-        let imageAction = SKAction.animate(with: myTexture, timePerFrame: 2.5)
+//        let roundedImage = target.profileImage
+//        let myTexture = [SKTexture(image: roundedImage)]
         
-        actions.append(growAction)
-        actions.append(imageAction)
-        
-        let group = SKAction.group(actions)
-        self.run(group)
+//        var actions = [SKAction]()
+//        
+//        
+//        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+//        let imageAction = SKAction.animate(with: myTexture, timePerFrame: 2.5)
+//        
+//        actions.append(growAction)
+//        actions.append(imageAction)
+//        
+//        let group = SKAction.group(actions)
+//        self.run(group)
         
         
         
@@ -504,11 +533,11 @@ class TargetSpriteNew: SKSpriteNode {
     init(target: TargetNew) {
         
         self.target = target
-//        let roundedImage = target.profileImage
-//        let myTexture = SKTexture(image: roundedImage)
+        let roundedImage = target.profileImage
+        let myTexture = SKTexture(image: roundedImage)
         
-        let imageHolder = UIImage(named: "backdrop")?.circle
-        let solidTexture = SKTexture(image: imageHolder!)
+//        let imageHolder = UIImage(named: "backdrop")?.circle
+//        let solidTexture = SKTexture(image: imageHolder!)
         
                 
         let scaledX = target.origPos.x * Model.shared.scaleAdjust
@@ -532,7 +561,7 @@ class TargetSpriteNew: SKSpriteNode {
         
         
 
-        
+
         
         
 //        
@@ -575,7 +604,7 @@ class TargetSpriteNew: SKSpriteNode {
 //        }
         
 //        super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
-        super.init(texture: solidTexture, color: UIColor(), size: CGSize(width: 10, height: 10))
+        super.init(texture: myTexture, color: UIColor(), size: CGSize(width: 10, height: 10))
         
         position = origPosition
 
@@ -594,6 +623,14 @@ class TargetSpriteNew: SKSpriteNode {
         self.addChild(timeRing)
         self.addChild(nameLabel)
         
+//        Model.shared.fetchImage(stringURL: profileImageURL) { returnedImage in
+//            guard let validImage = returnedImage else {
+//                return
+//            }
+//            let roundedImage = validImage.circle
+//            let myTexture = SKTexture(image: roundedImage!)
+//            self.texture = myTexture
+//        }
         
         animateSize()
         

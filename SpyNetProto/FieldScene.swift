@@ -112,6 +112,9 @@ class FieldScene: SKScene, AddTargetProtocol {
 //        return filteredOut
 //    }
     
+
+    
+    
     
     
     required init?(coder aDecoder: NSCoder) {
@@ -163,6 +166,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     func addMapScene(map: MGLMapView) {
         
         let scn = GameScene(create: true, map: map)
+
         let node = SK3DNode(viewportSize: CGSize(width: 600, height: 600) )
         node.position = CGPoint(x: 0, y: -100)
         node.scnScene = scn
@@ -309,13 +313,13 @@ class FieldScene: SKScene, AddTargetProtocol {
         Model.shared.myScreenOrigin = CGPoint(x: 0, y: 0)
         
         
-        profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
-        self.addChild(profileNode)
+//        profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+//        self.addChild(profileNode)
         
 //        adjustCatNodes(point: profileNode.position)
-        for node in allCategoryNodes {
-            self.addChild(node)
-        }
+//        for node in allCategoryNodes {
+//            self.addChild(node)
+//        }
 //        categories = [.tweet, .eater38, .spyGame]
         
 //        makeCategoryNodes()
