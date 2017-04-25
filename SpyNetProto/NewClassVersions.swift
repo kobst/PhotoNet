@@ -78,14 +78,14 @@ class User {
     
     var uid: String
     var name: String
-    var avatar: String
+    var avatar: URL
     var blurb: String
     var timeStamp: Double
     
     init(uid: String) {
         self.uid = uid
         name = ""
-        avatar = ""
+        avatar = URL(string: "")!
         blurb = ""
         timeStamp = 0.0
     }
@@ -93,7 +93,8 @@ class User {
     init(snapshot: FIRDataSnapshot) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
-        avatar = value?["avatar"] as? String ?? ""
+        let avatarString = value?["avatar"] as? String ?? ""
+        avatar = URL(string: avatarString)!
         blurb = value?["blurb"] as? String ?? ""
         name = value?["name"] as? String ?? ""
         timeStamp = value?["timeStamp"] as? Double ?? 0.0
@@ -202,7 +203,7 @@ class UserTarget: TargetNew {
     
     var uid: String
     var userName: String
-    var avatar: String
+    var avatar: URL
     var blurb: String
     var time: Double
     var lat: CLLocationDegrees
@@ -214,7 +215,8 @@ class UserTarget: TargetNew {
     init(snapshot: FIRDataSnapshot, location: CLLocation) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
-        avatar = value?["avatar"] as? String ?? ""
+        let avatarString = value?["avatar"] as? String ?? ""
+        avatar = URL(string: avatarString)!
         blurb = value?["blurb"] as? String ?? ""
         userName = value?["name"] as? String ?? ""
         time = value?["timeStamp"] as? Double ?? 0.0
@@ -323,7 +325,7 @@ class TargetNew {
 
 class TargetScnNode: SCNNode {
     var target: TargetNew
-    var profileImageURL: String
+    var profileImageURL: URL
     //    var tweetData: TweetData?
     
     var anchorGrav = SKFieldNode()
@@ -404,8 +406,16 @@ class TargetSpriteNew: SKSpriteNode {
             let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
             let imageAction = SKAction.animate(with: [firstImage!, myTexture], timePerFrame: 2.5)
             
+            let fadeOut = SKAction.fadeOut(withDuration: 0)
+            let fadeIn = SKAction.fadeIn(withDuration: 2.5)
+            
+            
+            self?.run(fadeOut)
+            
             actions.append(growAction)
-            actions.append(imageAction)
+            actions.append(fadeIn )
+            
+
             
             let group = SKAction.group(actions)
             self?.run(group)
@@ -504,7 +514,7 @@ class TargetSpriteNew: SKSpriteNode {
 //    }
     
     var target: TargetNew
-    var profileImageURL: String
+    var profileImageURL: URL
     
     //    var tweetData: TweetData?
 

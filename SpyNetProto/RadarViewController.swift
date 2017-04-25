@@ -144,24 +144,39 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 // 
 //        addOverlayBlips()
 //        radarMap.alpha = radarMap.alpha == 0 ? 1 : 0
-        sceneView.alpha = 1
+        
+//        performSegue(withIdentifier: "toPlay", sender: nil)
+        
+        
+
+        
+       
+        
+        UIView.animate(withDuration: 2.0) {
+            self.overlay.alpha = 0
+            self.sceneView.alpha = 1
+            self.radarMap.alpha = 0.25
+            
+        }
+        
         view.bringSubview(toFront: sceneView)
+        
+        sceneView.alpha = 1
         var scene: FieldScene!
-        
         sceneView.isMultipleTouchEnabled = false
-        
-        // Create and configure the scene.
-        scene = FieldScene(size: sceneView.bounds.size)
-        scene.addMapScene(map: radarMap)
-//        scene.delegateMainVC = self
+        scene = FieldScene(size: sceneView.bounds.size, map: radarMap)
         scene.scaleMode = .aspectFill
         sceneView.presentScene(scene)
         
-        for target in targets {
-            
+        ////        scene.addMapScene(map: radarMap)
+        ////        scene.delegateMainVC = self
+//        for target in targets {
+        
+        for target in Model.shared.userTargets {
             let pt = radarMap.convert(target.annotation.coordinate, toPointTo: sceneView)
             let pt2 = sceneView.convert(pt, to: sceneView.scene!)
             let node = TargetSpriteNew(target: target)
+            Model.shared.targetSpriteNew.append(node)
             node.position = pt2
             scene.addChild(node)
          
@@ -183,6 +198,22 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
             vc.mapView = radarMap
         }
         
+        if segue.identifier == "toPlay" {
+            let vc = segue.destination as! PlayViewController
+            vc.mapView = radarMap
+            
+            
+           
+//            for target in targets {
+//                
+//                let pt = radarMap.convert(target.annotation.coordinate, toPointTo: vc.sceneView)
+//                target.origPos = pt
+//                
+//            }
+//            
+//             vc.targets = targets
+            
+        }
         
     }
     
@@ -236,6 +267,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     func addTargetBlips(target: UserTarget) {
 //        annotations.append(target.annotation)
         targets.append(target)
+
         radarMap.addAnnotation(target.annotation)
         
 //        let point = MGLPointAnnotation()
@@ -318,6 +350,9 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         
         
         Model.shared.addBlipDelegate = self
+        
+        
+        view.backgroundColor = UIColor.black
         
         Model.shared.getTargetsNewVerComp2(myLocation: Model.shared.myLocation!) {
             print("done in closure")

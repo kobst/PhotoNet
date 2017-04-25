@@ -60,32 +60,45 @@ class SplashViewController: UIViewController {
         super.viewDidLoad()
         
 //        let userUID = UserDefaults.standard.value(forKey: "uid")
-        let userUID = UserDefaults.standard.value(forKey: "uid") as! String?
-        
-        if let validUID = userUID {
-            print("validUID")
-            Model.shared.fetchUser(UID: validUID, completionHandler: { (user) in
-                Model.shared.loggedInUser = user
-                print("in fetch user \n \n \n fetch user")
-//                self.performSegue(withIdentifier: "toMain", sender: self)
-//                self.performSegue(withIdentifier: "toRadar", sender: self)
-                
-                self.getLocation()
-                
-                
-                
-                
-
-                
-            })
-        }
+//        let userUID = UserDefaults.standard.value(forKey: "uid") as! String?
 //
-        else {
-            print("not valid")
-            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
-            
-        }
+//        
+//        if let validUID = userUID {
+//            print("validUID")
+//            Model.shared.fetchUser(UID: validUID, completionHandler: { (user) in
+//                Model.shared.loggedInUser = user
+//                print("in fetch user \n \n \n fetch user")
+////                self.performSegue(withIdentifier: "toMain", sender: self)
+////                self.performSegue(withIdentifier: "toRadar", sender: self)
+//                
+//                self.getLocation()
+//                
+//                
+//                
+//                
+//
+//                
+//            })
+//        }
+////
+//        else {
+//            print("not valid")
+//            self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
+//            
+//        }
         
+        
+        
+        let userUIDfake = "Vk8DAXariGZWyIiVdO4apcatEo73"
+        Model.shared.fetchUser(UID: userUIDfake, completionHandler: { (user) in
+            Model.shared.loggedInUser = user
+            print("in fetch user \n \n \n fetch user")
+            //                self.performSegue(withIdentifier: "toMain", sender: self)
+            //                self.performSegue(withIdentifier: "toRadar", sender: self)
+            
+            self.getLocation()
+            }
+        )
     }
 
     override func didReceiveMemoryWarning() {

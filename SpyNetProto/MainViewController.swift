@@ -82,8 +82,10 @@ class MainViewController: UIViewController, GoToDetail {
      @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
     
     
-
-    
+//    init() {
+//        super.init()
+//    }
+//    
     override func viewDidLoad() {
         super.viewDidLoad()
   
@@ -92,7 +94,7 @@ class MainViewController: UIViewController, GoToDetail {
         sceneView.isMultipleTouchEnabled = false
         
         // Create and configure the scene.
-        scene = FieldScene(size: sceneView.bounds.size)
+        scene = FieldScene(size: sceneView.bounds.size, map: mapView)
         scene.addMapScene(map: mapView)
         scene.delegateMainVC = self
         scene.scaleMode = .aspectFill

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		039EC93ABD1D63436F41BBF9 /* Pods_SpyNetProto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */; };
+		841F4AA81EA8539200D2D8C4 /* GameSceneVer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */; };
+		841F4AAA1EAD926C00D2D8C4 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841F4AA91EAD926C00D2D8C4 /* PlayViewController.swift */; };
+		841F4AAC1EAEF9DB00D2D8C4 /* SceneKitTest.scn in Resources */ = {isa = PBXBuildFile; fileRef = 841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */; };
 		8421C8EF1E4FF18300B0B39B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */; };
 		8421C8F31E5110E200B0B39B /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8421C8F21E5110E200B0B39B /* SuccessViewController.swift */; };
 		843684FE1E988730002DBC85 /* fieldSceneOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843684FD1E988730002DBC85 /* fieldSceneOverlay.swift */; };
@@ -55,6 +58,9 @@
 /* Begin PBXFileReference section */
 		1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpyNetProto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62BAD37BB5CB014EB6EDE009 /* Pods-SpyNetProto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.release.xcconfig"; sourceTree = "<group>"; };
+		841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneVer2.swift; sourceTree = "<group>"; };
+		841F4AA91EAD926C00D2D8C4 /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
+		841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = SceneKitTest.scn; sourceTree = "<group>"; };
 		8421C8EE1E4FF18300B0B39B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		8421C8F21E5110E200B0B39B /* SuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 		843684FD1E988730002DBC85 /* fieldSceneOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = fieldSceneOverlay.swift; sourceTree = "<group>"; };
@@ -122,7 +128,9 @@
 			children = (
 				8439C9601E3A930C00E72B7A /* FieldSceneOld.swift */,
 				84CDF4211E71EF4500875CAF /* MapScene.swift */,
+				841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */,
 				8493B5521E5D32BA000DF58C /* FieldScene.swift */,
+				841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */,
 				843684FD1E988730002DBC85 /* fieldSceneOverlay.swift */,
 			);
 			name = Scenes;
@@ -134,6 +142,7 @@
 				846DCA8C1E3BBF7900CAE31E /* LoginVC.swift */,
 				84D2BC241E393894001EABC2 /* MainViewController.swift */,
 				844C1E081E83140500C47F26 /* RadarViewController.swift */,
+				841F4AA91EAD926C00D2D8C4 /* PlayViewController.swift */,
 				8421C8F21E5110E200B0B39B /* SuccessViewController.swift */,
 				844F99121E47D6CB005EDABB /* DetailViewController.swift */,
 				848A017C1E552C82002FBBAF /* TweetDetailViewController.swift */,
@@ -272,6 +281,7 @@
 				84D2BC2D1E393894001EABC2 /* Assets.xcassets in Resources */,
 				84D2BC281E393894001EABC2 /* Main.storyboard in Resources */,
 				84EDF5841E39905F0002D4EE /* GoogleService-Info.plist in Resources */,
+				841F4AAC1EAEF9DB00D2D8C4 /* SceneKitTest.scn in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +371,7 @@
 				843684FE1E988730002DBC85 /* fieldSceneOverlay.swift in Sources */,
 				846DCA871E3B9FF700CAE31E /* MapViewController.swift in Sources */,
 				844F990F1E47A7EC005EDABB /* SplashViewController.swift in Sources */,
+				841F4AA81EA8539200D2D8C4 /* GameSceneVer2.swift in Sources */,
 				84D2BC231E393894001EABC2 /* AppDelegate.swift in Sources */,
 				848A017D1E552C82002FBBAF /* TweetDetailViewController.swift in Sources */,
 				8493B5561E5E014F000DF58C /* TargetUsersSprites.swift in Sources */,
@@ -371,6 +382,7 @@
 				844F99131E47D6CB005EDABB /* DetailViewController.swift in Sources */,
 				848A017A1E53EFB2002FBBAF /* TwitterModel.swift in Sources */,
 				844C1E091E83140500C47F26 /* RadarViewController.swift in Sources */,
+				841F4AAA1EAD926C00D2D8C4 /* PlayViewController.swift in Sources */,
 				846DCA8F1E3BC43100CAE31E /* OnBoardViewController.swift in Sources */,
 				845F052E1E93373B00B12D0E /* SceneKitViewController.swift in Sources */,
 				8493B5531E5D32BA000DF58C /* FieldScene.swift in Sources */,

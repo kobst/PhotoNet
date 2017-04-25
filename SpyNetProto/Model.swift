@@ -51,9 +51,10 @@ class Attempt {
         let successString = dict["success"] as! String
         success = successString == "fail" ? false : true
         
-        let imageURL = dict["photo"] as! String
+        let imageUrlString = dict["photo"] as! String
+        let imageURL = URL(string: imageUrlString)
       
-        Model.shared.fetchImage(stringURL: imageURL) { (image) in
+        Model.shared.fetchImage(stringURL: imageURL!) { (image) in
             if let returnedImage = image {
                 
                 self.photo = returnedImage
@@ -150,6 +151,8 @@ class Model {
     weak var addScnTargetDelegate: CreateScnTargets?
     
     weak var moveScnTargetDelegate: MoveSceneTargets?
+    
+
     
     let ref = FIRDatabase.database().reference()
 //    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
@@ -379,10 +382,10 @@ class Model {
     
 
    
-    func fetchImage(stringURL: String, completionHandler: @escaping (UIImage?) -> ()) {
+    func fetchImage(stringURL: URL, completionHandler: @escaping (UIImage?) -> ()) {
         DispatchQueue.global(qos: .background).async {
-            let url = URL(string: stringURL)!
-            URLSession.shared.dataTask(with: url) { (data, _, _) in
+//            let url = URL(string: stringURL)!
+            URLSession.shared.dataTask(with: stringURL) { (data, _, _) in
                 guard let responseData = data else {
                     completionHandler(nil)
                     return

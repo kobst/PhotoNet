@@ -292,7 +292,7 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
         
 
         
-        let _ = faceClient?.detect(withUrl: userTarget.avatar, returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
+        let _ = faceClient?.detect(withUrl: String(describing: userTarget.avatar), returnFaceId: true, returnFaceLandmarks: false, returnFaceAttributes: nil, completionBlock: { (faces, error) in
             
             if (faces?.count)! > 0 {
                 self.targetFaceID = faces?[0].faceId

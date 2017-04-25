@@ -42,6 +42,7 @@ protocol AddTargetProtocol: class {
 class FieldScene: SKScene, AddTargetProtocol {
     
     weak var delegateMainVC: GoToDetail?
+    weak var delegateSceneKit: MoveSceneTargets?
     let center = CGPoint(x: 0, y: 0)
     let circlePath = UIBezierPath(arcCenter: CGPoint(x: 0, y: 0), radius: 10, startAngle: 0, endAngle: CGFloat(M_PI_2), clockwise: true)
     
@@ -53,7 +54,7 @@ class FieldScene: SKScene, AddTargetProtocol {
 
     
  
-    
+    var mapNode: SK3DNode
     var profileNode = ProfileNode()   // should profileNode be a struct
     var catsOpen: Bool  // switch this to a class method for profileNode class...
     
@@ -120,8 +121,13 @@ class FieldScene: SKScene, AddTargetProtocol {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
+//    
+//  override init(size: CGSize) {
     
-  override init(size: CGSize) {
+    
+    
+    
+    init(size: CGSize, map: MGLMapView) {
         
 //        self.categories = Model.shared.allCategories
         
@@ -129,10 +135,20 @@ class FieldScene: SKScene, AddTargetProtocol {
 //            let buttonNode = ButtonCategoryNode(categoryInit: cat)
 //            allCategoryNodes.append(buttonNode)
 //        }
-        
 
         
+        
         self.catsOpen = true
+        
+        
+        let scn = GameScene(create: true, map: map)
+        //        let scn = GameSceneVer2(create: true, map: map)
+        
+        
+        mapNode = SK3DNode(viewportSize: CGSize(width: 800, height: 800) )
+        mapNode.position = CGPoint(x: 0, y: -100)
+        mapNode.scnScene = scn
+        
         
         super.init(size: size)
         
@@ -160,14 +176,24 @@ class FieldScene: SKScene, AddTargetProtocol {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         
+//        let scn = GameScene(create: true, map: map)
+//        //        let scn = GameSceneVer2(create: true, map: map)
+//        
+//        
+//        mapNode = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
+//        mapNode.position = CGPoint(x: 0, y: -100)
+//        mapNode.scnScene = scn
+        self.addChild(mapNode)
+        
     }
     
 
     func addMapScene(map: MGLMapView) {
-        
-        let scn = GameScene(create: true, map: map)
+         let scn = GameScene(create: true, map: map)
+//        let scn = GameSceneVer2(create: true, map: map)
 
-        let node = SK3DNode(viewportSize: CGSize(width: 600, height: 600) )
+    
+        let node = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
         node.position = CGPoint(x: 0, y: -100)
         node.scnScene = scn
         self.addChild(node)
@@ -324,11 +350,11 @@ class FieldScene: SKScene, AddTargetProtocol {
         
 //        makeCategoryNodes()
         
-        gravField.position = Model.shared.myScreenOrigin
-        //                gravField.isEnabled = true
-        gravField.categoryBitMask = gravityCategory
-        gravField.strength = 1.0
-        self.background.addChild(gravField)
+//        gravField.position = Model.shared.myScreenOrigin
+//        //                gravField.isEnabled = true
+//        gravField.categoryBitMask = gravityCategory
+//        gravField.strength = 1.0
+//        self.background.addChild(gravField)
         
 
         
@@ -447,6 +473,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         var count = 0
         
+        
         for targetSprite in array2 {
             
 //            if categories.contains(targetSprite.category!) {
@@ -454,14 +481,14 @@ class FieldScene: SKScene, AddTargetProtocol {
                     
                     if targetSprite.parent == nil {
                         self.background.addChild(targetSprite)
-                        if let validMask = Model.shared.assignBitMask2()  {
-                            targetSprite.anchorGrav.isEnabled = false
-                            targetSprite.anchorGrav.strength = 1.0
-                            targetSprite.anchorGrav.categoryBitMask = validMask
-                            targetSprite.physicsBody?.fieldBitMask = validMask | gravityCategory
-                            targetSprite.mask = validMask
-                            //                            print(Model.shared.bitMaskOccupied)
-                        }
+//                        if let validMask = Model.shared.assignBitMask2()  {
+//                            targetSprite.anchorGrav.isEnabled = false
+//                            targetSprite.anchorGrav.strength = 1.0
+//                            targetSprite.anchorGrav.categoryBitMask = validMask
+//                            targetSprite.physicsBody?.fieldBitMask = validMask | gravityCategory
+//                            targetSprite.mask = validMask
+//                            //                            print(Model.shared.bitMaskOccupied)
+//                        }
                     }
                     
                     if let iconNode = targetSprite.iconNode {
@@ -469,7 +496,8 @@ class FieldScene: SKScene, AddTargetProtocol {
                     }
                     
                     targetSprite.applySize()
-                    targetSprite.changePhysicsBody()
+                    
+//                    targetSprite.changePhysicsBody()
     
                     count += 1
                 }
@@ -478,8 +506,8 @@ class FieldScene: SKScene, AddTargetProtocol {
                     if targetSprite.parent != nil {
                         
                         targetSprite.removeFromParent()
-                        targetSprite.anchorGrav.isEnabled = false
-                        Model.shared.removeBitMask2(mask: targetSprite.mask!)
+//                        targetSprite.anchorGrav.isEnabled = false
+//                        Model.shared.removeBitMask2(mask: targetSprite.mask!)
                     }
                 }
 //            }
@@ -508,6 +536,8 @@ class FieldScene: SKScene, AddTargetProtocol {
     
 
     func handlePanFrom(recognizer: UIPanGestureRecognizer) {
+        
+        
         if recognizer.state == .began {
             var touchLocation = recognizer.location(in: recognizer.view)
             touchLocation = self.convertPoint(fromView: touchLocation)
@@ -521,9 +551,17 @@ class FieldScene: SKScene, AddTargetProtocol {
             translation = CGPoint(x: translation.x, y: -translation.y)
 //            print("in handle pan changed.....\(translation)")
     
+            
+            
+            Model.shared.moveScnTargets(translation: translation)
+            
             Model.shared.myScreenOrigin = CGPoint(x: Model.shared.myScreenOrigin.x - translation.x, y: Model.shared.myScreenOrigin.y - translation.y)
             cam.position = Model.shared.myScreenOrigin
-            gravField.position = Model.shared.myScreenOrigin
+//            gravField.position = Model.shared.myScreenOrigin
+            
+            
+            
+            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
             
             profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
 
@@ -537,6 +575,12 @@ class FieldScene: SKScene, AddTargetProtocol {
 //            updateTargetSprByDistance()
             
 //            updateTargetSprNew()
+            
+//            let rand = Double(arc4random()%10)
+//            let randScale = rand/10.0
+//            
+//            cam.setScale(CGFloat(randScale))
+            
             updateTargetSpriteNewVersion()
 //            fade()
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)

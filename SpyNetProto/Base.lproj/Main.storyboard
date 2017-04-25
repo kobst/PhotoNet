@@ -322,6 +322,39 @@
             </objects>
             <point key="canvasLocation" x="901.60000000000002" y="-143.47826086956522"/>
         </scene>
+        <!--Play View Controller-->
+        <scene sceneID="Ezv-Xi-dnU">
+            <objects>
+                <viewController id="vef-jM-Qq1" customClass="PlayViewController" customModule="SpyNetProto" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ztM-tS-K2C"/>
+                        <viewControllerLayoutGuide type="bottom" id="YGU-Wt-cYQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ypa-kT-g6o">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a3q-0p-eEo" userLabel="sceneView" customClass="SKView">
+                                <rect key="frame" x="0.0" y="30" width="375" height="627"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="a3q-0p-eEo" firstAttribute="leading" secondItem="ypa-kT-g6o" secondAttribute="leading" id="Gjf-9R-Mzp"/>
+                            <constraint firstAttribute="trailing" secondItem="a3q-0p-eEo" secondAttribute="trailing" id="I5b-cO-lst"/>
+                            <constraint firstItem="YGU-Wt-cYQ" firstAttribute="top" secondItem="a3q-0p-eEo" secondAttribute="bottom" constant="10" id="NHk-Tj-9uA"/>
+                            <constraint firstItem="a3q-0p-eEo" firstAttribute="top" secondItem="ztM-tS-K2C" secondAttribute="bottom" constant="10" id="el9-o7-VrV"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="sceneView" destination="a3q-0p-eEo" id="VPy-o3-Mhw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DMq-F1-kQH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4303.1999999999998" y="-1952.473763118441"/>
+        </scene>
         <!--Scene Kit View Controller-->
         <scene sceneID="XCl-iz-Fhe">
             <objects>
@@ -447,8 +480,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Au5-cV-gaR" userLabel="sceneView" customClass="SKView">
-                                <rect key="frame" x="16" y="20" width="343" height="647"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="375" id="pne-Gm-DbQ"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="01l-Em-Acy" userLabel="overlay">
                                 <rect key="frame" x="0.0" y="10" width="375" height="647"/>
@@ -476,10 +512,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="abt-gZ-RaG" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="8A2-YJ-rgG"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leading" id="A5M-BR-dic"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="CvK-jb-XSe"/>
                             <constraint firstAttribute="trailing" secondItem="abt-gZ-RaG" secondAttribute="trailing" id="DOA-fM-ZpU"/>
                             <constraint firstItem="abt-gZ-RaG" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leading" id="F5E-C3-xe3"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leading" id="Gpn-Ml-CPd"/>
                             <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="abt-gZ-RaG" secondAttribute="bottom" id="JBW-nW-5ro"/>
+                            <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="Au5-cV-gaR" secondAttribute="bottom" id="Tux-9a-iUE"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="trailing" secondItem="mGe-HC-LSW" secondAttribute="trailingMargin" id="WwQ-SW-xiH"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Au5-cV-gaR" secondAttribute="trailing" id="alt-4q-b2k"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="eoB-lr-HuX"/>
+                            <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="Au5-cV-gaR" secondAttribute="bottom" id="gPw-om-WUT"/>
+                            <constraint firstItem="Au5-cV-gaR" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leadingMargin" id="iKJ-15-8bH"/>
+                            <constraint firstAttribute="trailing" secondItem="Au5-cV-gaR" secondAttribute="trailing" id="l2B-Uu-axx"/>
                             <constraint firstItem="hSk-Cf-U1G" firstAttribute="top" secondItem="Au5-cV-gaR" secondAttribute="bottom" id="mVA-ot-lPZ"/>
                             <constraint firstItem="Au5-cV-gaR" firstAttribute="top" secondItem="MDs-NL-E9b" secondAttribute="bottom" id="pPc-PP-XjB"/>
                             <constraint firstItem="Au5-cV-gaR" firstAttribute="leading" secondItem="mGe-HC-LSW" secondAttribute="leadingMargin" id="qpN-Bu-7la"/>
@@ -491,6 +536,7 @@
                         <outlet property="sceneView" destination="Au5-cV-gaR" id="RC8-9p-E0I"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="toMain" id="gbM-Kv-P3I"/>
                         <segue destination="p6c-qR-sKq" kind="show" identifier="toSceneKit" id="f68-dJ-az9"/>
+                        <segue destination="vef-jM-Qq1" kind="show" identifier="toPlay" animates="NO" id="WC2-gk-iev"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pi1-6c-PlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -589,7 +635,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="gbM-Kv-P3I"/>
-        <segue reference="S2o-dq-ElQ"/>
+        <segue reference="gbR-bt-WXw"/>
         <segue reference="x5Q-6F-CPj"/>
         <segue reference="bse-Cj-gNA"/>
     </inferredMetricsTieBreakers>
