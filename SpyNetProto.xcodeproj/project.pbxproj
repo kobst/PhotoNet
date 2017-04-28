@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		039EC93ABD1D63436F41BBF9 /* Pods_SpyNetProto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */; };
+		840EACF01EB03A7F0030F0D2 /* FieldSceneNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840EACEF1EB03A7F0030F0D2 /* FieldSceneNew.swift */; };
 		841F4AA81EA8539200D2D8C4 /* GameSceneVer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */; };
 		841F4AAA1EAD926C00D2D8C4 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841F4AA91EAD926C00D2D8C4 /* PlayViewController.swift */; };
 		841F4AAC1EAEF9DB00D2D8C4 /* SceneKitTest.scn in Resources */ = {isa = PBXBuildFile; fileRef = 841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */; };
@@ -58,6 +59,7 @@
 /* Begin PBXFileReference section */
 		1E79E1EAEFA4D74B163183FE /* Pods_SpyNetProto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpyNetProto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62BAD37BB5CB014EB6EDE009 /* Pods-SpyNetProto.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpyNetProto.release.xcconfig"; path = "Pods/Target Support Files/Pods-SpyNetProto/Pods-SpyNetProto.release.xcconfig"; sourceTree = "<group>"; };
+		840EACEF1EB03A7F0030F0D2 /* FieldSceneNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldSceneNew.swift; sourceTree = "<group>"; };
 		841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneVer2.swift; sourceTree = "<group>"; };
 		841F4AA91EAD926C00D2D8C4 /* PlayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = SceneKitTest.scn; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				84CDF4211E71EF4500875CAF /* MapScene.swift */,
 				841F4AA71EA8539200D2D8C4 /* GameSceneVer2.swift */,
 				8493B5521E5D32BA000DF58C /* FieldScene.swift */,
+				840EACEF1EB03A7F0030F0D2 /* FieldSceneNew.swift */,
 				841F4AAB1EAEF9DB00D2D8C4 /* SceneKitTest.scn */,
 				843684FD1E988730002DBC85 /* fieldSceneOverlay.swift */,
 			);
@@ -376,6 +379,7 @@
 				848A017D1E552C82002FBBAF /* TweetDetailViewController.swift in Sources */,
 				8493B5561E5E014F000DF58C /* TargetUsersSprites.swift in Sources */,
 				846DCA921E3BCD5C00CAE31E /* Model.swift in Sources */,
+				840EACF01EB03A7F0030F0D2 /* FieldSceneNew.swift in Sources */,
 				8421C8EF1E4FF18300B0B39B /* ProfileViewController.swift in Sources */,
 				84D0AF4B1E689D7900A281BE /* NewClassVersions.swift in Sources */,
 				8439C9611E3A930C00E72B7A /* FieldSceneOld.swift in Sources */,

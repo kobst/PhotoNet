@@ -164,11 +164,11 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
         plane.height = 6
         plane.width = 3
         planeNode = SCNNode(geometry: plane)
-        planeNode.position = SCNVector3(0, -3,-3)
+        planeNode.position = SCNVector3(0,-1,-3)
         
 //        planeNode.position = SCNVector3(0, -1,-3)
 //        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
-        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-70), y: 0, z: 0)
+        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
 //        planeNode.rotation = SCNVector4(1, 0, 0, Float(-M_PI / 5.0))
         
 //        let sphereNode = SCNNode(geometry: sphere)

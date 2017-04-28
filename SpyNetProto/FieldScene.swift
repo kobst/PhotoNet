@@ -29,17 +29,17 @@ import CoreLocation
 //import MapKit
 import Mapbox
 
-protocol AddTargetProtocol: class {
-    
-    //    func addTarget(target: Target)
-//    func addTargetSprites(target: Target)
-    func addTargetSpritesNew(target: TargetNew)
-    
-}
+//protocol AddTargetProtocol: class {
+//    
+//    //    func addTarget(target: Target)
+////    func addTargetSprites(target: Target)
+//    func addTargetSpritesNew(target: TargetNew)
+//    
+//}
 
 
 
-class FieldScene: SKScene, AddTargetProtocol {
+class FieldSceneVer2: SKScene, AddTargetProtocol {
     
     weak var delegateMainVC: GoToDetail?
     weak var delegateSceneKit: MoveSceneTargets?

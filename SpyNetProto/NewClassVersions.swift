@@ -439,6 +439,23 @@ class TargetSpriteNew: SKSpriteNode {
 //        self.run(group)
         
         
+//        for target in Model.shared.targetSpriteNew {
+//            let fact = 2.3
+//            let newX = Double(target.position.x) * CGFloat(fact)
+//            let newY = Double(target.position.y) * fact
+//            let newPt = CGPoint(CGFloat(newX), CGFloat(newY))
+//            target.position = newPt
+        
+// +a if x,y is positive, -a if x,y is negative...
+// get a by expanding out closest sprites until they accomodate new size...
+        
+        // start them all at smallest possible bubble size...
+        //keep distance between bubbl
+        
+//        }
+        
+        
+        
         
     }
     

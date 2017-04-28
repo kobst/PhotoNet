@@ -105,18 +105,18 @@ class PlayViewController: UIViewController, GoToDetail {
         //        sceneView.overlaySKScene = sceneKitScene
         
         
-        
-        for target in targets! {
-            
-            
-                let pt2 = sceneView.convert(target.origPos, to: sceneView.scene!)
-                let node = TargetSpriteNew(target: target)
-                Model.shared.targetSpriteNew.append(node)
-                node.position = pt2
-                print("adding node \(pt2)...")
-                scene.addChild(node)
-            
-        }
+//        
+//        for target in targets! {
+//            
+//            
+//                let pt2 = sceneView.convert(target.origPos, to: sceneView.scene!)
+//                let node = TargetSpriteNew(target: target)
+//                Model.shared.targetSpriteNew.append(node)
+//                node.position = pt2
+//                print("adding node \(pt2)...")
+//                scene.addChild(node)
+//            
+//        }
         
 //        for i in 0...10 {
 //            

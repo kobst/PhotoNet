@@ -145,13 +145,11 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 //        addOverlayBlips()
 //        radarMap.alpha = radarMap.alpha == 0 ? 1 : 0
         
-//        performSegue(withIdentifier: "toPlay", sender: nil)
-        
         
 
         
        
-        
+//        
         UIView.animate(withDuration: 2.0) {
             self.overlay.alpha = 0
             self.sceneView.alpha = 1
@@ -167,18 +165,18 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         scene = FieldScene(size: sceneView.bounds.size, map: radarMap)
         scene.scaleMode = .aspectFill
         sceneView.presentScene(scene)
-        
-        ////        scene.addMapScene(map: radarMap)
-        ////        scene.delegateMainVC = self
-//        for target in targets {
-        
+//
+//        ////        scene.addMapScene(map: radarMap)
+//        ////        scene.delegateMainVC = self
+////        for target in targets {
+//        
         for target in Model.shared.userTargets {
             let pt = radarMap.convert(target.annotation.coordinate, toPointTo: sceneView)
             let pt2 = sceneView.convert(pt, to: sceneView.scene!)
             let node = TargetSpriteNew(target: target)
             Model.shared.targetSpriteNew.append(node)
             node.position = pt2
-            scene.addChild(node)
+//            scene.addChild(node)
          
         }
         
@@ -200,18 +198,19 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         
         if segue.identifier == "toPlay" {
             let vc = segue.destination as! PlayViewController
+            
             vc.mapView = radarMap
             
             
            
-//            for target in targets {
-//                
-//                let pt = radarMap.convert(target.annotation.coordinate, toPointTo: vc.sceneView)
-//                target.origPos = pt
-//                
-//            }
-//            
-//             vc.targets = targets
+            for target in targets {
+                
+                let pt = radarMap.convert(target.annotation.coordinate, toPointTo: vc.sceneView)
+                target.origPos = pt
+                
+            }
+            
+             vc.targets = targets
             
         }
         
