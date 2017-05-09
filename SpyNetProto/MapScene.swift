@@ -21,9 +21,12 @@ protocol CreateScnTargets: class {
 
 protocol MoveSceneTargets: class {
     func handlePan(translation: CGPoint)
+    
+    func addPlaneNode()
 }
 
-    
+
+
 
 class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
     
@@ -37,6 +40,14 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
     var targetNodes: [TargetScnNode] = []
     
     var planeNode = SCNNode()
+    
+    var mapView: MGLMapView?
+    
+    func addPlaneNode() {
+        
+        planeNode.geometry?.firstMaterial?.diffuse.contents = snapshot(view: mapView!)
+    }
+    
     
     func handlePan(translation: CGPoint){
         print(translation)
@@ -124,6 +135,8 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
 //        geometryNodes.addNodesTo(rootNode)
         
         
+        mapView = map
+        
         Model.shared.moveScnTargetDelegate = self
         
         let floor = SCNFloor()
@@ -141,8 +154,8 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
 //        }
         
         
-        floor.firstMaterial?.diffuse.contents = snapshot(view: map)
-        sphere.firstMaterial?.diffuse.contents = snapshot(view: map)
+//        floor.firstMaterial?.diffuse.contents = snapshot(view: map)
+//        sphere.firstMaterial?.diffuse.contents = snapshot(view: map)
         plane.firstMaterial?.diffuse.contents = snapshot(view: map)
 //        floor.firstMaterial!.diffuse.contents = UIImage(named: "androidjones")
 //        floor.firstMaterial!.diffuse.contents = UIColor.red
@@ -150,7 +163,7 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
         
       
         
-        cube.firstMaterial?.diffuse.contents = snapshot(view: map)
+//        cube.firstMaterial?.diffuse.contents = snapshot(view: map)
         
         let cubeNode = SCNNode(geometry: cube)
         cube.height = 10
@@ -164,11 +177,11 @@ class GameScene: SCNScene, CreateScnTargets, MoveSceneTargets {
         plane.height = 6
         plane.width = 3
         planeNode = SCNNode(geometry: plane)
-        planeNode.position = SCNVector3(0,-1,-3)
+        planeNode.position = SCNVector3(0, -3,-3)
         
 //        planeNode.position = SCNVector3(0, -1,-3)
 //        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
-        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-60), y: 0, z: 0)
+        planeNode.eulerAngles = SCNVector3(x: GLKMathDegreesToRadians(-70), y: 0, z: 0)
 //        planeNode.rotation = SCNVector4(1, 0, 0, Float(-M_PI / 5.0))
         
 //        let sphereNode = SCNNode(geometry: sphere)

@@ -31,6 +31,9 @@ class GameSceneVer2: SCNScene, CreateScnTargets, MoveSceneTargets {
     
     var sphereNode = SCNNode()
     
+    var mapView: MGLMapView?
+    
+    
     func handlePan(translation: CGPoint){
         print(translation)
         let adjustedX = translation.x / 100
@@ -40,6 +43,11 @@ class GameSceneVer2: SCNScene, CreateScnTargets, MoveSceneTargets {
             node.position.y += Float(adjustedY)
         }
         
+    }
+    
+    func addPlaneNode() {
+        
+        planeNode.geometry?.firstMaterial?.diffuse.contents = snapshot(view: mapView!)
     }
     
     func snapshot(view: UIView) -> UIImage {
@@ -96,6 +104,7 @@ class GameSceneVer2: SCNScene, CreateScnTargets, MoveSceneTargets {
         
         //        geometryNodes.addNodesTo(rootNode)
         
+        mapView = map
         
         Model.shared.moveScnTargetDelegate = self
         

@@ -81,13 +81,13 @@ class FieldScene: SKScene, AddTargetProtocol {
     
         
         
-        let scn = GameScene(create: true, map: map)
-        //        let scn = GameSceneVer2(create: true, map: map)
+//        let scn = GameScene(create: true, map: map)
+//                let scn = GameSceneVer2(create: true, map: map)
         
         
         mapNode = SK3DNode(viewportSize: CGSize(width: 900, height: 900) )
         mapNode.position = CGPoint(x: 0, y: -100)
-        mapNode.scnScene = scn
+//        mapNode.scnScene = scn
         
         
         super.init(size: size)
@@ -113,7 +113,9 @@ class FieldScene: SKScene, AddTargetProtocol {
         //        self.addGestureRecognizer(swipe)
         self.isUserInteractionEnabled = true
         
-        self.addChild(mapNode)
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        
+//        self.addChild(mapNode)
         
     }
     
@@ -127,6 +129,7 @@ class FieldScene: SKScene, AddTargetProtocol {
         node.position = CGPoint(x: 0, y: -100)
         node.scnScene = scn
         self.addChild(node)
+      
         
         
     }
@@ -271,67 +274,55 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     func updateTargetSpriteNewVersion() {
-        
-        //        let array = filteredTargetSprites
+
         let array2 = targetSpritesByDistance
-        let maxSpritesViewable = array2.count > 10 ? 10 : array2.count
-        
-        var count = 0
+
         
         
         for targetSprite in array2 {
             
-            //            if categories.contains(targetSprite.category!) {
-            if count < maxSpritesViewable {
-                
-                if targetSprite.parent == nil {
-                    self.background.addChild(targetSprite)
-    
-                }
-                
-                if let iconNode = targetSprite.iconNode {
-                    targetSprite.addChild(iconNode)
-                }
-                
+
                 targetSprite.applySize()
                 
-                //                    targetSprite.changePhysicsBody()
+                targetSprite.changePhysicsBody()
                 
-                count += 1
-            }
-                //                }
-            else {
-                if targetSprite.parent != nil {
-                    
-                    targetSprite.removeFromParent()
-                    //                        targetSprite.anchorGrav.isEnabled = false
-                    //                        Model.shared.removeBitMask2(mask: targetSprite.mask!)
-                }
-            }
-            //            }
+                print("\(targetSprite.size.width)---\(targetSprite.distance)")
             
-        }
+
+                
+            }
+        
+            
+        
     }
-    //            else {
-    //                if targetSprite.parent != nil {
-    //                    targetSprite.removeFromParent()
-    //                    Model.shared.removeBitMask2(mask: targetSprite.mask!)
-    //                }
-    //
-    //            }
+
+    // when you already have a set of sprites that are near enough each other.
+    // if (max rad * 2) > distance btw sprites then in group.
+    // or max rad * 4 > distance bc both sprites can be pushed to one rad length from another right next to it in the same vector. pushedRadLengthSprite2 + radLengthSprite2 + radLengthSprite1 + pushedradLengthSprite1
     
     
     
-    //        }
-    //
-    //
-    //    }
-    
-    
-    
-    
-    
-    
+//    func seperateSprites(sprites: [TargetSpriteNew]) {
+//        
+//        for sprite in sprites {
+//            var totalVector = CGPoint(x: 0, y: 0)
+//            
+//            for sprite2 in sprites {
+//                
+//                let deltaX = sprite.position.x - sprite2.position.x
+//                let deltaY = sprite.position.y - sprite2.position.y
+//                let vector = CGPoint(x: deltaX, y: deltaY)
+//                
+//                
+//
+//                
+//            }
+//        }
+//        
+//        
+//    }
+
+
     
     func handlePanFrom(recognizer: UIPanGestureRecognizer) {
         

@@ -20,6 +20,8 @@ class PlayViewController: UIViewController, GoToDetail {
     
     var selectedTarget: TargetSpriteNew?
     
+    @IBOutlet weak var overlay: UIView!
+    
     var targets: [UserTarget]!
     //    var sceneView: SCNView?
     
@@ -70,14 +72,43 @@ class PlayViewController: UIViewController, GoToDetail {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+//        override func viewWillAppear(_ animated: Bool) {
+//            super.viewWillAppear(animated)
+        
+        
+        
+//        if fieldScene.children.count > 0 {
+//            return
+//        }
+        
+        
+        view.bringSubview(toFront: overlay)
+        overlay.isUserInteractionEnabled = false
+        
         for target in targets {
+            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
+            let blip = Blip(pos: blipPt)
+            overlay.addSubview(blip)
+            
+            
             let pt = mapView.convert(target.annotation.coordinate, toPointTo: sceneView)
             let pt2 = sceneView.convert(pt, to: sceneView.scene!)
             let node = TargetSpriteNew(target: target)
             Model.shared.targetSpriteNew.append(node)
             node.position = pt2
+            node.origPos = pt2
             fieldScene.addChild(node)
+            node.isHidden = true
+            node.animateSize()
+            
+            
+            UIView.animate(withDuration: 1.5, animations: { 
+                blip.alpha = 0
+            })
         }
+        
+        
+        
     }
 
     override func viewDidLoad() {

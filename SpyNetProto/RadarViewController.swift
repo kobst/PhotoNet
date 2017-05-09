@@ -56,6 +56,13 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
     @IBAction func goPlay(_ sender: Any) {
 
+        addOverlayBlips()
+        
+        
+        
+        
+        
+        
         performSegue(withIdentifier: "toPlay", sender: nil)
     }
 
@@ -96,22 +103,30 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         }
 
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
 
 
     func addOverlayBlips() {
 
-        for point in annotations {
+        for target in targets {
 
-            let overlayPoint = radarMap.convert(point.coordinate, toPointTo: self.overlay)
-            let imageView = UIView()
-
-            imageView.backgroundColor = UIColor.cyan
-
-            imageView.frame.size.width = 20
-            imageView.frame.size.height = 20
-            imageView.layer.cornerRadius = 10
-            imageView.center = overlayPoint
-            overlay.addSubview(imageView)
+            
+            let overlayPoint = radarMap.convert(target.annotation.coordinate, toPointTo: self.overlay)
+//            let imageView = UIView()
+//
+//            imageView.backgroundColor = UIColor.cyan
+//
+//            imageView.frame.size.width = 20
+//            imageView.frame.size.height = 20
+//            imageView.layer.cornerRadius = 10
+//            imageView.center = overlayPoint
+            
+            let blip = Blip(pos: overlayPoint)
+            
+            overlay.addSubview(blip)
 
 
         }
