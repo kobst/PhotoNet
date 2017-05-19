@@ -113,12 +113,22 @@ class Model {
 //    var sceneTweets: [TweetData] = []
 //    var sceneTargets: [Target] = []
     
-    var targetSpriteNew: [TargetSpriteNew] = []
+    var targetSpriteNew: [TargetSpriteNew] = [] {
+        didSet {
+            if targetSpriteNew.count > userTargets.count {
+                ()
+            }
+        }
+    }
     
     
     var myLat: CGFloat?
     var myLong: CGFloat?
+    
+    // make this cllocation2d....
     var myLocation: CLLocation?
+    var myDraggedLocation: CLLocationCoordinate2D?
+    
     var myHeading: CLLocationDirection?
     var myScreenOrigin = CGPoint(x: 0, y: 0)
     var dateFormatter = DateFormatter()

@@ -203,7 +203,11 @@ class Blip: UIView {
 
     
     init(pos: CGPoint){
-        let rect = CGRect(x: Double(pos.x), y: Double(pos.y), width: 20, height: 20)
+        let newPosX = pos.x - 10
+        let newPosY = pos.y - 10
+//        let rect = CGRect(x: Double(pos.x), y: Double(pos.y), width: 20, height: 20)
+        let rect = CGRect(x: newPosX, y: newPosY, width: 20, height: 20)
+    
         super.init(frame: rect)
         self.backgroundColor = UIColor.cyan
         self.frame.size.width = 20
@@ -392,6 +396,10 @@ class TargetScnNode: SCNNode {
 
 class TargetSpriteNew: SKSpriteNode {
     
+    
+    static var allTargetSpriteNew = [TargetSpriteNew]()
+    
+    
     func animateSize() {
         
 //      var adjSize = ((distance * distance) / -2.0) + 150
@@ -463,39 +471,7 @@ class TargetSpriteNew: SKSpriteNode {
             
         }
         
-        
-//        let roundedImage = target.profileImage
-//        let myTexture = [SKTexture(image: roundedImage)]
-        
-//        var actions = [SKAction]()
-//        
-//        
-//        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
-//        let imageAction = SKAction.animate(with: myTexture, timePerFrame: 2.5)
-//        
-//        actions.append(growAction)
-//        actions.append(imageAction)
-//        
-//        let group = SKAction.group(actions)
-//        self.run(group)
-        
-        
-//        for target in Model.shared.targetSpriteNew {
-//            let fact = 2.3
-//            let newX = Double(target.position.x) * CGFloat(fact)
-//            let newY = Double(target.position.y) * fact
-//            let newPt = CGPoint(CGFloat(newX), CGFloat(newY))
-//            target.position = newPt
-        
-// +a if x,y is positive, -a if x,y is negative...
-// get a by expanding out closest sprites until they accomodate new size...
-        
-        // start them all at smallest possible bubble size...
-        //keep distance between bubbl
-        
-//        }
-        
-        
+
         
         
     }
@@ -504,59 +480,26 @@ class TargetSpriteNew: SKSpriteNode {
 //        
 //        var adjSize = (distance / -2.0) + 150
         
-        var adjSize = ((distance * distance) / -100) + 200
-        var adjD = 500 - distance
-//        var adjSize2 = (adjD * adjD) / 1000
-//////
-//        var adjSize2 = (distance / -2.0) + 125
-        
-        
-        var adjSize2 = ((distance * distance) / -100) + 125
-//        //   this needs to be log scale....
-//        
-//        if adjSize < 30 {
-//            
-//            self.alpha = 0
-//            
-//        }
-//        
-//        
-//        if adjSize > 30 {
-//            
-//            self.alpha = ((adjSize - 75) / 50.0) + 0.5
-//        }
-//        
-//        self.nameLabel.isHidden = adjSize > 100 ? false : true
-//        
-//        adjSize = 30
-//        
-        
+//        var adjSize = ((distance * distance) / -100) + 200
+        let adjD = 400 - distance
+        var adjSize2 = (adjD * adjD) / 1000
         
         //   this needs to be log scale....
         
-        if adjSize < 25 {
+        print(adjSize2)
+        
+        if adjSize2 < 25 {
             
             self.alpha = 0.25
             adjSize2 = 25
             
         }
         
-//        if adjSize > 25 && adjSize < 70 {
-//            self.alpha = 0.5
-//            adjSize = 50
-//            
-//        }
-        
-        if adjSize > 25 {
+        if adjSize2 > 25 {
             
-            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+            self.alpha = ((adjSize2 / 50.0) + 0.25)
         }
-        
-//        let growAction = SKAction.resize(toWidth: adjSize, duration: 2.5)
-//        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
-//        
-//        self.run(growAction)
-        
+    
         
         self.size.height = adjSize2
         self.size.width = adjSize2
@@ -570,7 +513,7 @@ class TargetSpriteNew: SKSpriteNode {
     func changePhysicsBody() {
         
         self.physicsBody = nil
-        self.position = self.origPos!
+//        self.position = self.origPos!
         
         if self.size.width < 70 {
             
@@ -579,9 +522,13 @@ class TargetSpriteNew: SKSpriteNode {
                 
                 self.mask = nil
                 
+                self.position = self.origPos!
             }
            
-       
+//            self.mask = nil
+            
+            self.position = self.origPos!
+            
             
         }
         
@@ -600,12 +547,15 @@ class TargetSpriteNew: SKSpriteNode {
             body.angularVelocity = 0
             body.linearDamping = 1
             body.angularDamping = 1
+            body.pinned = true
+        
             
             self.physicsBody = body
+            self.nameLabel.isHidden = false
             
 //            self.position = self.origPos!
             
-    
+
           if self.mask == nil {
                 
                 if let validMask = Model.shared.assignBitMask2()  {
@@ -633,14 +583,7 @@ class TargetSpriteNew: SKSpriteNode {
         case offScreen
         case onScreen
     }
-//    
-//    enum Category: String {
-//        case spyGame = "spyGame"
-//        case tweet = "twitter"
-//        case eater38 = "eater38"
-//        case timeOutEvent = "timeOut"
-//        case other = "other"
-//    }
+
     
     var target: TargetNew
     var profileImageURL: URL
@@ -670,23 +613,12 @@ class TargetSpriteNew: SKSpriteNode {
     }
     
   
-    init(target: TargetNew) {
+    init(target: TargetNew, pos: CGPoint) {
         
         self.target = target
         let roundedImage = target.profileImage
         let myTexture = SKTexture(image: roundedImage)
 
-//        let imageHolder = UIImage(named: "backdrop")?.circle
-//        let solidTexture = SKTexture(image: imageHolder!)
-        
-                
-//        let scaledX = target.origPos.x * Model.shared.scaleAdjust
-//        let scaledY = target.origPos.y * Model.shared.scaleAdjust
-//        
-//        let origPosition = CGPoint(x: scaledX, y: scaledY)
-        
-        
-        
         nameLabel.fontName = "Chalkduster"
         nameLabel.fontSize = 12
         nameLabel.horizontalAlignmentMode = .center
@@ -701,57 +633,12 @@ class TargetSpriteNew: SKSpriteNode {
         profileImageURL = userTarget.avatar
         nameLabel.text = userTarget.userName
         
-//        self.isHidden = true
-
-
-        
-        
-//        
-//        switch target {
-//            
-//        case is TweetTarget:
-//            let tweetTarget = target as! TweetTarget
-//            profileImageURL = tweetTarget.idImageURL
-//            nameLabel.text = tweetTarget.senderID
-//            category = .tweet
-//            
-//            let twitterIcon = UIImage(named: "twitter")
-//            let texture = SKTexture(image: twitterIcon!)
-//            let twitterNode = SKSpriteNode(texture: texture, color: UIColor(), size: CGSize(width: 25, height: 25))
-//            twitterNode.position = CGPoint(x: 5, y: 5)
-//            
-//            
-//        case is UserTarget:
-//            let userTarget = target as! UserTarget
-//            profileImageURL = userTarget.avatar
-//            nameLabel.text = userTarget.userName
-//            category = .spyGame
-//        
-//        case is Eater38:
-//            let eaterRest = target as! Eater38
-//            profileImageURL = ""
-//            nameLabel.text = eaterRest.restName
-//            category = .eater38
-//        
-//            
-//        case is TimeOutTarget:
-//            let event = target as! TimeOutTarget
-//            profileImageURL = ""
-//            nameLabel.text = event.name
-//            category = .timeOutEvent
-//            
-//            
-//        default:
-//            fatalError()
-//        }
-        
-//        super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
         super.init(texture: myTexture, color: UIColor(), size: CGSize(width: 25, height: 25))
         
 //        super.init(color: UIColor.cyan, size: CGSize(width: 25, height: 25))
         
-//        position = origPosition
-//        origPos = position
+        position = pos
+        origPos = position
         
 
         let path = CGMutablePath()
@@ -769,21 +656,12 @@ class TargetSpriteNew: SKSpriteNode {
         self.addChild(timeRing)
         self.addChild(nameLabel)
         
-//        Model.shared.fetchImage(stringURL: profileImageURL) { returnedImage in
-//            guard let validImage = returnedImage else {
-//                return
-//            }
-//            let roundedImage = validImage.circle
-//            let myTexture = SKTexture(image: roundedImage!)
-//            self.texture = myTexture
-//        }
         
-//        applySize()
-//        animateSize()
+        TargetSpriteNew.allTargetSpriteNew.append(self)
         
         
-//        self.size.height = 10
-//        self.size.width = 10
+        
+    
         
     }
     
@@ -793,6 +671,446 @@ class TargetSpriteNew: SKSpriteNode {
 
 
 
+//
+//class TargetSpriteNew: SKSpriteNode {
+//    
+//    
+//    static var allTargetSpriteNew = [TargetSpriteNew]()
+//    
+//    
+//    func animateSize() {
+//        
+//        //      var adjSize = ((distance * distance) / -2.0) + 150
+//        
+//        
+//        
+//        //        var adjSize = ((distance * distance) / -100) + 150
+//        
+//        var adjSize = ((distance * distance) / -100) + 125
+//        
+//        
+//        
+//        //   this needs to be log scale....
+//        
+//        if adjSize < 25 {
+//            
+//            adjSize = 25
+//            
+//        }
+//        
+//        if adjSize > 25 && adjSize < 70 {
+//            self.alpha = 0.5
+//            adjSize = 50
+//            
+//        }
+//        
+//        if adjSize > 70 {
+//            
+//            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+//        }
+//        
+//        print("\(adjSize)...dist...\(distance)")
+//        //        adjSize = 30
+//        
+//        Model.shared.fetchImage(stringURL: profileImageURL) { [weak self] returnedImage in
+//            guard let validImage = returnedImage else {
+//                return
+//            }
+//            
+//            //            let firstImage = self?.texture
+//            self?.isHidden = false
+//            
+//            let roundedImage = validImage.circle
+//            let myTexture = SKTexture(image: roundedImage!)
+//            self?.texture = myTexture
+//            
+//            
+//            var actions = [SKAction]()
+//            
+//            
+//            let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 1.5)
+//            //            let imageAction = SKAction.animate(with: [firstImage!, myTexture], timePerFrame: 2.5)
+//            
+//            let fadeOut = SKAction.fadeOut(withDuration: 0)
+//            let fadeIn = SKAction.fadeIn(withDuration: 1.5)
+//            
+//            // make fade to alpha and grow to size simultaneous as function
+//            
+//            
+//            self?.run(fadeOut)
+//            
+//            actions.append(growAction)
+//            actions.append(fadeIn )
+//            
+//            
+//            
+//            let group = SKAction.group(actions)
+//            self?.run(group)
+//            
+//        }
+//        
+//        
+//        //        let roundedImage = target.profileImage
+//        //        let myTexture = [SKTexture(image: roundedImage)]
+//        
+//        //        var actions = [SKAction]()
+//        //
+//        //
+//        //        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+//        //        let imageAction = SKAction.animate(with: myTexture, timePerFrame: 2.5)
+//        //
+//        //        actions.append(growAction)
+//        //        actions.append(imageAction)
+//        //
+//        //        let group = SKAction.group(actions)
+//        //        self.run(group)
+//        
+//        
+//        //        for target in Model.shared.targetSpriteNew {
+//        //            let fact = 2.3
+//        //            let newX = Double(target.position.x) * CGFloat(fact)
+//        //            let newY = Double(target.position.y) * fact
+//        //            let newPt = CGPoint(CGFloat(newX), CGFloat(newY))
+//        //            target.position = newPt
+//        
+//        // +a if x,y is positive, -a if x,y is negative...
+//        // get a by expanding out closest sprites until they accomodate new size...
+//        
+//        // start them all at smallest possible bubble size...
+//        //keep distance between bubbl
+//        
+//        //        }
+//        
+//        
+//        
+//        
+//    }
+//    
+//    func applySize() {
+//        //
+//        //        var adjSize = (distance / -2.0) + 150
+//        
+//        var adjSize = ((distance * distance) / -100) + 200
+//        var adjD = 500 - distance
+//        //        var adjSize2 = (adjD * adjD) / 1000
+//        //////
+//        //        var adjSize2 = (distance / -2.0) + 125
+//        
+//        
+//        var adjSize2 = ((distance * distance) / -100) + 125
+//        //        //   this needs to be log scale....
+//        //
+//        //        if adjSize < 30 {
+//        //
+//        //            self.alpha = 0
+//        //
+//        //        }
+//        //
+//        //
+//        //        if adjSize > 30 {
+//        //
+//        //            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+//        //        }
+//        //
+//        //        self.nameLabel.isHidden = adjSize > 100 ? false : true
+//        //
+//        //        adjSize = 30
+//        //
+//        
+//        
+//        //   this needs to be log scale....
+//        
+//        if adjSize < 25 {
+//            
+//            self.alpha = 0.25
+//            adjSize2 = 25
+//            
+//        }
+//        
+//        //        if adjSize > 25 && adjSize < 70 {
+//        //            self.alpha = 0.5
+//        //            adjSize = 50
+//        //
+//        //        }
+//        
+//        if adjSize > 25 {
+//            
+//            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+//        }
+//        
+//        //        let growAction = SKAction.resize(toWidth: adjSize, duration: 2.5)
+//        //        let growAction = SKAction.resize(toWidth: adjSize, height: adjSize, duration: 2.5)
+//        //
+//        //        self.run(growAction)
+//        
+//        
+//        self.size.height = adjSize2
+//        self.size.width = adjSize2
+//        
+//        
+//        
+//    }
+//    
+//    
+//    func changeSizeAndBody() {
+//        
+//        
+//        var adjSize = ((distance * distance) / -100) + 125
+//        
+//        if adjSize < 25 {
+//            
+//            self.alpha = 0.25
+//            adjSize = 25
+//            
+//        }
+//        
+//        
+//        if adjSize > 25 {
+//            
+//            self.alpha = ((adjSize - 75) / 50.0) + 0.5
+//        }
+//        
+//        if adjSize > 75 {
+//            
+//            
+//        }
+//        
+//    }
+//    
+//    
+//    
+//    
+//    
+//    func changePhysicsBody() {
+//        
+//        self.physicsBody = nil
+//        self.position = self.origPos!
+//        
+//        if self.size.width < 70 {
+//            
+//            if self.mask != nil {
+//                Model.shared.removeBitMask2(mask: self.mask!)
+//                
+//                self.mask = nil
+//                
+//            }
+//            
+//            
+//            
+//        }
+//        
+//        if self.size.width > 70 {
+//            
+//            let size = self.size.width
+//            
+//            let body = SKPhysicsBody(circleOfRadius: size / 2.0)
+//            
+//            body.affectedByGravity = true
+//            body.isDynamic = true
+//            body.density = 0.5
+//            body.friction = 1
+//            body.restitution = 1.0
+//            body.allowsRotation = false
+//            body.angularVelocity = 0
+//            body.linearDamping = 1
+//            body.angularDamping = 1
+//            
+//            self.physicsBody = body
+//            
+//            //            self.position = self.origPos!
+//            
+//            
+//            
+//            
+//            
+//            
+//            if self.mask == nil {
+//                
+//                if let validMask = Model.shared.assignBitMask2()  {
+//                    self.anchorGrav.categoryBitMask = validMask
+//                    self.anchorGrav.position = self.origPos!
+//                    self.physicsBody?.fieldBitMask = validMask
+//                    self.mask = validMask
+//                }
+//                
+//                
+//            }
+//            
+//            
+//            
+//            
+//        }
+//        
+//        
+//        
+//    }
+//    
+//    
+//    
+//    enum OnView {
+//        case offScreen
+//        case onScreen
+//    }
+//    //
+//    //    enum Category: String {
+//    //        case spyGame = "spyGame"
+//    //        case tweet = "twitter"
+//    //        case eater38 = "eater38"
+//    //        case timeOutEvent = "timeOut"
+//    //        case other = "other"
+//    //    }
+//    
+//    var target: TargetNew
+//    var profileImageURL: URL
+//    var origPos: CGPoint?
+//    
+//    //    var tweetData: TweetData?
+//    
+//    var anchorGrav = SKFieldNode()
+//    var timeRing = SKShapeNode()
+//    var mask: UInt32?
+//    var iconNode: SKSpriteNode?
+//    var nameLabel = SKLabelNode()
+//    var status: OnView = .offScreen
+//    var category: Category?
+//    var distance: CGFloat {
+//        
+//        let newX = position.x - (Model.shared.myScreenOrigin.x)
+//        let newY = position.y - (Model.shared.myScreenOrigin.y)
+//        
+//        return sqrt((newX * newX) + (newY * newY))
+//        
+//    }
+//    
+//    
+//    required init(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
+//    
+//    init(target: TargetNew) {
+//        
+//        self.target = target
+//        let roundedImage = target.profileImage
+//        let myTexture = SKTexture(image: roundedImage)
+//        
+//        //        let imageHolder = UIImage(named: "backdrop")?.circle
+//        //        let solidTexture = SKTexture(image: imageHolder!)
+//        
+//        
+//        //        let scaledX = target.origPos.x * Model.shared.scaleAdjust
+//        //        let scaledY = target.origPos.y * Model.shared.scaleAdjust
+//        //
+//        //        let origPosition = CGPoint(x: scaledX, y: scaledY)
+//        
+//        
+//        
+//        nameLabel.fontName = "Chalkduster"
+//        nameLabel.fontSize = 12
+//        nameLabel.horizontalAlignmentMode = .center
+//        nameLabel.position = CGPoint(x: 0, y: 0)
+//        nameLabel.isHidden = true
+//        
+//        //        self.anchorGrav.position = origPosition
+//        //        self.anchorGrav.isEnabled = true
+//        //        self.anchorGrav.strength = 1.0
+//        
+//        let userTarget = target as! UserTarget
+//        profileImageURL = userTarget.avatar
+//        nameLabel.text = userTarget.userName
+//        
+//        //        self.isHidden = true
+//        
+//        
+//        
+//        
+//        //
+//        //        switch target {
+//        //
+//        //        case is TweetTarget:
+//        //            let tweetTarget = target as! TweetTarget
+//        //            profileImageURL = tweetTarget.idImageURL
+//        //            nameLabel.text = tweetTarget.senderID
+//        //            category = .tweet
+//        //
+//        //            let twitterIcon = UIImage(named: "twitter")
+//        //            let texture = SKTexture(image: twitterIcon!)
+//        //            let twitterNode = SKSpriteNode(texture: texture, color: UIColor(), size: CGSize(width: 25, height: 25))
+//        //            twitterNode.position = CGPoint(x: 5, y: 5)
+//        //
+//        //
+//        //        case is UserTarget:
+//        //            let userTarget = target as! UserTarget
+//        //            profileImageURL = userTarget.avatar
+//        //            nameLabel.text = userTarget.userName
+//        //            category = .spyGame
+//        //
+//        //        case is Eater38:
+//        //            let eaterRest = target as! Eater38
+//        //            profileImageURL = ""
+//        //            nameLabel.text = eaterRest.restName
+//        //            category = .eater38
+//        //
+//        //
+//        //        case is TimeOutTarget:
+//        //            let event = target as! TimeOutTarget
+//        //            profileImageURL = ""
+//        //            nameLabel.text = event.name
+//        //            category = .timeOutEvent
+//        //
+//        //
+//        //        default:
+//        //            fatalError()
+//        //        }
+//        
+//        //        super.init(texture: myTexture, color: UIColor(), size: myTexture.size())
+//        super.init(texture: myTexture, color: UIColor(), size: CGSize(width: 25, height: 25))
+//        
+//        //        super.init(color: UIColor.cyan, size: CGSize(width: 25, height: 25))
+//        
+//        //        position = origPosition
+//        //        origPos = position
+//        
+//        
+//        let path = CGMutablePath()
+//        path.addArc(center: CGPoint.zero, // CGPoint.centerNode.
+//            radius: self.size.width, //spriteNode.size.width...
+//            startAngle: 0,
+//            endAngle: (CGFloat.pi * 2) * CGFloat((arc4random()%100) / 100),
+//            clockwise: true)
+//        timeRing.path = path
+//        timeRing.lineWidth = 10
+//        timeRing.fillColor = .red
+//        timeRing.strokeColor = .white
+//        timeRing.glowWidth = 5.5
+//        
+//        self.addChild(timeRing)
+//        self.addChild(nameLabel)
+//        
+//        
+//        
+//        
+//        //        Model.shared.fetchImage(stringURL: profileImageURL) { returnedImage in
+//        //            guard let validImage = returnedImage else {
+//        //                return
+//        //            }
+//        //            let roundedImage = validImage.circle
+//        //            let myTexture = SKTexture(image: roundedImage!)
+//        //            self.texture = myTexture
+//        //        }
+//        
+//        //        applySize()
+//        //        animateSize()
+//        
+//        
+//        //        self.size.height = 10
+//        //        self.size.width = 10
+//        
+//    }
+//    
+//    
+//}
+//
 
 
 

@@ -14,18 +14,18 @@ import GeoFire
 import SceneKit
 import Mapbox
 
-protocol GoToDetail: class {
-    
-//    func goToDetail(targetSprite: TargetSprite)
-//
-//    func goToTweet(targetSprite: TargetSprite)
-    
-    func goToProfile()
-//    func goToTweetTarget(target: TargetSpriteNew)
-    func goToUserTarget(target: TargetSpriteNew)
-    
-    
-}
+//protocol GoToDetail: class {
+//    
+////    func goToDetail(targetSprite: TargetSprite)
+////
+////    func goToTweet(targetSprite: TargetSprite)
+//    
+//    func goToProfile()
+////    func goToTweetTarget(target: TargetSpriteNew)
+//    func goToUserTarget(target: TargetSpriteNew)
+//    
+//    
+//}
 
 class MainViewController: UIViewController, GoToDetail {
     

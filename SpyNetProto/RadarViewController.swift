@@ -44,27 +44,44 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
     @IBOutlet weak var overlay: UIView!
 
+    @IBOutlet weak var buttonView: UIView!
 
     var myLocation: CLLocationCoordinate2D!
 
     var annotations: [MGLAnnotation] = []
 
     var targets: [UserTarget] = []
+    
+    var blips: [Blip] = []
+    
+    var blipStatus: Bool!
+    
+    var centerBlip = UIView()
 
     @IBOutlet weak var radarMap: MGLMapView!
 
 
-    @IBAction func goPlay(_ sender: Any) {
-
-        addOverlayBlips()
+    @IBAction func goPlayNew(_ sender: Any) {
+        
+        if !blipStatus {
+            addOverlayBlips()
+            blipStatus = true
+        }
+            
+            
+        else {
+            blipStatus = false
+            Model.shared.myLocation = CLLocation(latitude: radarMap.centerCoordinate.latitude, longitude: radarMap.centerCoordinate.longitude)
+            performSegue(withIdentifier: "toPlay", sender: nil)
+//            for blip in blips {
+//                blip.removeFromSuperview()
+//            }
+        }
         
         
         
-        
-        
-        
-        performSegue(withIdentifier: "toPlay", sender: nil)
     }
+
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSceneKit" {
@@ -80,6 +97,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         if segue.identifier == "toPlay" {
             let vc = segue.destination as! PlayViewController
 
+            
             vc.mapView = radarMap
             vc.targets = targets
 
@@ -106,12 +124,29 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        
+        
     }
 
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+       
+        
+        for view in overlay.subviews {
+            view.removeFromSuperview()
+        }
+        
+        addOverlayBlips()
+        
+    }
+    
+    
     func addOverlayBlips() {
 
-        for target in targets {
+        for target in Model.shared.userTargets {
 
             
             let overlayPoint = radarMap.convert(target.annotation.coordinate, toPointTo: self.overlay)
@@ -124,7 +159,11 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 //            imageView.layer.cornerRadius = 10
 //            imageView.center = overlayPoint
             
+           
+            
             let blip = Blip(pos: overlayPoint)
+            
+            blips.append(blip)
             
             overlay.addSubview(blip)
 
@@ -148,52 +187,79 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     func zoomMap() {
 
         var closestAnnotations: [MGLAnnotation] = []
+        
+        for target in Model.shared.userTargetsByDistance {
+            radarMap.addAnnotation(target.annotation)
+            
+        }
 
         for i in 0...7 {
             closestAnnotations.append(Model.shared.userTargetsByDistance[i].annotation)
         }
-
         radarMap.showAnnotations(closestAnnotations, animated: true)
         //        radarMap.removeAnnotations(annotations)
         //        addOverlayBlips()
 
     }
 
+    
+//       override func viewDidAppear(_ animated: Bool)  {
+//        for blip in blips {
+//            blip.removeFromSuperview()
+//        }
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        blipStatus = false
 
+        
+        Model.shared.myDraggedLocation =  CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
+        
+        
         myLocation = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
 
 
+        
         radarMap.delegate = self
 
         radarMap.isZoomEnabled = true
 
         radarMap.latitude = myLocation.latitude
         radarMap.longitude = myLocation.longitude
+        
+        
+        
         radarMap.setZoomLevel(9 , animated: true)
 
         radarMap.camera.pitch = 180
+        radarMap.isUserInteractionEnabled = true
+        
 
         view.addSubview(radarMap)
         //        view.bringSubview(toFront: overlay)
 
-        let centerScreenPoint: CGPoint = radarMap.convert(radarMap.centerCoordinate, toPointTo: self.overlay)
+//        let centerScreenPoint: CGPoint = radarMap.convert(radarMap.centerCoordinate, toPointTo: self.overlay)
+        
+        let myLoc = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
 
+        let centerScreenPoint: CGPoint = radarMap.convert(myLoc, toPointTo: self.overlay)
 
         print("Screen center: \(centerScreenPoint) = \(radarMap.center)")
 
-        let imageView = UIView()
-        imageView.backgroundColor = UIColor.red
+//        let imageView = UIView()
+        centerBlip.backgroundColor = UIColor.green
 
-        imageView.frame.size.width = 20
-        imageView.frame.size.height = 20
-        imageView.layer.cornerRadius = 10
-        imageView.center = centerScreenPoint
-        overlay.addSubview(imageView)
+        centerBlip.frame.size.width = 20
+        centerBlip.frame.size.height = 20
+        centerBlip.layer.cornerRadius = 10
+        centerBlip.center = CGPoint(x: centerScreenPoint.x, y: centerScreenPoint.y)
+        overlay.addSubview(centerBlip)
         view.bringSubview(toFront: overlay)
-
+        view.bringSubview(toFront: buttonView)
+        overlay.isUserInteractionEnabled = false
+        
 
         Model.shared.addBlipDelegate = self
 
@@ -240,6 +306,13 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     }
 
 
+    
+    func mapViewRegionIsChanging(_ mapView: MGLMapView) {
+        for view in overlay.subviews {
+            
+            view.removeFromSuperview()
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

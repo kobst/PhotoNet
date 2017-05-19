@@ -168,7 +168,7 @@ class FieldSceneOverlay: SKScene, AddTargetProtocol, MoveSprites {
     
     func addTargetSpritesNew(target: TargetNew) {
         
-        let sprite = TargetSpriteNew(target: target)
+        let sprite = TargetSpriteNew(target: target, pos: CGPoint(x: 0, y: 0))
         
         Model.shared.targetSpriteNew.append(sprite)
         

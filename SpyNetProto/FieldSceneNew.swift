@@ -53,7 +53,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     let background = SKSpriteNode()
     
     
-    
+    var centerNode = SKSpriteNode()
     var mapNode: SK3DNode
     var profileNode = ProfileNode()   // should profileNode be a struct
  
@@ -64,9 +64,6 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
 
-    
-    
-    
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
@@ -107,6 +104,12 @@ class FieldScene: SKScene, AddTargetProtocol {
         addChild(background)
         
         
+        centerNode.size.width = 15
+        centerNode.size.height = 15
+        centerNode.color = UIColor.red
+        background.position = CGPoint(x: 0, y: 0)
+        addChild(centerNode)
+        
         //        addMapScene(map: map)
         
         //        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
@@ -137,7 +140,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     func addTargetSpritesNew(target: TargetNew) {
         
-        let sprite = TargetSpriteNew(target: target)
+        let sprite = TargetSpriteNew(target: target, pos: CGPoint(x: 0, y: 0))
         
         Model.shared.targetSpriteNew.append(sprite)
         
@@ -163,8 +166,6 @@ class FieldScene: SKScene, AddTargetProtocol {
                 sprite.changePhysicsBody()
             }
         }
-        
-        
         
     }
     
@@ -210,6 +211,8 @@ class FieldScene: SKScene, AddTargetProtocol {
         
         //position the camera on the gamescene.
         cam.position = CGPoint(x: 0, y: 0)
+        centerNode.position = CGPoint(x: 0, y: 0)
+//        centerNode.position = CGPoint(x: 0, y: 0)
         Model.shared.myScreenOrigin = CGPoint(x: 0, y: 0)
         
   
@@ -296,6 +299,11 @@ class FieldScene: SKScene, AddTargetProtocol {
         
     }
 
+    
+    
+    
+    
+    
     // when you already have a set of sprites that are near enough each other.
     // if (max rad * 2) > distance btw sprites then in group.
     // or max rad * 4 > distance bc both sprites can be pushed to one rad length from another right next to it in the same vector. pushedRadLengthSprite2 + radLengthSprite2 + radLengthSprite1 + pushedradLengthSprite1
@@ -349,12 +357,15 @@ class FieldScene: SKScene, AddTargetProtocol {
             //            gravField.position = Model.shared.myScreenOrigin
             
             
+//            
+//            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+//            
+//            profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
             
-            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
             
-            profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
+            centerNode.position = Model.shared.myScreenOrigin
             
-            
+        
             updateTargetSpriteNewVersion()
             //            fade()
             recognizer.setTranslation(CGPoint(x: 0, y:0), in: recognizer.view)
