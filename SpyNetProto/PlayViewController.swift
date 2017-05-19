@@ -33,6 +33,8 @@ class PlayViewController: UIViewController, GoToDetail {
     
     //    var selectedSprite: TargetSprite?
     
+    var didAddNodes: Bool = false
+    
     @IBOutlet weak var backButton: UIButton!
     
     var distanceConversion: Double?
@@ -229,6 +231,56 @@ class PlayViewController: UIViewController, GoToDetail {
     override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
         
+        
+        if didAddNodes == false {
+            // Create and configure the scene.
+            fieldScene = FieldScene(size: mapView.bounds.size, map: mapView)
+            //        scene.addMapScene(map: mapView)
+            fieldScene.delegateMainVC = self
+            fieldScene.scaleMode = .aspectFill
+            sceneView.presentScene(fieldScene)
+            sceneView.frame = view.frame
+            //        sceneView.overlaySKScene = sceneKitScene
+            
+            let myLoc = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
+            let centerPt = mapView.convert(myLoc, toPointTo: overlay)
+            fieldScene.centerNode.position = centerPt
+
+            
+            
+            for target in Model.shared.userTargets {
+                //            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
+                //            let blip = Blip(pos: blipPt)
+                //            overlay.addSubview(blip)
+                
+                
+                let pt = mapView.convert(target.annotation.coordinate, toPointTo: sceneView)
+                
+                //            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
+                
+                let pt2 = sceneView.convert(pt, to: sceneView.scene!)
+                
+                
+                let node = TargetSpriteNew(target: target, pos: pt2)
+                Model.shared.targetSpriteNew.append(node)
+                //            node.position = pt2
+                //            node.origPos = pt2
+                fieldScene.addChild(node)
+                node.isHidden = true
+                node.animateSize()
+                node.changePhysicsBody()
+                
+                
+                //            UIView.animate(withDuration: 1.5, animations: {
+                //                blip.alpha = 0
+                //                
+                //                //                blip.removeFromSuperview()
+                //            })
+            }
+            
+            didAddNodes = true
+        }
+        
         for target in Model.shared.userTargets {
             
             let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
@@ -366,17 +418,8 @@ class PlayViewController: UIViewController, GoToDetail {
         
         sceneView.isMultipleTouchEnabled = false
         
-        // Create and configure the scene.
-        fieldScene = FieldScene(size: sceneView.bounds.size, map: mapView)
-//        scene.addMapScene(map: mapView)
-        fieldScene.delegateMainVC = self
-        fieldScene.scaleMode = .aspectFill
-        sceneView.presentScene(fieldScene)
-        //        sceneView.overlaySKScene = sceneKitScene
         
-        let myLoc = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
-        let centerPt = mapView.convert(myLoc, toPointTo: overlay)
-        fieldScene.centerNode.position = centerPt
+        
      
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
@@ -391,36 +434,7 @@ class PlayViewController: UIViewController, GoToDetail {
         
 //        for target in Model.shared.userTargets 
     
-        
-         for target in Model.shared.userTargets {
-//            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-//            let blip = Blip(pos: blipPt)
-//            overlay.addSubview(blip)
-            
-            
-            let pt = mapView.convert(target.annotation.coordinate, toPointTo: sceneView)
-            
-//            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-            
-            let pt2 = sceneView.convert(pt, to: sceneView.scene!)
-        
-            
-            let node = TargetSpriteNew(target: target, pos: pt2)
-            Model.shared.targetSpriteNew.append(node)
-            //            node.position = pt2
-            //            node.origPos = pt2
-            fieldScene.addChild(node)
-            node.isHidden = true
-            node.animateSize()
-            node.changePhysicsBody()
-            
-            
-//            UIView.animate(withDuration: 1.5, animations: {
-//                blip.alpha = 0
-//                
-//                //                blip.removeFromSuperview()
-//            })
-        }
+
         
         
     }
