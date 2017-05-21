@@ -307,106 +307,11 @@ class PlayViewController: UIViewController, GoToDetail {
         super.viewDidAppear(animated)
 
 
-        
-        
-        
-//        if fieldScene.children.count > 0 {
-//            return
-//        }
-        
+    
         
         view.bringSubview(toFront: overlay)
         view.bringSubview(toFront: backButton)
         overlay.isUserInteractionEnabled = false
-        
-//        for target in Model.shared.userTargets {
-//                let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-//                let blip = Blip(pos: blipPt)
-//                overlay.addSubview(blip)
-//        }
-        
-//        if Model.shared.targetSpriteNew.count > 0 {
-//            
-////            for sprite in Model.shared.targetSpriteNew {
-////                let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-////                let blip = Blip(pos: blipPt)
-////                overlay.addSubview(blip)
-////                
-////                
-////            }
-////            
-//        }
-        
-        
-//        for target in targets {
-//            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-//            let blip = Blip(pos: blipPt)
-//            overlay.addSubview(blip)
-//            
-//            
-//            let pt = mapView.convert(target.annotation.coordinate, toPointTo: sceneView)
-//            let pt2 = sceneView.convert(pt, to: sceneView.scene!)
-//            
-//            
-//            
-//            let node = TargetSpriteNew(target: target, pos: pt2)
-//            Model.shared.targetSpriteNew.append(node)
-////            node.position = pt2
-////            node.origPos = pt2
-//            fieldScene.addChild(node)
-//            node.isHidden = true
-//            node.animateSize()
-//            node.changePhysicsBody()
-//            
-//            
-//            UIView.animate(withDuration: 1.5, animations: { 
-//                blip.alpha = 0
-//                
-////                blip.removeFromSuperview()
-//            })
-//        }
-        
-   
-
-        
-        
-//        let distanceScreen = targets[0].distance
-//        let closestSprite = Model.shared.targetSprNewByDistance[0]
-//        let distanceScreen = Double(closestSprite.distance)
-//        let closestUserTarget = closestSprite.target as! UserTarget
-//        let actualLat = closestUserTarget.lat
-//        let actualLon = closestUserTarget.lon
-//        let actualCoordinate = CLLocation(latitude: actualLat, longitude: actualLon)
-//        let actualDistance = actualCoordinate.distance(from: Model.shared.myLocation!)
-        
-        
-        if Model.shared.targetSpriteNew.count > 0 {
-            
-            let closestSprite = fieldScene.targetSpritesByDistance[0]
-            let closestUser = closestSprite.target as! UserTarget
-            
-            
-            let deltaSpriteY = closestSprite.origPos?.y
-            let deltaCoordinateY = closestUser.lat - (Model.shared.myLocation?.coordinate.latitude)!
-            //        let deltaCoordinateY = closestUser.lat - (Model.shared.myDraggedLocation?.latitude)!
-            
-            
-            let deltaSpriteX = closestSprite.origPos?.x
-            let deltaCoordinateX = closestUser.lon - (Model.shared.myLocation?.coordinate.longitude)!
-            //        let deltaCoordinateX  = closestUser.lat - (Model.shared.myDraggedLocation?.longitude)!
-            
-            
-            let slopeY = deltaCoordinateY / Double(deltaSpriteY!)
-            let slopeX = deltaCoordinateX / Double(deltaSpriteX!)
-            
-            
-        }
-    
-        
-        // make closestSprite have a lat/lon property....
-        
-
-        
         
 
         

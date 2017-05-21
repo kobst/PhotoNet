@@ -70,6 +70,10 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
             
             
         else {
+            
+            
+            
+            
             blipStatus = false
             Model.shared.myLocation = CLLocation(latitude: radarMap.centerCoordinate.latitude, longitude: radarMap.centerCoordinate.longitude)
             performSegue(withIdentifier: "toPlay", sender: nil)
@@ -97,7 +101,8 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
         if segue.identifier == "toPlay" {
             let vc = segue.destination as! PlayViewController
 
-            
+            // zoom in/out to get to right annotation view? or zoom in the play view controller. 
+            // or zoom in/out first then show the annotations....
             vc.mapView = radarMap
             vc.targets = targets
 
