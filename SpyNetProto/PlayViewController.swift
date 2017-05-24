@@ -77,25 +77,30 @@ class PlayViewController: UIViewController, GoToDetail {
         performSegue(withIdentifier: "toProfile", sender: nil)
     }
     
+    func returnToCenter() {
+        
+        fieldScene.returnToCenter()
+        
+        
+    }
+    
+    
     @IBAction func backButtonTouchUpInside(_ sender: Any) {
+    
+//        returnToCenter()
         
-        
-//        let newCenter = Model.shared.myScreenOrigin
-        
-        // find the closest node, use distance plus relative coordiante to center....
-        // move the radarMap to new center....
         
         view.bringSubview(toFront: overlay)
         view.bringSubview(toFront: backButton)
-        
-        
         
         for view in overlay.subviews {
             view.removeFromSuperview()
         }
         
-        var count = 0
+   
         for target in Model.shared.targetSpriteNew {
+            
+            target.animateExit()
             
             let point = target.origPos
             
@@ -105,49 +110,14 @@ class PlayViewController: UIViewController, GoToDetail {
             
             let blip = Blip(pos: overlayPt)
             
+           
+            
             overlay.addSubview(blip)
-            count = count + 1
-            print(count)
-            
-            
+   
         }
-        
-//        let centerPt = sceneView.scene!.convertPoint(toView: newCenter)
-//        let centerOverlayPt = sceneView.convert(centerPt, to: overlay)
-//        
-//        let closestSprite = fieldScene.targetSpritesByDistance[0]
-//        
-//        let closestUser = closestSprite.target as! UserTarget
-//
-//        
-////        let vectorX = (closestSprite.origPos?.x)! - newCenter.x
-////        
-////        let vectorY = (closestSprite.origPos?.y)! - newCenter.y
-//        
-//        let xVector = newCenter.x - (closestSprite.origPos?.x)!
-//        let yVector = newCenter.y - (closestSprite.origPos?.y)!
-//        
-//        
-//        let actualDistance = Double(closestSprite.distance) * distanceConversion!
-//        
-//        let radian = atan2(yVector, xVector)
-//        
-//        let degreeRadians = radiansToDegrees(radians: Double(radian))
-//        
-//        
-//        let newCenterCoordinates = locationWithBearing(bearing: Double(radian), distanceMeters: actualDistance, origin: CLLocationCoordinate2D(latitude: closestUser.lat, longitude: closestUser.lon))
-        
-        
-             // just go right back to model.mysharedlocation...no need to reset mapView.centerCoordinates...
         
         
         mapView.centerCoordinate = convertScale()
-//        Model.shared.myDraggedLocation = mapView.centerCoordinate
-        
-        
-//
-//        mapView.centerCoordinate = CLLocationCoordinate2D(latitude: closestUser.lat, longitude: closestUser.lon)
-        
         
         dismiss(animated: false, completion: nil)
 
@@ -156,11 +126,6 @@ class PlayViewController: UIViewController, GoToDetail {
     
     func convertScale() -> CLLocationCoordinate2D {
         
-        
-        // (0, Model.shared.lat), (origPos.y, closestUser.lat)
-        
-        
-        // (0, Model.shared.mylocation.lon), (origPos.x, closestUser.lat)
         
         
         let closestSprite = fieldScene.targetSpritesByDistance[0]
@@ -190,13 +155,7 @@ class PlayViewController: UIViewController, GoToDetail {
         
         return CLLocationCoordinate2D(latitude: newCenterLat, longitude: newCenterLon)
         
-        // coordiinateY = deltaY(x) + b
-        // b = (Model.shared.myLocation?.coordinate.latitude)
-        
-        // let lat = slopeY(sprite.coordinate) + b
-        
-    
-        
+
     }
     
     
@@ -249,37 +208,27 @@ class PlayViewController: UIViewController, GoToDetail {
             
             
             for target in Model.shared.userTargets {
-                //            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-                //            let blip = Blip(pos: blipPt)
-                //            overlay.addSubview(blip)
-                
+     
                 
                 let pt = mapView.convert(target.annotation.coordinate, toPointTo: sceneView)
-                
-                //            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
+
                 
                 let pt2 = sceneView.convert(pt, to: sceneView.scene!)
                 
                 
                 let node = TargetSpriteNew(target: target, pos: pt2)
                 Model.shared.targetSpriteNew.append(node)
-                //            node.position = pt2
-                //            node.origPos = pt2
+  
                 fieldScene.addChild(node)
                 node.isHidden = true
                 node.animateSize()
                 node.changePhysicsBody()
-                
-                
-                //            UIView.animate(withDuration: 1.5, animations: {
-                //                blip.alpha = 0
-                //                
-                //                //                blip.removeFromSuperview()
-                //            })
+            
             }
             
             didAddNodes = true
         }
+        
         
         for target in Model.shared.userTargets {
             
@@ -288,6 +237,7 @@ class PlayViewController: UIViewController, GoToDetail {
             overlay.addSubview(blip)
             UIView.animate(withDuration: 2.0, animations: { 
                 blip.alpha = 0
+                
             })
         }
  
@@ -295,9 +245,7 @@ class PlayViewController: UIViewController, GoToDetail {
     
         }
     
-//    override func viewWillDisappear(_ animated: Bool) {
-//        Model.shared.targetSpriteNew = []
-//    }
+
     
     deinit {
          Model.shared.targetSpriteNew = []
@@ -305,16 +253,10 @@ class PlayViewController: UIViewController, GoToDetail {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-
-    
         
         view.bringSubview(toFront: overlay)
         view.bringSubview(toFront: backButton)
         overlay.isUserInteractionEnabled = false
-        
-
-        
         
     }
 
@@ -324,9 +266,6 @@ class PlayViewController: UIViewController, GoToDetail {
         sceneView.isMultipleTouchEnabled = false
         
         
-        
-     
-        
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
         
         locMgr.subscribeToHeadingUpdates { (heading, status) in
@@ -335,19 +274,6 @@ class PlayViewController: UIViewController, GoToDetail {
                 Model.shared.myHeading = heading?.trueHeading
             }
         }
-        
-        
-//        for target in Model.shared.userTargets 
-    
-
-        
-        
-    }
-    
-    
-    
-    func determineScale() {
-        
         
         
     }
@@ -361,8 +287,6 @@ class PlayViewController: UIViewController, GoToDetail {
     
     
 }
-
-
 
 
 

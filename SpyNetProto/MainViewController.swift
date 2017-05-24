@@ -103,10 +103,10 @@ class MainViewController: UIViewController, GoToDetail {
     
         
         
-        for userTarget in Model.shared.userTargetsByDistance {
-//            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
-            scene.addTargetSpritesNew(target: userTarget)
-        }
+//        for userTarget in Model.shared.userTargetsByDistance {
+////            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
+//            scene.addTargetSpritesNew(target: userTarget)
+//        }
 
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()

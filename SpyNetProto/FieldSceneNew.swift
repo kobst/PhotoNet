@@ -39,7 +39,7 @@ protocol AddTargetProtocol: class {
 
 
 
-class FieldScene: SKScene, AddTargetProtocol {
+class FieldScene: SKScene {
     
     weak var delegateMainVC: GoToDetail?
     weak var delegateSceneKit: MoveSceneTargets?
@@ -54,7 +54,7 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     
     var centerNode = SKSpriteNode()
-    var mapNode: SK3DNode
+    var mapNode: SK3DNode!
     var profileNode = ProfileNode()   // should profileNode be a struct
  
     
@@ -64,35 +64,21 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
 
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
  
     
-    
-    
+
     
     init(size: CGSize, map: MGLMapView) {
-        
     
-        
-        
-//        let scn = GameScene(create: true, map: map)
-//                let scn = GameSceneVer2(create: true, map: map)
-        
-        
         mapNode = SK3DNode(viewportSize: CGSize(width: 900, height: 900) )
         mapNode.position = CGPoint(x: 0, y: -100)
-//        mapNode.scnScene = scn
-        
-        
+
         super.init(size: size)
         
-        
-        Model.shared.addTargetDelegate = self
-        //        Modelv2.shared.addTweetDelegate = self
-        //        Modelv2.shared.addTargetDelegate = self
+
         
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
@@ -110,10 +96,13 @@ class FieldScene: SKScene, AddTargetProtocol {
         background.position = CGPoint(x: 0, y: 0)
         addChild(centerNode)
         
-        //        addMapScene(map: map)
-        
-        //        let swipe = UIPanGestureRecognizer(target: self, action: Selector(("moveCenter")))
-        //        self.addGestureRecognizer(swipe)
+//        addMapScene(map: map)
+        let scn = GameScene(create: true, map: map)
+        mapNode = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
+        mapNode.position = CGPoint(x: 0, y: -100)
+        mapNode.scnScene = scn
+        self.addChild(mapNode)
+
         self.isUserInteractionEnabled = true
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -125,9 +114,6 @@ class FieldScene: SKScene, AddTargetProtocol {
     
     func addMapScene(map: MGLMapView) {
         let scn = GameScene(create: true, map: map)
-        //        let scn = GameSceneVer2(create: true, map: map)
-        
-        
         let node = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
         node.position = CGPoint(x: 0, y: -100)
         node.scnScene = scn
@@ -138,37 +124,44 @@ class FieldScene: SKScene, AddTargetProtocol {
     }
     
     
-    func addTargetSpritesNew(target: TargetNew) {
+    func returnToCenter() {
         
-        let sprite = TargetSpriteNew(target: target, pos: CGPoint(x: 0, y: 0))
-        
-        Model.shared.targetSpriteNew.append(sprite)
-        
-        
-        Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
-            guard let validImage = returnedImage else {
-                return
-            }
-            let roundedImage = validImage.circle
-            let myTexture = SKTexture(image: roundedImage!)
-            sprite.texture = myTexture
-        }
-        
-        if sprite.distance < 75 {
-            self.background.addChild(sprite)
-            print(sprite.nameLabel.text ?? "mmmmmmmmm")
-            if let validMask = Model.shared.assignBitMask2()  {
-                sprite.anchorGrav.categoryBitMask = validMask
-                sprite.physicsBody?.fieldBitMask = validMask
-                sprite.mask = validMask
-                sprite.animateSize()
-                //                sprite.applySize()
-                sprite.changePhysicsBody()
-            }
-        }
+        cam.position = CGPoint(x: 0, y: 0)
+        centerNode.position = CGPoint(x: 0, y: 0)
         
     }
     
+//    func addTargetSpritesNew(target: TargetNew) {
+//        
+//        let sprite = TargetSpriteNew(target: target, pos: CGPoint(x: 0, y: 0))
+//        
+//        Model.shared.targetSpriteNew.append(sprite)
+//        
+//        
+//        Model.shared.fetchImage(stringURL: sprite.profileImageURL) { returnedImage in
+//            guard let validImage = returnedImage else {
+//                return
+//            }
+//            let roundedImage = validImage.circle
+//            let myTexture = SKTexture(image: roundedImage!)
+//            sprite.texture = myTexture
+//        }
+//        
+//        if sprite.distance < 75 {
+//            self.background.addChild(sprite)
+//            print(sprite.nameLabel.text ?? "mmmmmmmmm")
+//            if let validMask = Model.shared.assignBitMask2()  {
+//                sprite.anchorGrav.categoryBitMask = validMask
+//                sprite.physicsBody?.fieldBitMask = validMask
+//                sprite.mask = validMask
+//                sprite.animateSize()
+//                //                sprite.applySize()
+//                sprite.changePhysicsBody()
+//            }
+//        }
+//        
+//    }
+//    
 
     
 
@@ -184,6 +177,7 @@ class FieldScene: SKScene, AddTargetProtocol {
             fatalError("init(coder:) has not been implemented")
         }
     }
+    
     
     func makeProfileNode() -> SKSpriteNode {
         
@@ -358,13 +352,17 @@ class FieldScene: SKScene, AddTargetProtocol {
             
             
 //            
-//            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
-//            
+            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 100)
+//
+            
+//            let scene = mapNode.scnScene as! GameScene
+//            mapNode.pointOfView = scene.cameraNode
+            
 //            profileNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 200)
             
             
             centerNode.position = Model.shared.myScreenOrigin
-            
+         
         
             updateTargetSpriteNewVersion()
             //            fade()

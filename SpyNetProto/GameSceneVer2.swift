@@ -195,20 +195,3 @@ class GameSceneVer2: SCNScene, CreateScnTargets, MoveSceneTargets {
 
 
 
-//
-//func fillMap(mapView: MKMapView) {
-//
-//    let lanDelta: CLLocationDegrees = 0.00005
-//
-//    let lonDelta: CLLocationDegrees = 0.00005
-//
-//    let span = MKCoordinateSpan(latitudeDelta: lanDelta, longitudeDelta: lonDelta)
-//
-//    let center = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
-//    
-//    let region = MKCoordinateRegion(center: center, span: span)
-//    
-//    mapView.setRegion(region, animated: true)
-//  
-//}
-
