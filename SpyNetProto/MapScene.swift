@@ -21,7 +21,7 @@ protocol CreateScnTargets: class {
 
 protocol MoveSceneTargets: class {
     func handlePan(translation: CGPoint)
-    
+
     func addPlaneNode()
 }
 

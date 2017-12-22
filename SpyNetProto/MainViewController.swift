@@ -81,11 +81,7 @@ class MainViewController: UIViewController, GoToDetail {
     
      @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
     
-    
-//    init() {
-//        super.init()
-//    }
-//    
+
     override func viewDidLoad() {
         super.viewDidLoad()
   
@@ -100,9 +96,6 @@ class MainViewController: UIViewController, GoToDetail {
         scene.scaleMode = .aspectFill
         sceneView.presentScene(scene)
 //        sceneView.overlaySKScene = sceneKitScene
-    
-        
-        
 //        for userTarget in Model.shared.userTargetsByDistance {
 ////            Model.shared.addTargetDelegate?.addTargetSpritesNew(target: userTarget)
 //            scene.addTargetSpritesNew(target: userTarget)
@@ -110,8 +103,6 @@ class MainViewController: UIViewController, GoToDetail {
 
         
         let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
- //
-        
 
         locMgr.subscribeToHeadingUpdates { (heading, status) in
             if status == .success {

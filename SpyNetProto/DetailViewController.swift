@@ -286,7 +286,6 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
   
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
         
-
         attemptedImageOrigin = attemptedImageView.frame.origin
         profileImageOrigin = profileImageView.frame.origin
         
@@ -300,8 +299,6 @@ class DetailViewController: UIViewController, UIImagePickerControllerDelegate, U
                 print(faces?[0].faceId ?? "no face")
 
             }
-            
-
             
         })
         

@@ -40,7 +40,7 @@ class Attempt {
     }
     
     
-    init(snapshot: FIRDataSnapshot) {
+    init(snapshot: DataSnapshot) {
         
         let dict = snapshot.value as! [String : Any]
         lat = dict["lat"] as! CLLocationDegrees
@@ -99,6 +99,15 @@ class Model {
    
 //    let allCategories: [TargetSpriteNew.Category] = [.tweet, .spyGame, .eater38, .timeOutEvent]
     
+    
+    var myLat: CGFloat?
+    var myLong: CGFloat?
+    
+    // make this cllocation2d....
+    var myLocation: CLLocation?
+    
+    
+    
     static var shared = Model()
 
     private init(){}
@@ -122,11 +131,7 @@ class Model {
     }
     
     
-    var myLat: CGFloat?
-    var myLong: CGFloat?
-    
-    // make this cllocation2d....
-    var myLocation: CLLocation?
+
     var myDraggedLocation: CLLocationCoordinate2D?
     
     var myHeading: CLLocationDirection?
@@ -139,11 +144,6 @@ class Model {
         return userTargets.sorted(by: {$0.distance < $1.distance})
     }
     
-//    var targetSprByDistance: [TargetSprite] {
-//        
-//        return targetSprites.sorted(by: {$0.distance < $1.distance})
-//        
-//    }
     
     var targetSprNewByDistance: [TargetSpriteNew] {
         
@@ -164,28 +164,29 @@ class Model {
     
 
     
-    let ref = FIRDatabase.database().reference()
+    let ref = Database.database().reference()
 //    let geoFire = GeoFire(firebaseRef: FIRDatabase.database().reference(withPath: "user_locations"))
-    
 
     func moveScnTargets(translation: CGPoint) {
         
         moveScnTargetDelegate?.handlePan(translation: translation)
     }
     
-    func fetchUser(UID: String, completionHandler: @escaping (User) -> ()){
-        
+    func fetchUser(UID: String, completionHandler: @escaping (User?) -> ()){
         ref.child("users").child(UID).observeSingleEvent(of: .value, with: { (snapshot) in
-            let newUser = User(snapshot: snapshot)
-            completionHandler(newUser)
+            if snapshot.exists() {
+                let newUser = User(snapshot: snapshot)
+                completionHandler(newUser)
+            }
+            else {
+                completionHandler(nil)
+            }
         })
-        
     }
     
     
     func makeFakeLocation() -> CLLocation {
-        
-        
+
         let count = fakeLocations.count - 1
         let random = Int(arc4random()) % count
         let key = fakeLocations[random]
@@ -198,11 +199,13 @@ class Model {
         let geoFire = GeoFire(firebaseRef: ref.child("user_locations"))
         
         let userID = Model.shared.loggedInUser!.uid
+        let uid = Session.sharedSession.currentUser?.uid
+
         let fakeLocation = makeFakeLocation()
         geoFire!.setLocation(fakeLocation, forKey: userID) { (error) in
 //        geoFire!.setLocation(myLocation, forKey: userID) { (error) in
             if (error != nil) {
-                debugPrint("An error occured: \(error)")
+                debugPrint("An error occured: \(error.debugDescription)")
             } else {
                 print("Saved location successfully!")
             }
@@ -210,9 +213,7 @@ class Model {
     }
     
     
-    
-    
-    
+
 
     func getTargetNew(myLocation: CLLocation) {
         
@@ -222,7 +223,6 @@ class Model {
         //        var targets = [Target]()
         //        let fakeLocation = makeFakeLocation()
         let circleQuery = geoFire?.query(at: myLocation, withRadius: 2.5)
-        
         
         circleQuery?.observe(.keyEntered, with: { [weak self] (string, location) in
             if let validUID = string, let locationBack = location {
@@ -365,13 +365,13 @@ class Model {
     func setNewAttempt(attempt: Attempt) {
         
         let result = attempt.success ? "success" : "fail"
-        let baseRef = FIRDatabase.database().reference()
+        let baseRef = Database.database().reference()
         let ref = baseRef.child("attempts").childByAutoId()
         let data = UIImageJPEGRepresentation(attempt.photo, 0.1)!
-        let storageRef = FIRStorage.storage().reference()
+        let storageRef = Storage.storage().reference()
         let imageUID = NSUUID().uuidString
         let imageRef = storageRef.child(imageUID)
-        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
+        imageRef.putData(data, metadata: nil).observe(.success) { (snapshot) in
             let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
             
             let attemptData = [

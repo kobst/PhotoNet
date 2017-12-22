@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EE26A8B8B569FF97FA76A9F93346A3D6"
+               BlueprintIdentifier = "78EAAA0AA80815EE5E514F42096006ED"
                BuildableName = "Pods_SpyNetProto.framework"
                BlueprintName = "Pods-SpyNetProto"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,6 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -36,6 +37,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -45,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE26A8B8B569FF97FA76A9F93346A3D6"
+            BlueprintIdentifier = "78EAAA0AA80815EE5E514F42096006ED"
             BuildableName = "Pods_SpyNetProto.framework"
             BlueprintName = "Pods-SpyNetProto"
             ReferencedContainer = "container:Pods.xcodeproj">

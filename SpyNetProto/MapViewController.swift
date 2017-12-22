@@ -18,7 +18,6 @@ class MapViewController: UIViewController {
 
     
     func getLocationPermissions() {
-        
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
     }
@@ -26,7 +25,6 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     

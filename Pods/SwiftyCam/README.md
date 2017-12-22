@@ -1,4 +1,4 @@
-<h1 align="center">SwiftyCam</h1>
+<img src="SwiftyCamBanner.jpg"  align="center"> 
 
 <p align="center">
     <img src="https://img.shields.io/badge/platform-iOS%208%2B-blue.svg?style=flat" alt="Platform: iOS 8+"/>
@@ -15,20 +15,21 @@ Configuring a Camera View Controller in AVFoundation can be tedious and time con
 
 ## Features
 
-              |  SwiftyCam
---------------------------|------------------------------------------------------------
-:sunglasses: | Snapchat-style media capture
-:+1: | Support iOS8+
-:camera: | Image capture
-:movie_camera: | Video capture
-:chart_with_upwards_trend: | Manual image quality settings
-:tada: | Front and rear camera support
-:flashlight: | Front and rear flash
-:sunny: | Retina flash support
-:mag_right: | Supports manual zoom
-:lock: | Supports manual focus
-:last_quarter_moon_with_face: | Low light setting
-:speaker: | Background audio support
+|                              | SwiftyCam        
+| ------------------------------------- | --------------------- 
+| :sunglasses:                  | Snapchat-style media capture               
+| :+1:        					  | Support iOS8+                
+| :camera:  						  | Image capture               
+| :movie_camera:  			      | Video capture                
+| :chart_with_upwards_trend:    | Manual image quality settings                
+| :tada:                        | Front and rear camera support              
+| :flashlight:                  | Front and rear flash  
+| :sunny:                       | Retina flash support               
+| :mag_right:                   |  Supports manual zoom               
+| :lock:                        | Supports manual focus
+| :last_quarter_moon_with_face: |  Low light setting               
+| :speaker:                     | Background audio support                 
+ 
 
 
 ## Requirements
@@ -50,6 +51,18 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod "SwiftyCam"
+```
+
+### [Carthage](https://github.com/Carthage/Carthage)
+
+Add this to `Cartfile`
+
+```
+github "Awalz/SwiftyCam" ~> 2.2.1
+```
+
+```
+$ carthage update SwiftyCam
 ```
 
 ### Manual Installation:
@@ -123,7 +136,7 @@ stopVideoRecording()
 ``` 
 
 
-###Delegate
+### Delegate
 
 In order to acquire the photos and videos taken by either the SwiftyCamButton or manually, you must implement the `SwiftyCamViewControllerDelegate` and set the `cameraDelegate` to your view controller instance:
 
@@ -138,7 +151,7 @@ class MyCameraViewController : SwiftyCamViewController, SwiftyCamViewControllerD
 }
 ```   
 
-####Delegate methods:
+#### Delegate methods:
 
 ```swift
 func swiftyCam(_ swiftyCam: SwiftyCamViewController, didTake photo: UIImage) {
@@ -225,7 +238,7 @@ SwiftyCam also enables switching between cameras with a double tap gesture. To d
 doubleTapCameraSwitch = false
 ```
 
-##Configuration
+## Configuration
 
 SwiftyCam has several options for configurating the functionality of the capture:
 
@@ -261,13 +274,33 @@ A value of **0.0** will allow for unlimited video recording via the SwiftyCamBut
 
 ## Camera Zoom
 
-SwiftyCam supports digital zoom of the camera session via pinch gestures. The gestures work similar to the default iOS app and will zoom to the maximum supported zoom level. Camera zoom is only supported on the rear facing camera. AVFoundation does not currently support front facing camera zoom. To disable this feature, change the `pinchToZoom` property:
+SwiftyCam supports digital zoom of the camera session via pinch and pan gestures. The gestures work similar to the default iOS app and will zoom to the maximum supported zoom level. Camera zoom is only supported on the rear facing camera. AVFoundation does not currently support front facing camera zoom. To disable this feature, change the `pinchToZoom` property:
 
 ```swift
 pinchToZoom = false
 ```   
 
-By default, **pinchToZoom** is enabled.
+By default, ```pinchToZoom``` is enabled.
+
+SwiftyCam also supports the ability to zoom the rear facing camera with vertical pan gestures. To disable this feature, change the `swipeToZoom` property:
+
+```swift
+swipeToZoom = false
+```   
+
+By default, ```swipeToZoom``` is enabled. The default gestures zoom in the capture session with a downward swipe, and zoom out with an upward swipe. This can be reversed by changing the ```swipeToZoomInverted``` property:
+
+```swift
+swipeToZoomInverted = true
+``` 
+
+You can also restrict the amount that the rear facing camera can zoom. To do this, use the         `maxZoomScale` property:
+
+```swift
+maxZoomScale = 2.0
+```   
+
+By default, `maxZoomScale` is set to **infinite**. The actual maximum zoom level is determined by the device's [videoMaxZoomFactor](https://developer.apple.com/reference/avfoundation/avcapturedeviceformat/1624635-videomaxzoomfactor).
 
 ## Camera Focus
 
@@ -278,6 +311,15 @@ tapToFocus = false
 ```
 
 By default, `tapToFocus` is enabled. If you wish to show a on screen animation when a tap to focus is initiated, you can use the `SwiftyCamDidFocusAtPoint(focusPoint:)` to get the coordinates of tap and provide your own tap animation
+
+## Device Orientation
+
+By default, SwiftyCam will set the photo orientation to be portrait. If you wish to preserve the orientation of the capture photos to allow support for landscape images, use the `shouldUseDeviceOrientation` property:
+
+```swift
+shouldUseDeviceOrientation = true
+```
+
 
 ## Background Audio
 

@@ -78,26 +78,20 @@ class PlayViewController: UIViewController, GoToDetail {
     }
     
     func returnToCenter() {
-        
         fieldScene.returnToCenter()
-        
-        
     }
     
     
     @IBAction func backButtonTouchUpInside(_ sender: Any) {
     
-//        returnToCenter()
-        
-        
-        view.bringSubview(toFront: overlay)
+////        returnToCenter()
+//        view.bringSubview(toFront: overlay)
         view.bringSubview(toFront: backButton)
         
         for view in overlay.subviews {
             view.removeFromSuperview()
         }
         
-   
         for target in Model.shared.targetSpriteNew {
             
             target.animateExit()
@@ -110,35 +104,27 @@ class PlayViewController: UIViewController, GoToDetail {
             
             let blip = Blip(pos: overlayPt)
             
-           
-            
             overlay.addSubview(blip)
    
         }
         
-        
         mapView.centerCoordinate = convertScale()
         
         dismiss(animated: false, completion: nil)
-
     }
     
     
     func convertScale() -> CLLocationCoordinate2D {
-        
-        
         
         let closestSprite = fieldScene.targetSpritesByDistance[0]
         
         // make closestSprite have a lat/lon property....
         
         let closestUser = closestSprite.target as! UserTarget
-        
-        
+
         let deltaSpriteY = closestSprite.origPos?.y
         let deltaCoordinateY = closestUser.lat - (Model.shared.myLocation?.coordinate.latitude)!
 //        let deltaCoordinateY = closestUser.lat - (Model.shared.myDraggedLocation?.latitude)!
-        
         
         let deltaSpriteX = closestSprite.origPos?.x
         let deltaCoordinateX = closestUser.lon - (Model.shared.myLocation?.coordinate.longitude)!
@@ -155,7 +141,6 @@ class PlayViewController: UIViewController, GoToDetail {
         
         return CLLocationCoordinate2D(latitude: newCenterLat, longitude: newCenterLon)
         
-
     }
     
     
@@ -180,7 +165,7 @@ class PlayViewController: UIViewController, GoToDetail {
     func goToUserTarget(target: TargetSpriteNew) {
         selectedTarget = target
         //         performSegue(withIdentifier: "toDetail", sender: nil)
-        performSegue(withIdentifier: "toCamView", sender: nil)
+//        performSegue(withIdentifier: "toCamView", sender: nil)
     }
     
     @IBAction func unwindToMain(segue: UIStoryboardSegue) {}
@@ -230,16 +215,16 @@ class PlayViewController: UIViewController, GoToDetail {
         }
         
         
-        for target in Model.shared.userTargets {
-            
-            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
-            let blip = Blip(pos: blipPt)
-            overlay.addSubview(blip)
-            UIView.animate(withDuration: 2.0, animations: { 
-                blip.alpha = 0
-                
-            })
-        }
+//        for target in Model.shared.userTargets {
+//
+//            let blipPt = mapView.convert(target.annotation.coordinate, toPointTo: overlay)
+//            let blip = Blip(pos: blipPt)
+//            overlay.addSubview(blip)
+//            UIView.animate(withDuration: 2.0, animations: {
+//                blip.alpha = 0
+//
+//            })
+//        }
  
         
     
@@ -254,7 +239,7 @@ class PlayViewController: UIViewController, GoToDetail {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        view.bringSubview(toFront: overlay)
+//        view.bringSubview(toFront: overlay)
         view.bringSubview(toFront: backButton)
         overlay.isUserInteractionEnabled = false
         

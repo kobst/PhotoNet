@@ -101,18 +101,20 @@ class OnBoardController: UIViewController, UIImagePickerControllerDelegate, UINa
     
     func setUser(data: Data) {
         
-        let storageRef = FIRStorage.storage().reference()
+        let storageRef = Storage.storage().reference()
         let imageUID = NSUUID().uuidString
         let imageRef = storageRef.child(imageUID)
         
+        
+        //replace with Session...
         Model.shared.loggedInUser?.blurb = blurbField.text
         Model.shared.loggedInUser?.name = codeName.text!
         
-        imageRef.put(data, metadata: nil).observe(.success) { (snapshot) in
+        imageRef.putData(data, metadata: nil).observe(.success) { (snapshot) in
             let imageURL = snapshot.metadata?.downloadURL()?.absoluteString
             
             
-            let baseRef = FIRDatabase.database().reference()
+            let baseRef = Database.database().reference()
             let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
             
             //            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")

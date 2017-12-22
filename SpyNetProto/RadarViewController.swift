@@ -52,37 +52,96 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
     var targets: [UserTarget] = []
     
+    var genTargets: [UserTarget] = []
+    
     var blips: [Blip] = []
     
     var blipStatus: Bool!
     
     var centerBlip = UIView()
+    
+    var cameraMap = MGLMapCamera()
 
+    @IBOutlet weak var sceneView: SKView!
+    
+    var fieldScene: FieldScene!
+    
     @IBOutlet weak var radarMap: MGLMapView!
-
 
     @IBAction func goPlayNew(_ sender: Any) {
         
-        if !blipStatus {
-            addOverlayBlips()
-            blipStatus = true
-        }
+        
+        
+        Model.shared.myLocation = CLLocation(latitude: radarMap.centerCoordinate.latitude, longitude: radarMap.centerCoordinate.longitude)
+        
+        Session.sharedSession.myLocation = CLLocationCoordinate2D(latitude: radarMap.centerCoordinate.latitude, longitude: radarMap.centerCoordinate.longitude)
+        
+         performSegue(withIdentifier: "toPlay", sender: nil)
+
+        
+
+        
+        
+        
+        
+//        performSegue(withIdentifier: "toPlay", sender: nil)
+//        for blip in blips {
+//            blip.removeFromSuperview()
+//        }
+//
+//
+//        if !blipStatus {
+//            addOverlayBlips()
+//            let camera = MGLMapCamera(lookingAtCenter: radarMap.centerCoordinate, fromDistance: 4500, pitch: 150, heading: 80)
+//            
+//            radarMap.setCamera(camera, withDuration: 5, animationTimingFunction: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut))
+
+//            cameraMap = MGLMapCamera(lookingAtCenter: radarMap.centerCoordinate, fromDistance: 275, pitch: 15, heading: 180)
+//            radarMap.camera = cameraMap
+//
+//            zoomMap()
+//
+//            blipStatus = true
+        
+//            fieldScene = FieldScene(size: radarMap.bounds.size, map: radarMap)
+//    //        scene.addMapScene(map: mapView)
+////            fieldScene.delegateMainVC = self
+//            fieldScene.scaleMode = .aspectFill
+//            sceneView.presentScene(fieldScene)
             
-            
-        else {
-            
-            
-            
-            
-            blipStatus = false
-            Model.shared.myLocation = CLLocation(latitude: radarMap.centerCoordinate.latitude, longitude: radarMap.centerCoordinate.longitude)
-            performSegue(withIdentifier: "toPlay", sender: nil)
-//            for blip in blips {
-//                blip.removeFromSuperview()
+//            for target in Model.shared.userTargets {
+//
+//                let pt = radarMap.convert(target.annotation.coordinate, toPointTo: sceneView)
+//
+//                let pt2 = sceneView.convert(pt, to: sceneView.scene!)
+//
+//                let node = TargetSpriteNew(target: target, pos: pt2)
+//                Model.shared.targetSpriteNew.append(node)
+//                fieldScene.addChild(node)
+//
+//                node.isHidden = false
+//                node.animateSize()
+//                node.changePhysicsBody()
+//
 //            }
-        }
-        
-        
+//
+//
+//        }
+//
+//        else {
+//
+//            blipStatus = false
+//
+//
+
+//
+////            cameraMap = MGLMapCamera(lookingAtCenter: radarMap.centerCoordinate, fromDistance: 275, pitch: 88, heading: 180)
+////            radarMap.camera = cameraMap
+////
+////            zoomMap()
+//
+//
+//        }
         
     }
 
@@ -130,15 +189,11 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        
-        
     }
 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-       
         
         for view in overlay.subviews {
             view.removeFromSuperview()
@@ -153,26 +208,13 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
         for target in Model.shared.userTargets {
 
-            
             let overlayPoint = radarMap.convert(target.annotation.coordinate, toPointTo: self.overlay)
-//            let imageView = UIView()
-//
-//            imageView.backgroundColor = UIColor.cyan
-//
-//            imageView.frame.size.width = 20
-//            imageView.frame.size.height = 20
-//            imageView.layer.cornerRadius = 10
-//            imageView.center = overlayPoint
-            
-           
             
             let blip = Blip(pos: overlayPoint)
             
             blips.append(blip)
-            
+
             overlay.addSubview(blip)
-
-
         }
 
     }
@@ -180,10 +222,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
     func addTargetBlips(target: UserTarget) {
         //        annotations.append(target.annotation)
         targets.append(target)
-
         radarMap.addAnnotation(target.annotation)
-
-
 
     }
 
@@ -198,7 +237,7 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
             
         }
 
-        for i in 0...7 {
+        for i in 0...3 {
             closestAnnotations.append(Model.shared.userTargetsByDistance[i].annotation)
         }
         radarMap.showAnnotations(closestAnnotations, animated: true)
@@ -219,31 +258,27 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
         blipStatus = false
 
-        
         Model.shared.myDraggedLocation =  CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
         
-        
+
         myLocation = CLLocationCoordinate2D(latitude: (Model.shared.myLocation?.coordinate.latitude)!, longitude: (Model.shared.myLocation?.coordinate.longitude)!)
 
 
         
         radarMap.delegate = self
-
         radarMap.isZoomEnabled = true
-
+        radarMap.isPitchEnabled = true
         radarMap.latitude = myLocation.latitude
         radarMap.longitude = myLocation.longitude
+     
         
-        
-        
-        radarMap.setZoomLevel(9 , animated: true)
-
-        radarMap.camera.pitch = 180
+        cameraMap = MGLMapCamera(lookingAtCenter: radarMap.centerCoordinate, fromDistance: 75, pitch: 85, heading: 180)
+        radarMap.camera = cameraMap
+        radarMap.setZoomLevel(15 , animated: true)
         radarMap.isUserInteractionEnabled = true
-        
-
         view.addSubview(radarMap)
-        //        view.bringSubview(toFront: overlay)
+//        sceneView.isHidden = true
+//        view.bringSubview(toFront: overlay)
 
 //        let centerScreenPoint: CGPoint = radarMap.convert(radarMap.centerCoordinate, toPointTo: self.overlay)
         
@@ -271,12 +306,46 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
         view.backgroundColor = UIColor.black
 
+        
+        fieldScene = FieldScene(size: radarMap.bounds.size, map: radarMap)
+        //        scene.addMapScene(map: mapView)
+        //            fieldScene.delegateMainVC = self
+        fieldScene.scaleMode = .aspectFill
+        sceneView.presentScene(fieldScene)
+        
+        view.bringSubview(toFront: sceneView)
+        sceneView.isHidden = false
+        
         Model.shared.getTargetsNewVerComp2(myLocation: Model.shared.myLocation!) {
             print("done in closure")
 
             print(Model.shared.userTargets.count)
 
+            
+
             self.zoomMap()
+            
+            
+            for target in Model.shared.userTargets {
+            
+            
+                let pt = self.radarMap.convert(target.annotation.coordinate, toPointTo: self.sceneView)
+            
+                let pt2 = self.sceneView.convert(pt, to: self.sceneView.scene!)
+            
+            
+                let node = TargetSpriteNew(target: target, pos: pt2)
+                Model.shared.targetSpriteNew.append(node)
+            
+                self.fieldScene.addChild(node)
+                print(node.position)
+                node.isHidden = false
+                node.animateSize()
+                node.changePhysicsBody()
+            
+                    }
+            
+            
         }
 
 
@@ -313,10 +382,14 @@ class RadarViewController: UIViewController, MGLMapViewDelegate, AddBlips {
 
     
     func mapViewRegionIsChanging(_ mapView: MGLMapView) {
-        for view in overlay.subviews {
-            
-            view.removeFromSuperview()
-        }
+        
+     
+//        Model.shared.moveSprites(translation: tra)
+        
+//        for view in overlay.subviews {
+//
+//            view.removeFromSuperview()
+//        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -49,9 +49,6 @@ class SuccessViewController: UIViewController {
         
         done()
         
-        
-        
-        
     }
 
     override func didReceiveMemoryWarning() {

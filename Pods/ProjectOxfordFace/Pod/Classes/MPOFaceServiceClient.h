@@ -43,9 +43,18 @@
 typedef enum {
     MPOFaceAttributeTypeAge = 1,
     MPOFaceAttributeTypeGender,
-    MPOFaceAttributeTypeFacialHair,
     MPOFaceAttributeTypeSmile,
+    MPOFaceAttributeTypeGlasses,
+    MPOFaceAttributeTypeFacialHair,
     MPOFaceAttributeTypeHeadPose,
+    MPOFaceAttributeTypeEmotion,
+    MPOFaceAttributeTypeHair,
+    MPOFaceAttributeTypeMakeup,
+    MPOFaceAttributeTypeOcclusion,
+    MPOFaceAttributeTypeAccessories,
+    MPOFaceAttributeTypeBlur,
+    MPOFaceAttributeTypeExposure,
+    MPOFaceAttributeTypeNoise,
 } MPOFaceAttributeType;
 
 typedef enum {
@@ -64,11 +73,19 @@ typedef void (^MPOFaceListMetadataArrayCompletionBlock)(NSArray<MPOFaceListMetad
 @interface MPOFaceServiceClient : NSObject
 
 /**
- *  Creates an instance of MPOFaceServiceClient
- *  @param key @param key subscription key to use face api
- *  @return @return MPOFaceServiceClient
+ *  Creates an instance of MPOFaceServiceClient with default endpoint
+ *  @param key subscription key to use face api
+ *  @return MPOFaceServiceClient
  */
 - (id)initWithSubscriptionKey:(NSString *)key;
+
+/**
+ *  Creates an instance of MPOFaceServiceClient with specific endpoint and subscription key
+ *  @param endpoint the endpoint to use the face api
+ *  @param key the subscription key to use the face api
+ *  @return MPOFaceServiceClient
+ */
+- (id)initWithEndpointAndSubscriptionKey:(NSString *)endpoint key:(NSString *)key;
 
 
 #pragma mark Face Detection APIs

@@ -23,7 +23,6 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         
-
         super.viewDidLoad()
         
         
@@ -94,7 +93,7 @@ class LoginVC: UIViewController {
             return
         }
         
-        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+        Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
             guard let validUser = user else {
                 self.alert(message: "User does not exist", title: "Invalid User")
                 return
@@ -108,6 +107,16 @@ class LoginVC: UIViewController {
         })
             
         })
+        
+//        
+//        Session.sharedSession.signIn(email: email, password: password) {error in
+//            if let _ = error {
+//                self.alert(message: "User does not exist", title: "Invalid User")
+//                return
+//            }
+//        }
+        
+        
     }
     
  
@@ -139,7 +148,7 @@ class LoginVC: UIViewController {
         }
         
         
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user: FIRUser?, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             
             if error != nil {
                 let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
@@ -164,7 +173,7 @@ class LoginVC: UIViewController {
             UserDefaults.standard.set(validUser.uid, forKey: "uid")
             UserDefaults.standard.synchronize()
           
-            let baseRef = FIRDatabase.database().reference()
+            let baseRef = Database.database().reference()
             let ref = baseRef.child("users").child(Model.shared.loggedInUser!.uid)
             
             //            let ref  = FIRDatabase.database().reference(withPath: "users/\(Model.shared.loggedInUser!.uid)")
@@ -180,7 +189,7 @@ class LoginVC: UIViewController {
             
          
             self.performSegue(withIdentifier: "toOnboard", sender: nil)
-        })
+        }
     }
     
     

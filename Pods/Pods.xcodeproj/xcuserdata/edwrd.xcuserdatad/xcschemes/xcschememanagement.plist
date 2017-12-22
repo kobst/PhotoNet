@@ -8,46 +8,87 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>GeoFire 2.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
 		</dict>
 		<key>GeoFire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>INTULocationManager.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 		<key>Pods-SpyNetProto.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 		<key>ProjectOxfordFace.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
+		<key>Protobuf.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>7</integer>
 		</dict>
 		<key>SwiftyCam.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>8</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>143A36CBF019EC9D558E40EC6882486E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F27C81B06916273961E276598E5F0C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>78EAAA0AA80815EE5E514F42096006ED</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7E683DB16DC4643221505F9973C9BC36</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A12DF1AB5540D41C7548877698763B82</key>
+		<key>87240502A76DFE723A4340129A8FF9BB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -63,16 +104,6 @@
 			<true/>
 		</dict>
 		<key>D442A1063E1FD2A0AB8ACF96C63173A4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EE26A8B8B569FF97FA76A9F93346A3D6</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EEF4335AB9F65474CCE8F8C769DF2C8F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -11,67 +11,37 @@ import INTULocationManager
 
 class SplashViewController: UIViewController {
   
-    var userUID: String?
-
-    
-    func getLocation() {
-        
-        
-        let locMgr: INTULocationManager = INTULocationManager.sharedInstance()
-        
-        locMgr.requestLocation(withDesiredAccuracy: INTULocationAccuracy.block,
-                               timeout: 5,
-                               delayUntilAuthorized: true,
-                               block: {(currentLocation: CLLocation?, achievedAccuracy: INTULocationAccuracy, status: INTULocationStatus) -> Void in
-                                if status == INTULocationStatus.success {
-                                    print("got location");
-                                    
-                                    let dummyLocation = CLLocation(latitude: 40.7369432, longitude: -73.9918239)
-                                    
-                                    
-                                    Model.shared.updateMyLocation(myLocation: dummyLocation)
-                                    
-                                    Model.shared.myLocation = dummyLocation
-                                    
-                                    print("\(currentLocation).....CL.")
-                                    
-                                    
-                                     self.performSegue(withIdentifier: "toRadar", sender: self)
-                                    
-
-//                                    
-                                }
-                                    
-                                else {
-                                    print("no location")
-                                }
-                                
-        })
-
-        
-        
-        
-    }
-    
-    
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        let userUIDfake = "Vk8DAXariGZWyIiVdO4apcatEo73"
-        Model.shared.fetchUser(UID: userUIDfake, completionHandler: { (user) in
-            Model.shared.loggedInUser = user
-            print("in fetch user \n \n \n fetch user")
-            //                self.performSegue(withIdentifier: "toMain", sender: self)
-            //                self.performSegue(withIdentifier: "toRadar", sender: self)
-            
-            self.getLocation()
+//        let userUIDfake = "Vk8DAXariGZWyIiVdO4apcatEo73"
+        Session.sharedSession.setCurrentUser() { success in
+            if success {
+      
+                LocationService.getLocation() { success in
+                    if success {
+                        
+                    
+                        self.performSegue(withIdentifier: "toRadar", sender: self)
+                    }
+                    else {
+                        
+                        print("no location")
+                    }
+                }
             }
-        )
+            
+            else {
+                print("no user")
+                self.performSegue(withIdentifier: "toLoginFromSplash", sender: self)
+            }
+        }
+        
+        
     }
 
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

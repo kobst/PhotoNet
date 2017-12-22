@@ -12,19 +12,15 @@ import Firebase
 class ProfileViewController: UIViewController {
     
     
-    
     @IBOutlet weak var profileImageView: UIImageView!
-    
     
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var scoreLabel: UILabel!
     
-
     @IBOutlet weak var miscLabel: UILabel!
     
     var attempts = [Attempt]()
-    
     
     @IBAction func backToMain(_ sender: Any) {
         
@@ -43,7 +39,6 @@ class ProfileViewController: UIViewController {
     @IBAction func editProfile(_ sender: Any) {
         performSegue(withIdentifier: "toEdit", sender: self)
         
-    
     }
     
     
@@ -58,17 +53,17 @@ class ProfileViewController: UIViewController {
     
     func getStats() {
         let userUID = Model.shared.loggedInUser?.uid
-        let ref = FIRDatabase.database().reference(withPath: "attempts")
+        let ref = Database.database().reference(withPath: "attempts")
         let query = ref.queryOrdered(byChild: "taker").queryEqual(toValue: userUID)
         query.observeSingleEvent(of: .value, with: updateScore)
     }
     
     
-    func updateScore(snapshot: FIRDataSnapshot) {
+    func updateScore(snapshot: DataSnapshot) {
    
         for child in snapshot.children {
             
-            let newAttempt = Attempt(snapshot: child as! FIRDataSnapshot)
+            let newAttempt = Attempt(snapshot: child as! DataSnapshot)
             print("added Attempt")
             attempts.append(newAttempt)
             print(attempts.count)

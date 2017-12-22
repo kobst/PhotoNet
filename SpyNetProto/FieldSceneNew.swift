@@ -54,10 +54,10 @@ class FieldScene: SKScene {
     
     
     var centerNode = SKSpriteNode()
-    var mapNode: SK3DNode!
+//    var mapNode: SK3DNode!
     var profileNode = ProfileNode()   // should profileNode be a struct
  
-    
+  
     var targetSpritesByDistance: [TargetSpriteNew] {
         return Model.shared.targetSpriteNew.sorted(by: {$0.distance < $1.distance})
         
@@ -72,9 +72,9 @@ class FieldScene: SKScene {
 
     
     init(size: CGSize, map: MGLMapView) {
-    
-        mapNode = SK3DNode(viewportSize: CGSize(width: 900, height: 900) )
-        mapNode.position = CGPoint(x: 0, y: -100)
+//
+//        mapNode = SK3DNode(viewportSize: CGSize(width: 900, height: 900) )
+//        mapNode.position = CGPoint(x: 0, y: -100)
 
         super.init(size: size)
         
@@ -97,17 +97,24 @@ class FieldScene: SKScene {
         addChild(centerNode)
         
 //        addMapScene(map: map)
-        let scn = GameScene(create: true, map: map)
-        mapNode = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
-        mapNode.position = CGPoint(x: 0, y: -100)
-        mapNode.scnScene = scn
-        self.addChild(mapNode)
+//        let scn = GameScene(create: true, map: map)
+//        mapNode = SK3DNode(viewportSize: CGSize(width: 1150, height: 750) )
+//        mapNode.position = CGPoint(x: 0, y: -100)
+//        mapNode.scnScene = scn
+//        self.addChild(mapNode)
 
         self.isUserInteractionEnabled = true
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
 //        self.addChild(mapNode)
+        
+        
+        
+        
+
+        
+        
         
     }
     
@@ -118,8 +125,7 @@ class FieldScene: SKScene {
         node.position = CGPoint(x: 0, y: -100)
         node.scnScene = scn
         self.addChild(node)
-      
-        
+
         
     }
     
@@ -352,7 +358,7 @@ class FieldScene: SKScene {
             
             
 //            
-            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 100)
+//            mapNode.position = CGPoint(x: Model.shared.myScreenOrigin.x, y: Model.shared.myScreenOrigin.y - 100)
 //
             
 //            let scene = mapNode.scnScene as! GameScene

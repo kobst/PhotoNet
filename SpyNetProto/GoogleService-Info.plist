@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>411930754534-j0qrfj77dn126jfkp3mbrqmf892fk2sb.apps.googleusercontent.com</string>
+	<string>411930754534-sirtb70a6aver9e24nn9qbj9ads7ne5g.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.411930754534-j0qrfj77dn126jfkp3mbrqmf892fk2sb</string>
+	<string>com.googleusercontent.apps.411930754534-sirtb70a6aver9e24nn9qbj9ads7ne5g</string>
 	<key>API_KEY</key>
 	<string>AIzaSyD31qG2uqQsp3LQOXgMBuALVpmkm6HfGMM</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>ga.SpyNetProto</string>
+	<string>ga.spyData</string>
 	<key>PROJECT_ID</key>
 	<string>spyproto-39671</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:411930754534:ios:96dfc1291ff2c8a8</string>
+	<string>1:411930754534:ios:a0db1f83bbf6399d</string>
 	<key>DATABASE_URL</key>
 	<string>https://spyproto-39671.firebaseio.com</string>
 </dict>

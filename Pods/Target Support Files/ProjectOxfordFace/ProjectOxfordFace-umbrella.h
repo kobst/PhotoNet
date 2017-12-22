@@ -10,11 +10,15 @@
 #endif
 #endif
 
+#import "MPOAccessories.h"
 #import "MPOAddPersistedFaceResult.h"
+#import "MPOBlur.h"
 #import "MPOCandidate.h"
 #import "MPOCreatePersonResult.h"
+#import "MPOExposure.h"
 #import "MPOFace.h"
 #import "MPOFaceAttributes.h"
+#import "MPOFaceEmotion.h"
 #import "MPOFaceFeatureCoordinate.h"
 #import "MPOFaceHeadPose.h"
 #import "MPOFaceLandmarks.h"
@@ -26,7 +30,11 @@
 #import "MPOFaceServiceClient.h"
 #import "MPOFacialHair.h"
 #import "MPOGroupResult.h"
+#import "MPOHair.h"
 #import "MPOIdentifyResult.h"
+#import "MPOMakeup.h"
+#import "MPONoise.h"
+#import "MPOOcclusion.h"
 #import "MPOPerson.h"
 #import "MPOPersonFace.h"
 #import "MPOPersonGroup.h"

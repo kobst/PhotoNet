@@ -79,6 +79,7 @@ class User {
     var uid: String
     var name: String
     var avatar: URL
+    var faceId: String
     var blurb: String
     var timeStamp: Double
     
@@ -86,11 +87,12 @@ class User {
         self.uid = uid
         name = ""
         avatar = URL(string: "")!
+        faceId = ""
         blurb = ""
         timeStamp = 0.0
     }
     
-    init(snapshot: FIRDataSnapshot) {
+    init(snapshot: DataSnapshot) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
         let avatarString = value?["avatar"] as? String ?? ""
@@ -98,6 +100,19 @@ class User {
         blurb = value?["blurb"] as? String ?? ""
         name = value?["name"] as? String ?? ""
         timeStamp = value?["timeStamp"] as? Double ?? 0.0
+        faceId = value?["faceId"] as? String ?? ""
+    }
+    
+    init(dict: [String:String]) {
+        
+        uid = dict["uid"] ?? ""
+        let avatarString = dict["avatar"] ?? ""
+        avatar = URL(string: avatarString)!
+        blurb = dict["blurb"] ?? ""
+        name = dict["name"] ?? ""
+        let timeStampString = dict["timeStamp"] ?? "0.0"
+        timeStamp = Double(timeStampString)!
+        faceId = dict["faceId"] ?? ""
         
     }
     
@@ -144,10 +159,8 @@ class TweetTarget: TargetNew {
 
 
 
-
 class TimeOutTarget: TargetNew {
-    //        static var all = [Message]()
-    
+
     
     var uid: String
     var eventTitle: String
@@ -176,7 +189,7 @@ class TimeOutTarget: TargetNew {
 //        let deltaLon = CGFloat(lon - (origin!.coordinate.longitude))
 //        let point = CGPoint(x: deltaLon, y: deltaLat)
     
-    init(snapshot: FIRDataSnapshot, location: CLLocation) {
+    init(snapshot: DataSnapshot, location: CLLocation) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
         eventTitle = value?["name"] as? String ?? ""
@@ -236,7 +249,7 @@ class UserTarget: TargetNew {
     var annotation: MGLPointAnnotation
     
     
-    init(snapshot: FIRDataSnapshot, location: CLLocation) {
+    init(snapshot: DataSnapshot, location: CLLocation) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
         let avatarString = value?["avatar"] as? String ?? ""
@@ -285,7 +298,7 @@ class Eater38: TargetNew {
     var lon: CLLocationDegrees
     
     
-    init(snapshot: FIRDataSnapshot, location: CLLocation) {
+    init(snapshot: DataSnapshot, location: CLLocation) {
         let value = snapshot.value as! [String: Any]!
         uid = snapshot.key
         restName = value?["name"] as? String ?? ""
@@ -313,24 +326,23 @@ class Eater38: TargetNew {
 class TargetNew {
     //    var sprite: SKSpriteNode?
     
-    enum OnView {
-        case offScreen
-        case onScreen
-    }
-    
-//    enum Category {
-//        case spyGame
-//        case tweet
-//        case eater38
-//        case timeOutEvent
-//        case other
+//    enum OnView {
+//        case offScreen
+//        case onScreen
 //    }
+    
+    enum Category {
+        case spyGame
+        case tweet
+        case eater38
+        case timeOutEvent
+        case other
+    } // somehow initialize Categoruy
     
     var profileImage: UIImage
     var name: String
    
-    
-    
+
     init(image: UIImage, name: String)     {
 //        let scaledX = position.x
 //        let scaledY = position.y
@@ -490,7 +502,7 @@ class TargetSpriteNew: SKSpriteNode {
         
 //        var adjSize = ((distance * distance) / -100) + 200
         let adjD = 400 - distance
-        var adjSize2 = (adjD * adjD) / 1000
+        var adjSize2 = (adjD * adjD) / 1500
         
         
         if adjSize2 < 25 {
@@ -505,6 +517,9 @@ class TargetSpriteNew: SKSpriteNode {
             self.alpha = ((adjSize2 / 50.0) + 0.25)
         }
     
+        if adjSize2 > 100 {
+            adjSize2 = 60
+        }
         
         self.size.height = adjSize2
         self.size.width = adjSize2
@@ -518,7 +533,7 @@ class TargetSpriteNew: SKSpriteNode {
         self.physicsBody = nil
 //        self.position = self.origPos!
         
-        if self.size.width < 70 {
+        if self.size.width < 25 {
             
             if self.mask != nil {
                 Model.shared.removeBitMask2(mask: self.mask!)
@@ -534,7 +549,7 @@ class TargetSpriteNew: SKSpriteNode {
             
         }
         
-        if self.size.width > 70 {
+        if self.size.width > 25 {
             
             let size = self.size.width
             
@@ -637,6 +652,7 @@ class TargetSpriteNew: SKSpriteNode {
         position = pos
         origPos = position
         
+
 
         let path = CGMutablePath()
         path.addArc(center: CGPoint.zero, // CGPoint.centerNode.

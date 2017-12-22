@@ -31,10 +31,13 @@
 
 #import "MPOFaceServiceClient.h"
 
+static NSString *const DefaultEndpoint = @"https://westus.api.cognitive.microsoft.com/face/v1.0/";
+
 @interface MPOFaceServiceClient ()
 //private properties
 typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObject, NSError *error);
 @property NSString* subscriptionKey;
+@property NSString* endpoint;
 @end
 
 
@@ -45,10 +48,24 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
     self = [super init];
     if (self) {
         self.subscriptionKey = key;
+        self.endpoint = DefaultEndpoint;
     }
     
     return self;
 }
+
+- (id)initWithEndpointAndSubscriptionKey:(NSString *)endpoint key:(NSString *)key {
+
+    self = [super init];
+    if (self) {
+        self.endpoint = endpoint;
+        self.subscriptionKey = key;
+    }
+
+    return self;
+}
+
+
 
 #pragma mark Face
 /*
@@ -64,22 +81,45 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
         if ([number isEqualToNumber:@(MPOFaceAttributeTypeAge)]) {
             [faceAttributesStringArray addObject:@"age"];
         }
-        
         if ([number isEqualToNumber:@(MPOFaceAttributeTypeGender)]) {
             [faceAttributesStringArray addObject:@"gender"];
         }
-        if ([number isEqualToNumber:@(MPOFaceAttributeTypeHeadPose)]) {
-            [faceAttributesStringArray addObject:@"headPose"];
-            
-        }
         if ([number isEqualToNumber:@(MPOFaceAttributeTypeSmile)]) {
             [faceAttributesStringArray addObject:@"smile"];
-            
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeGlasses)]) {
+            [faceAttributesStringArray addObject:@"glasses"];
         }
         if ([number isEqualToNumber:@(MPOFaceAttributeTypeFacialHair)]) {
             [faceAttributesStringArray addObject:@"facialHair"];
         }
-        
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeHeadPose)]) {
+            [faceAttributesStringArray addObject:@"headPose"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeEmotion)]) {
+            [faceAttributesStringArray addObject:@"emotion"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeHair)]) {
+            [faceAttributesStringArray addObject:@"hair"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeMakeup)]) {
+            [faceAttributesStringArray addObject:@"makeup"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeOcclusion)]) {
+            [faceAttributesStringArray addObject:@"occlusion"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeAccessories)]) {
+            [faceAttributesStringArray addObject:@"accessories"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeBlur)]) {
+            [faceAttributesStringArray addObject:@"blur"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeExposure)]) {
+            [faceAttributesStringArray addObject:@"exposure"];
+        }
+        if ([number isEqualToNumber:@(MPOFaceAttributeTypeNoise)]) {
+            [faceAttributesStringArray addObject:@"noise"];
+        }
     }
     
     NSString *joinedComponents = [faceAttributesStringArray componentsJoinedByString:@","];
@@ -413,13 +453,20 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
 
 - (NSURLSessionDataTask *)getPersonsWithPersonGroupId:(NSString *)personGroupId completionBlock:(MPOPersonArrayCompletionBlock)completion {
     
-    return [self listPersonsWithPersonGroupId:personGroupId completionBlock:completion];
-    
+    return [self listPersonsWithPersonGroupIdAndStart:personGroupId start:nil top:1000 completionBlock:completion];
 }
 
 - (NSURLSessionDataTask *)listPersonsWithPersonGroupId:(NSString *)personGroupId completionBlock:(MPOPersonArrayCompletionBlock)completion {
     
-    return [self startTaskWithHttpMethod:@"GET" path:[NSString stringWithFormat:@"persongroups/%@/persons", personGroupId] parameters:nil urlParams:nil bodyData:nil completion:^(NSURLResponse *response, id responseObject, NSError *error) {
+    return [self listPersonsWithPersonGroupIdAndStart:personGroupId start:nil top:1000 completionBlock:completion];
+}
+
+- (NSURLSessionDataTask *)listPersonsWithPersonGroupIdAndStart:(NSString *)personGroupId start:(NSString *)start top:(NSInteger)top completionBlock:(MPOPersonArrayCompletionBlock)completion {
+    NSString * url = [NSString stringWithFormat:@"persongroups/%@/persons?top=%ld", personGroupId, (long)top];
+    if (start != nil) {
+        url = [url stringByAppendingString:[NSString stringWithFormat:@"&start=%@", start]];
+    }
+    return [self startTaskWithHttpMethod:@"GET" path:url parameters:nil urlParams:nil bodyData:nil completion:^(NSURLResponse *response, id responseObject, NSError *error) {
         
         NSMutableArray *personCollection = [[NSMutableArray alloc] init];
         
@@ -433,7 +480,6 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
         
         [self runCompletionOnMainQueueWithBlock:completion object:personCollection error:error];
     }];
-    
 }
 
 - (NSURLSessionDataTask *)getPersonFaceWithPersonGroupId:(NSString *)personGroupId personId:(NSString *)personId persistedFaceId:(NSString *)persistedFaceId completionBlock:(void (^) (MPOPersonFace *personFace, NSError *error))completion {
@@ -613,8 +659,6 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
 
 - (NSURLSessionDataTask *)startTaskWithHttpMethod:(NSString *)httpMethod path:(NSString *)path parameters:(NSDictionary *)params urlParams:(NSDictionary *)urlParams bodyData:(NSData *)bodyData completion:(PORequestCompletionBlock)completion {
     
-    NSString *basePath = @"https://api.projectoxford.ai/face/v1.0/";
-    
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
     if (!bodyData) {
@@ -651,7 +695,7 @@ typedef void(^PORequestCompletionBlock)(NSURLResponse *response, id responseObje
     }
     
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", basePath, path, queryString]]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", self.endpoint, path, queryString]]];
     
     request.HTTPMethod = httpMethod;
     
